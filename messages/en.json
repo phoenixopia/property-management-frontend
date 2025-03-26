@@ -1,0 +1,50 @@
+{
+    "Home": {
+      "title": "NextJS",
+      "description": "dis"
+    },
+    "Dashboard":{
+        "dashboardTitle":"Dashboard",
+        "setting":"Setting",
+        "user-managment":"User Managment",
+        "sign-out":"Sign Out"
+       },
+    "full": {
+      "add-user": "Add User",
+      "export-csv": "Export CSV",
+      "search-user":"Search User",
+      "all-role":"All Role",
+      "id":"Id",
+      "name":"Name",
+      "action":"Action",
+      "role":"Role",
+      "select-role":"Select Role",
+      "email":"Email",
+      "change-theme":"Change Theme",
+      "multi-language":"Multi Language",
+      "next":"Next",
+      "previous":"Previous",
+      "create-user":"Create User",
+      "choose-language":"Choose a Language",
+      "english":"English",
+      "amharic":"አማርኛ",
+      "role-managment":"Role Managment",
+      "create-role":"Create Role",
+      "add-role":"Add Role",
+      "edit-role":"Edit Role",
+      "permssions":"Permssions",
+      "edit-user":"Edit User"
+
+
+
+
+
+      
+    },
+    "Step2": {
+      "title": "Step 2 Title",
+      "EXPLANATION_PARAGRAPH1": "lorem ipsum",
+      "EXPLANATION_PARAGRAPH2": "lorem ipsum",
+      "EXPLANATION_PARAGRAPH3": "lorem ipsum"
+    }
+  }

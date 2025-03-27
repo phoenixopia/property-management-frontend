@@ -7,7 +7,8 @@
         "dashboardTitle":"Dashboard",
         "setting":"Setting",
         "user-managment":"User Managment",
-        "sign-out":"Sign Out"
+        "sign-out":"Sign Out",
+        "maintenance-title":"Maintenance"
        },
     "full": {
       "add-user": "Add User",
@@ -33,11 +34,25 @@
       "add-role":"Add Role",
       "edit-role":"Edit Role",
       "permssions":"Permssions",
-      "edit-user":"Edit User"
-
-
-
-
+      "edit-user":"Edit User",
+      "latest-maintenance-request":"Latest maintenance Request",
+      "edit-profile":"Change Profile",
+      "update":"Update",
+      "minutes":"minutes",
+      "ago":"ago",
+      "maintenance":"Maintenance",
+      "maintenance-requests":"Maintenance Requests",
+      "status":"Status",
+      "requested-date":"Requested Date",
+      "fixed-date":"Fixed Date",
+      "description":"Description",
+      "add-maintenance-request":"Add Maintenance Request",
+      "user-detail":"User Detail",
+      "phone-number":"Tel",
+      "property-name":"Property Name",
+     "city":"City",
+     "price":"Price",
+     "zip-code":"Zip-code"
 
       
     },

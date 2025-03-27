@@ -5,11 +5,13 @@ import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./theme/theme-toggle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGear, faHouse,faUser,faBell,faCircleUser, faRightFromBracket,faUsersGear } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faHouse,faUser,faBell,faCircleUser, faRightFromBracket,faUsersGear,faPen,faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
+import EditProfileForm from "./forms/profileManagment/EditProfileForm";
 
 const SideBar = () => {
+    const[edituser,setEditUser]=useState(false)
   const locale = useLocale();  
   const t = useTranslations('Dashboard'); 
   const t2 = useTranslations('full'); 
@@ -23,6 +25,7 @@ const SideBar = () => {
     `/${locale}/user-managment`,
     `/${locale}/settings`,
     `/${locale}/role-managment`,
+    `/${locale}/maintenance`,
 
   ];
 
@@ -48,6 +51,14 @@ const SideBar = () => {
         : "w-5 h-5 text-black dark:text-white"
     }`};
 
+    const openEditProfileModal =()=>{
+      setEditUser(true);
+    }
+
+    const closeEditProfileModal =()=>{
+      setEditUser(false);
+    }
+
   return (
     <div>
    
@@ -72,11 +83,15 @@ const SideBar = () => {
       </button>
 
       {/* Sidebar */}
+      <div className= {`${isOpen ? "absolute w-full h-screen bg-gray-800/50":" "} `}>
+
+        </div>
       <aside
         className={`fixed top-0 left-0 z-80 w-64 h-screen transition-transform bg-gray-100  dark:bg-[#212327] ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
+        
         {/* <ThemeToggle/> */}
 
 
@@ -88,10 +103,17 @@ const SideBar = () => {
         <FontAwesomeIcon icon={faBell} className='text-black w-16 dark:text-white text-2xl'/>
 
         </div>
-        <div className="flex w-full mx-4 cursor-pointer">
-          <div className="flex flex-col justify-between items-center px-7 border-1 w-full border-gray-50 shadow-2xs bg-white dark:bg-gray-600 dark:border-gray-800 py-2  gap-2 ">
+        <div className="flex w-full mx-4 r">
+          <div className="flex flex-col justify-between items-center px-7 border-1 w-full border-gray-50 shadow-2xs dark:bg-gray-600 dark:border-gray-800 py-2  gap-2 ">
+          <div className="cursor-pointer">
+
+          </div>
           <div>
-          <FontAwesomeIcon icon={faCircleUser} className="flex flex-row  text-3xl dark:text-gray-400 text-gray-600"/>
+          <FontAwesomeIcon icon={faCircleUser} className="flex flex-row  text-5xl dark:text-gray-400 text-gray-800"/>
+          </div>
+           <div onClick={openEditProfileModal} className="flex absolute ml-8 size-6 rounded-full bg-white items-center justify-center cursor-pointer">
+                                <FontAwesomeIcon icon={faPen} className='text-gray-800 dark:text-gray-00 text-[0.7rem] cursor-pointer' />
+            
           </div>
           <div className="flex flex-col justify-center">
             <span className="text-black dark:text-white font-bold dar">AdminName</span>
@@ -105,7 +127,7 @@ const SideBar = () => {
         </div>
 
   
-        <hr className="h-px mt-4  bg-gray-200 border-0 dark:bg-gray-700"/>
+        {/* <hr className="h-px mt-4  bg-gray-200 border-0 dark:bg-gray-700"/> */}
 
         
         
@@ -154,6 +176,28 @@ const SideBar = () => {
           </li>
 
 
+          
+          <li>
+            
+            <Link  href="/maintenance" className=" flex items-center w-full ">
+            <FontAwesomeIcon icon={faScrewdriverWrench}
+                  className={getLinkClassesIcon("/maintenance")}
+
+               />
+            
+        
+            <div
+             
+              className={`${getLinkClasses("/maintenance")} `}
+            >
+              
+              <span className="ms-3">{t2('maintenance-requests')}</span>
+              </div>
+            </Link>
+            
+          </li>
+
+
           <li>
             
             <Link  href="/role-managment" className=" flex items-center w-full ">
@@ -173,6 +217,7 @@ const SideBar = () => {
             </Link>
             
           </li>
+          
 
 
           <li>
@@ -226,6 +271,26 @@ const SideBar = () => {
           </ul>
         </div>
       </aside>
+
+      {edituser && (
+     <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
+           <div className='relative bg-white  dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl'>
+             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                 <h3 className="text-lg font-semibold text-gray-600 dark:text-white ">
+                     {t2("edit-profile")}
+                 </h3>
+                 <button onClick={closeEditProfileModal}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                     <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                     </svg>
+                     <span className="sr-only">Close modal</span>
+                 </button>
+             </div>
+             {/* <ClientForm client={selectedClient} /> */}
+             <EditProfileForm/>
+           </div>
+         </div>
+      )}
 
       {/* Backdrop for Mobile */}
       {isOpen && (

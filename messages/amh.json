@@ -7,7 +7,9 @@
      "dashboardTitle":"ዳሽቦርድ",
      "setting":"ቅንብር",
      "user-managment":"የተጠቃሚ አስተዳደር",
-     "sign-out":"ዘግተህ ውጣ"
+     "sign-out":"ዘግተህ ውጣ",
+     "maintenance-title":"ጥገና ገጽ"
+
 
     },
     "full": {
@@ -34,7 +36,28 @@
       "add-role":"ሚና ይጨምሩ",
       "edit-role":"ሚና ቀይር",
       "permssions":"ፍቃዶች",
-      "edit-user":"ተጠቃሚን ቀይር"
+      "edit-user":"ተጠቃሚን ቀይር",
+      "latest-maintenance-request":"የቅርብ ጊዜ የጥገና ጥያቄ",
+      "edit-profile":"መገለጫ ቀይር",
+      "update":"አዘምን",
+      "minutes":"ደቂቃዎች",
+      "ago":"በፊት",
+      "maintenance":"ጥገና",
+     "maintenance-requests":"የጥገና ጥያቄዎች",
+     "status":"ሁኔታ",
+     "requested-date":"ያመለከቱበት ቀን",
+     "fixed-date":"የተስተካከለበት ቀን",
+     "description":"መግለጫ",
+     "add-maintenance-request":"የጥገና ጥያቄዎች አስገባ",
+     "user-detail":"የተጠቃሚ ዝርዝር",
+     "property-name":"የንብረት ስም",
+     "phone-number":"ስልክ ቁጥር",
+     "city":"ከተማ",
+     "price":"ዋጋ",
+     "zip-code":"አካባቢያዊ መለያ ቁጥር"
+
+
+
 
 
     },

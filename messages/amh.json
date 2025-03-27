@@ -1,0 +1,47 @@
+{
+    "Home": {
+      "title": "ታይትል",
+      "description": "dis"
+    },
+    "Dashboard":{
+     "dashboardTitle":"ዳሽቦርድ",
+     "setting":"ቅንብር",
+     "user-managment":"የተጠቃሚ አስተዳደር",
+     "sign-out":"ዘግተህ ውጣ"
+
+    },
+    "full": {
+      "add-user": "ተጠቃሚ አክል",
+      "export-csv": "ፋይል አውጣ",
+      "search-user":"ተጠቃሚ ፈልግ",
+      "all-role":"ሁሉም ሚና",
+      "id":"መታወቂያ",
+      "name":"ስም",
+      "action":"ድርጊት",
+      "role":"ሚና",
+      "select-role":"ምረጥ-ሚና",
+      "email":"ኢሜይል",
+      "change-theme":"ለውጥ ከለር",
+      "multi-language":"ቋንቋ ለውጥ",
+      "next":"ቀጥሎ",
+      "previous":"ቀዳሚ",
+      "create-user":"አዲስ ተጠቃሚ ፍጠር",
+      "choose-language":"ቋንቋ ይምረጡ",
+      "english":"English",
+      "amharic":"አማርኛ",
+      "role-managment":"የኃላፊነት አስተዳደር",
+      "create-role":"ሚና መፍጠር",
+      "add-role":"ሚና ይጨምሩ",
+      "edit-role":"ሚና ቀይር",
+      "permssions":"ፍቃዶች",
+      "edit-user":"ተጠቃሚን ቀይር"
+
+
+    },
+    "Step2": {
+      "title": "Step 2 Title",
+      "EXPLANATION_PARAGRAPH1": "lorem ipsum",
+      "EXPLANATION_PARAGRAPH2": "lorem ipsum",
+      "EXPLANATION_PARAGRAPH3": "lorem ipsum"
+    }
+  }

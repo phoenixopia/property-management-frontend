@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./theme/theme-toggle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGear, faHouse,faUser,faBell,faCircleUser, faRightFromBracket,faUsersGear,faPen,faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faHouse,faUser,faBell,faCircleUser, faRightFromBracket,faUsersGear,faPen,faScrewdriverWrench,faBuilding } from '@fortawesome/free-solid-svg-icons'
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import EditProfileForm from "./forms/profileManagment/EditProfileForm";
@@ -26,6 +26,8 @@ const SideBar = () => {
     `/${locale}/settings`,
     `/${locale}/role-managment`,
     `/${locale}/maintenance`,
+    `/${locale}/property-management`,
+
 
   ];
 
@@ -82,15 +84,19 @@ const SideBar = () => {
         </svg>
       </button>
 
-      {/* Sidebar */}
-      <div className= {`${isOpen ? "absolute w-full h-screen bg-gray-800/50":" "} `}>
+     
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-gray-800/50 z-40" 
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
+        <aside
+          className={`fixed top-0 left-0 z-50 w-64 h-screen transition-transform bg-gray-100 dark:bg-[#212327] ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0`}
+        >
 
-        </div>
-      <aside
-        className={`fixed top-0 left-0 z-80 w-64 h-screen transition-transform bg-gray-100  dark:bg-[#212327] ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0`}
-      >
         
         {/* <ThemeToggle/> */}
 
@@ -174,6 +180,27 @@ const SideBar = () => {
             </Link>
             
           </li>
+
+          <li>
+            
+            <Link  href="/property-management" className=" flex items-center w-full ">
+            <FontAwesomeIcon icon={faBuilding}
+                  className={getLinkClassesIcon("/property-management")}
+
+               />
+            
+        
+            <div
+             
+              className={`${getLinkClasses("/property management")} `}
+            >
+              
+              <span className="ms-3">{t2('property-management')}</span>
+              </div>
+            </Link>
+            
+          </li>
+
 
 
           

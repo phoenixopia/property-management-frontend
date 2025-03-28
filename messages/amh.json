@@ -54,7 +54,23 @@
      "phone-number":"ስልክ ቁጥር",
      "city":"ከተማ",
      "price":"ዋጋ",
-     "zip-code":"አካባቢያዊ መለያ ቁጥር"
+     "zip-code":"አካባቢያዊ መለያ ቁጥር",
+     "property-management":"የንብረት አስተዳደር",
+     "owner-name":"የባለቤትነት ስም",
+     "manager-name":"የአስተዳዳሪ ስም",
+     "lease-id":"የሊዝ መታወቂያ",
+     "add-property":"ንብረት መጨመር",
+     "edit-property":"ንብረት መቀየር",
+     "property-detail":"የንብረት ዝርዝር",
+     "lease-detail":"የሊዝ ዝርዝር",
+     "select-owner":"ባለቤት ይምረጡ",
+     "select-manager":"አስተዳዳሪን ይምረጡ",
+     "welcome":"እንኳን ደህና መጡ",
+     "login":"ግባ",
+     "forgot-password":"የይለፍ ቃል ረስተዋል",
+     "password":"የይለፍ ቃል",
+     "remember-me":"አስታውሰኝ"
+
 
 
 

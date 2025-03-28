@@ -52,7 +52,25 @@
       "property-name":"Property Name",
      "city":"City",
      "price":"Price",
-     "zip-code":"Zip-code"
+     "zip-code":"Zip-code",
+     "property-management":"Property Managment",
+     "owner-name":"Owner Name",
+     "manager-name":"Manager Name",
+     "lease-id":"Lease-Id",
+     "add-property":"Add Property",
+     "edit-property":"Edit Property",
+     "property-detail":"Property Detail",
+     "lease-detail":"Lease Detail",
+     "select-owner":"Select Owner",
+     "select-manager":"Select Manager",
+      "welcome":"Welcome",
+     "login":"Login",
+     "forgot-password":"Forgot password",
+     "password":"Password",
+     "remember-me":"Remember Me"
+
+
+
 
       
     },

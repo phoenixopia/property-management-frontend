@@ -42,8 +42,8 @@ const StaticsData = () => {
     
 
         <div className=" bg-gray-100  rounded-lg dark:bg-[#212327] dark:border-gray-700 p-2   h-[30rem]">
-      <RevenueBar />
-    </div>
+          <RevenueBar />
+        </div>
         
 
     <div className="flex  p-8   items-center justify-center   bg-gray-100  rounded-lg dark:bg-[#212327] dark:border-gray-700   h-[30rem]" 

@@ -16,69 +16,94 @@ const LatestAddedTenants = () => {
      <span className=''>       
          <FontAwesomeIcon icon={faRectangleList} className='text-black w-4 dark:text-gray-50 text-2xl'/>
       </span>
-      <p className='text-gray-800 dark:text-gray-50 text-sm font-bold '>Latest Added Tenants</p>
+      <p className='text-gray-800 dark:text-gray-50 text-sm font-bold '>{t2('latest-added-tenants')}</p>
      </div>
      <div className='flex flex-row p-4'>
   
      
-    <ul className='list-disc ps-5 my-4 space-y-4'>
-      <li >
+    <ul className=' ps-5 w-full my-4 space-y-4'>
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-50 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-400  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
 
        </div>
       </li>
-      <li >
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-50  text-sm font-bold'>30 {t2("minutes")} {t2("ago")}</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-400 capitalize text-[0.75rem] p-1'>tenant x who lives in y address request for z maintainance</p>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
 
        </div>
       </li>
-      <li >
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-50  text-sm font-bold'>30 {t2("minutes")} {t2("ago")}</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-400 capitalize text-[0.75rem] p-1'>tenant x who lives in y address request for z maintainance</p>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
 
        </div>
       </li>
-      <li >
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-50  text-sm font-bold'>30 {t2("minutes")} {t2("ago")}</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-400 capitalize text-[0.75rem] p-1'>tenant x who lives in y address request for z maintainance</p>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
 
        </div>
       </li>
-          <li >
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-50  text-sm font-bold'>30 {t2("minutes")} {t2("ago")}</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-400 capitalize text-[0.75rem] p-1'>tenant x who lives in y address request for z maintainance</p>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
 
        </div>
       </li>
-      <li >
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-50  text-sm font-bold'>30 {t2("minutes")} {t2("ago")}</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-400 capitalize text-[0.75rem] p-1'>tenant x who lives in y address request for z maintainance</p>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
 
        </div>
       </li>
-      <li >
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-50  text-sm font-bold'>30 {t2("minutes")} {t2("ago")}</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-400 capitalize text-[0.75rem] p-1'>tenant x who lives in y address request for z maintainance</p>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
 
        </div>
       </li>
-      <li >
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-50  text-sm font-bold'>30 {t2("minutes")} {t2("ago")}</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-400 capitalize text-[0.75rem] p-1'>tenant x who lives in y address request for z maintainance</p>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
 
        </div>
       </li>
-      
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
+        <div className='flex flex-col font-sm'>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+
+       </div>
+      </li>
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
+        <div className='flex flex-col font-sm'>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+
+       </div>
+      </li>
+      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
+        <div className='flex flex-col font-sm'>
+          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+
+       </div>
+      </li>
+     
+     
+     
+     
+     
 
    
     </ul>

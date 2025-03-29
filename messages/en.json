@@ -67,7 +67,12 @@
      "login":"Login",
      "forgot-password":"Forgot password",
      "password":"Password",
-     "remember-me":"Remember Me"
+     "remember-me":"Remember Me",
+     "latest-added-tenants":"Latest Added Tenants",
+     "occupied-properties":"Occupied Properties",
+     "available-properties":"Available Properties"
+     
+     
 
 
 

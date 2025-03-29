@@ -27,11 +27,6 @@ const Dashboard = () => {
 </div>
 
 
-<div className='flex  shadow-sm p-8  items-center justify-center xl:w-[50%] rounded-xl'>
-   <LatestMaintenance/>
-
-
- </div>
 
       
     </div>

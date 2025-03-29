@@ -81,7 +81,6 @@ const MaintenanceManagement = () => {
           <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
             <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#444548] dark:text-gray-200'>
               <tr>
-                <th className='px-6 py-3'>{t('id')}</th>
                 <th className='px-6 py-3'>{t('name')}</th>
                 <th className='px-6 py-3'>{t('email')}</th>
                 <th className='px-6 py-3'>{t('status')}</th>
@@ -97,7 +96,7 @@ const MaintenanceManagement = () => {
             <tbody>
               {users.map((user) => (
                 <tr key={user.id} onClick={openUserDetail} className=' cursor-pointer bg-white capitalize text-gray-500 dark:text-gray-200 border-b dark:bg-[#333538] dark:border-gray-700 border-gray-200'>
-                  <td className='px-6 py-4'>{user?.id}</td>
+              
                   <td className='px-6 py-4'>{user?.name}</td>
                   <td className='px-6 py-4'>{user?.email}</td>
                   <td className='px-6 py-4'>{user?.status}</td>

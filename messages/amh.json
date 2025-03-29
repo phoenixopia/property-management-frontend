@@ -69,7 +69,11 @@
      "login":"ግባ",
      "forgot-password":"የይለፍ ቃል ረስተዋል",
      "password":"የይለፍ ቃል",
-     "remember-me":"አስታውሰኝ"
+     "remember-me":"አስታውሰኝ",
+     "latest-added-tenants":"የቅርብ ጊዜ የተጨመሩ ተከራዮች",
+     "occupied-properties":"የተያዙ ንብረቶች",
+     "available-properties":"የሚገኙ ንብረቶች"
+
 
 
 

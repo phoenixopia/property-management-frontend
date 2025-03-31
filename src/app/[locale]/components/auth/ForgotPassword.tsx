@@ -74,7 +74,11 @@ const onSubmit: SubmitHandler<LoginData> = (data) => {
                 </div>
       </div>
       <div className="relative z-10 bg-white/80 w-full max-w-[25rem] p-8 rounded-2xl shadow-2xl text-white ">
-        <h2 className="text-center text-2xl mb-6 text-gray-700">{t("welcome")}</h2>
+
+        <h2 className="text-center text-2xl mb-6 text-gray-700">{t("reset-your-password")}</h2>
+
+        <p className='text-center text-sm font-light mb-6 text-gray-700'>{t("enter-the-email-associated-with-your-account-and-we-will-send-you-password-reset-instructions")}</p>
+      
         <form   onSubmit={handleSubmit(onSubmit)}
          className="flex flex-col gap-5" >
           <div className="relative">
@@ -106,47 +110,9 @@ const onSubmit: SubmitHandler<LoginData> = (data) => {
         )}
           </div>
 
-          <div className="relative">
-            <input
-              type="password"
-              placeholder={t("password")}
-              {...register('password')}
-              
-              className="p-3 pl-10 w-full rounded-lg bg-gray-100 text-black focus:outline-none border border-gray-300"
-              required
-            />
-            <div className="absolute left-3 top-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-5 h-5 text-gray-500"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 10.5V7.125A4.125 4.125 0 0012.375 3h-.75A4.125 4.125 0 007.5 7.125V10.5m-3 0h13.5a1.5 1.5 0 011.5 1.5v6a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-6a1.5 1.5 0 011.5-1.5z"
-                />
-              </svg>
-            </div>
-            {errors.password && (
-          <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
-        )}
-          </div>
+    
 
-          <div className="flex justify-between items-center text-sm text-gray-600">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input 
-                type="checkbox" 
-
-                className="w-4 h-4 accent-blue-600 cursor-pointer"
-              />
-               {t("remember-me")}
-            </label>
-            <Link href="#" className="text-blue-600 hover:underline">{t("forgot-password")}?</Link>
-          </div>
+       
             <div className="flex items-center w-full justify-center">
             <button
                         type="submit"
@@ -156,7 +122,7 @@ const onSubmit: SubmitHandler<LoginData> = (data) => {
                      
                         {loginMutation.isPending ? 
                         <div className="h-6 w-6 items-center justify-center animate-spin rounded-full border-b-2 border-current" />
-                        :    t("login")}
+                        :    t("forgot-password")}
                      </button>
             </div>
         

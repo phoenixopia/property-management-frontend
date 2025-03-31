@@ -70,7 +70,11 @@
      "remember-me":"Remember Me",
      "latest-added-tenants":"Latest Added Tenants",
      "occupied-properties":"Occupied Properties",
-     "available-properties":"Available Properties"
+     "available-properties":"Available Properties",
+     "reset-your-password":"Reset Your Password",
+     "enter-the-email-associated-with-your-account-and-we-will-send-you-password-reset-instructions":"Enter the email associated with your account and we will send you password reset instructions"
+
+
      
      
 

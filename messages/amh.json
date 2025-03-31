@@ -74,12 +74,10 @@
      "occupied-properties":"የተያዙ ንብረቶች",
      "available-properties":"የሚገኙ ንብረቶች",
      "reset-your-password":"የይለፍ ቃልዎን ዳግም ያስጀምሩ",
-     "enter-the-email-associated-with-your-account-and-we-will-send-you-password-reset-instructions":"ከአካውንትዎ ጋር የተገናኘውን ኢሜል ያስገቡና እና የይለፍ ቃል ዳግም ማስጀመር መመሪያዎችን እንልክሎታለን።"
-
-
-
-
-
+     "enter-the-email-associated-with-your-account-and-we-will-send-you-password-reset-instructions":"ከአካውንትዎ ጋር የተገናኘውን ኢሜል ያስገቡና እና የይለፍ ቃል ዳግም ማስጀመር መመሪያዎችን እንልክሎታለን።",
+     "change-your-password":"የይለፍ ቃልህን ቀይር",
+     "enter-new-password-below-to-change-password":"የይለፍ ቃል ለመቀየር ከዚህ በታች አዲስ የይለፍ ቃል ያስገቡ።",
+     "reset-password":"የይለፍ ቃል ዳግም አስጀምር"
 
 
     },

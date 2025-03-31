@@ -1,91 +1,100 @@
-"use client"
-import {useEffect,useState} from 'react'
-import ThemeToggle from '@/app/[locale]/components/theme/theme-toggle'
-import Language from '@/app/[locale]/components/language/Language'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useMutation } from '@tanstack/react-query'
-import { faLanguage,faCircleHalfStroke} from '@fortawesome/free-solid-svg-icons'
-import { useLocale } from "next-intl";  
-import { useTranslations } from 'next-intl'; 
-import Link from 'next/link'
-import { signInSchema } from '../../../../lib/zodTypes'
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { singIn } from '@/actions/auth'
-import toast from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
-type LoginData = z.infer<typeof signInSchema>
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { getUserAuthData } from "@/actions/authCookies";
+import { singIn } from "@/actions/auth";
+import { signInSchema } from "../../../../lib/zodTypes";
+import { z } from "zod";
+import Link from "next/link";
+import Language from "@/app/[locale]/components/language/Language";
+import { useTranslations } from "next-intl";
+
+type LoginData = z.infer<typeof signInSchema>;
+
 export default function Login() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const t = useTranslations("full");
 
-  const router = useRouter()
- 
-      const t = useTranslations('full'); 
-;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginData>({
+    resolver: zodResolver(signInSchema),
+  });
 
-const {
-  register,
-  handleSubmit,
-  watch,
-  formState: { errors },
-} = useForm<LoginData>({
-  resolver: zodResolver(signInSchema),
-});
+  const logIn = async (data: LoginData) => {
+    return await singIn({ ...data });
+  };
 
- const logIn = async(data:LoginData)=>{
+  const loginMutation = useMutation({
+    mutationFn: logIn,
+    onSuccess: async (response) => {
+      if (response?.status === 200) {
+        toast.success("Successfully signed in!");
+        
+        // Fetch updated user auth data
+        const authData = await getUserAuthData();
+        
+        // Redirect based on user role/permissions
+        if (authData.groups.length > 0 && authData.permissions.length > 0) {
+          router.push("/dashboard");
+        } else {
+          toast.error("Access denied: No permissions assigned.");
+        }
+      } else {
+        toast.error(response?.non_field_errors?.[0] || "An unexpected error occurred.");
+      }
+    },
+    onError: () => {
+      toast.error("Failed to log in. Please try again.");
+    },
+  });
 
+  const onSubmit: SubmitHandler<LoginData> = (data) => {
+    loginMutation.mutate(data);
+  };
 
-     const result = await singIn({...data});
+  useEffect(() => {
+    const checkAuth = async () => {
+      const authData = await getUserAuthData();
+      if (authData.groups.length > 0 && authData.permissions.length > 0) {
+        router.push("/dashboard");
+      } else {
+        setLoading(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
 
- 
-     return result;
- }
- const loginMutation = useMutation({
-  mutationFn: logIn,
-  onSuccess: (response) => {
-
-    if (response?.status === 200) {
-      toast.success('Successfully sign In!');
-      router.push('/dashboard');
-    } else {
-   
-
-      toast.error(typeof response.non_field_errors[0] === 'string' ? response?.non_field_errors[0] : 'An unexpected error occurred.');
-    }
-  },
-  onError: (error: any) => {
-
-    toast.error(error?.message || 'Failed to login. Please try again.');
-  },
-});
-
-const onSubmit: SubmitHandler<LoginData> = (data) => {
-
-  loginMutation.mutate(data);
-};
-
+  if (loading) return <div>Loading...</div>;
 
   return (
-    <div className='relative min-h-screen flex items-center justify-center px-4 bg-cover bg-center' style={{ backgroundImage: "url('/loginBack.png')" }}>
+    <div className="relative min-h-screen flex items-center justify-center px-4 bg-cover bg-center" style={{ backgroundImage: "url('/loginBack.png')" }}>
       <div className="absolute inset-0 bg-black/40 backdrop-blur-xs"></div>
-      <div className='absolute end-0 top-0 p-15'>
-            <div className=' relative flex items-center gap-2 z-100 shadow-2xl'>
-                    <Language/>
-                </div>
+      <div className="absolute end-0 top-0 p-15">
+        <div className="relative flex items-center gap-2 z-100 shadow-2xl">
+          <Language />
+        </div>
       </div>
-      <div className="relative z-10 bg-white/80 w-full max-w-[25rem] p-8 rounded-2xl shadow-2xl text-white ">
+      <div className="relative z-10 bg-white/80 w-full max-w-[25rem] p-8 rounded-2xl shadow-2xl text-white">
         <h2 className="text-center text-2xl mb-6 text-gray-700">{t("welcome")}</h2>
-        <form   onSubmit={handleSubmit(onSubmit)}
-         className="flex flex-col gap-5" >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <div className="relative">
             <input
               type="email"
               placeholder={t("email")}
-               {...register('email')}
+              {...register("email")}
               className="p-3 pl-10 w-full rounded-lg bg-gray-100 text-black focus:outline-none border border-gray-300"
               required
             />
-            <div className="absolute left-3 top-3">
+               <div className="absolute left-3 top-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -101,21 +110,17 @@ const onSubmit: SubmitHandler<LoginData> = (data) => {
                 />
               </svg>
             </div>
-            {errors.email && (
-          <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>
-        )}
+            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
           </div>
-
           <div className="relative">
             <input
               type="password"
               placeholder={t("password")}
-              {...register('password')}
-              
+              {...register("password")}
               className="p-3 pl-10 w-full rounded-lg bg-gray-100 text-black focus:outline-none border border-gray-300"
               required
             />
-            <div className="absolute left-3 top-3">
+               <div className="absolute left-3 top-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -131,35 +136,26 @@ const onSubmit: SubmitHandler<LoginData> = (data) => {
                 />
               </svg>
             </div>
-            {errors.password && (
-          <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
-        )}
+            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>}
           </div>
-
           <div className="flex justify-between items-center text-sm text-gray-600">
             <label className="flex items-center gap-2 cursor-pointer">
-              <input 
-                type="checkbox" 
-
-                className="w-4 h-4 accent-blue-600 cursor-pointer"
-              />
-               {t("remember-me")}
+              <input type="checkbox" className="w-4 h-4 accent-blue-600 cursor-pointer" />
+              {t("remember-me")}
             </label>
             <Link href="#" className="text-blue-600 hover:underline">{t("forgot-password")}?</Link>
           </div>
-            <div className="flex items-center w-full justify-center">
-            <button
-                        type="submit"
-                        className="flex p-[0.7rem] w-full items-center justify-center  bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
-                        disabled={loginMutation.isPending}
-                     >
-                     
-                        {loginMutation.isPending ? 
-                        <div className="h-6 w-6 items-center justify-center animate-spin rounded-full border-b-2 border-current" />
-                        :    t("login")}
-                     </button>
-            </div>
-        
+          <button
+            type="submit"
+            className="flex p-[0.7rem] w-full items-center justify-center bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+            disabled={loginMutation.isPending}
+          >
+            {loginMutation.isPending ? (
+              <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-current" />
+            ) : (
+              t("login")
+            )}
+          </button>
         </form>
       </div>
     </div>

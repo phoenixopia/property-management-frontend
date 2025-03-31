@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import { useTranslations } from 'next-intl'; 
 import LatestMaintenance from './subDashboard/LatestMaintenance';
 import StaticsData from './subDashboard/StaticsData';
+import { withAuth } from '@/hooks/withAuth';
 const Dashboard = () => {
   const t = useTranslations('Home'); 
   const t2 =useTranslations('full')
@@ -33,4 +34,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default withAuth(Dashboard, ["new group 3", "group 2"], ["pms.view_tenant", "pms.ednant"]);

@@ -1,7 +1,9 @@
 'use server'
 import { z} from 'zod'
+import { cookies } from 'next/headers'
+
 import { signInSchema,forgotPasswordSchema, resetPasswordSchema } from '@/lib/zodTypes'
-let endPoint ="http://192.168.0.179:8000/api"
+let endPoint ="https://sasconerp.com/pms/api"
 import { useRouter } from 'next/router'
 type LoginData = z.infer<typeof signInSchema>
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>
@@ -21,14 +23,17 @@ export const singIn =async (loginData:LoginData)=>{
       });
 
 
-      const resJson =res.json();
+      const resJson =await res.json();
     
 
       if(res?.status ===200){
-        return {
-            status: res?.status,
-            data: resJson,
-          };
+        const cookieStore = await cookies();
+        cookieStore.set("_s_t", resJson.access, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
+        cookieStore.set("_s_r", resJson.refresh, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
+        cookieStore.set("_s_ap", JSON.stringify(resJson.permissions), { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
+        cookieStore.set("_s_ag", JSON.stringify(resJson.groups), { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
+    
+        return { status: res.status, message: "Logged in successfully" };
       }else{
         return resJson
       }

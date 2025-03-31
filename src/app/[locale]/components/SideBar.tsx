@@ -9,13 +9,14 @@ import { faGear, faHouse,faUser,faBell,faCircleUser, faRightFromBracket,faUsersG
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import EditProfileForm from "./forms/profileManagment/EditProfileForm";
+import { useAuth } from "@/hooks/useAuth";
 
 const SideBar = () => {
     const[edituser,setEditUser]=useState(false)
   const locale = useLocale();  
   const t = useTranslations('Dashboard'); 
   const t2 = useTranslations('full'); 
-
+  const { hasRole, hasPermission } = useAuth();
 
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false); 
@@ -30,6 +31,15 @@ const SideBar = () => {
 
 
   ];
+
+  const hasAccess = (requiredRoles: string[], requiredPermissions: string[]) => {
+    const hasAtLeastOneRole = requiredRoles.some(role => hasRole(role));
+    const hasAtLeastOnePermission = requiredPermissions.some(permission => hasPermission(permission));
+  
+    return hasAtLeastOneRole && hasAtLeastOnePermission; 
+  };
+  
+
 
   if ( !validRoutes.includes(pathname)) return null;
  
@@ -142,7 +152,7 @@ const SideBar = () => {
 
 
           <ul className="space-y-2 font-medium text-sm">
-            
+          {hasAccess(["new group 3", "group 2"], [ "pms.view_notification","admin.change_logentry"]) && (
             <li>
             
               <Link  href="/dashboard" className=" flex items-center w-full ">
@@ -158,7 +168,7 @@ const SideBar = () => {
                 </div>
               </Link>
               
-            </li>
+            </li>)}
 
 
             <li>

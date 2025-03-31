@@ -16,7 +16,7 @@ import { singIn } from '@/actions/auth'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 type LoginData = z.infer<typeof signInSchema>
-export default function Login() {
+export default function ForgotPassword() {
 
   const router = useRouter()
  

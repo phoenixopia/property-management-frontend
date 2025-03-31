@@ -9,7 +9,7 @@ import StaticsData from './subDashboard/StaticsData';
 const Dashboard = () => {
   const t = useTranslations('Home'); 
   const t2 =useTranslations('full')
-  console.log('fro')
+
   return (
     <div className='flex flex-col justify-between px-2 3xl:flex-row '>
  

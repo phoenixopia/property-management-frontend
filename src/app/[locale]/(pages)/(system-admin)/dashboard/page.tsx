@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 
 const page = () => {
     const t = useTranslations('Dashboard'); 
-  console.log('from the dashboard')
+
   return (
     <div className=" md:ml-64 text-black dark:text-gray-300 bg-white dark:bg-[#292a2d] min-h-screen ">
         <div className="fixed top-0 left-0 right-0   bg-white dark:bg-[#292a2d]">

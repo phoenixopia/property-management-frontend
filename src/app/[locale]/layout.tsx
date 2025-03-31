@@ -7,7 +7,7 @@ import {routing} from '@/i18n/routing';
 
 import { Toaster } from 'react-hot-toast';
 import SideBar from "./components/SideBar"
-import TanProvider from "./lib/TanProvider";
+import TanProvider from "../../lib/TanProvider";
 import { ThemeProvider } from 'next-themes'
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";

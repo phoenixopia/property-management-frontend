@@ -7,26 +7,49 @@ import type { NextRequest } from "next/server";
 const intlMiddleware = createMiddleware(routing);
 
 export function middleware(req: NextRequest) {
-  // First, apply internationalization middleware
   const response = intlMiddleware(req);
 
-  // Authentication logic
   const accessToken = req.cookies.get("_s_t");
-  const userPermissions = req.cookies.get("_s_ap");
-  const userGroups = req.cookies.get("_s_ag");
-
+  const token = accessToken?.value; 
   const protectedRoutes = ["/dashboard", "/admin"];
   const isProtectedRoute = protectedRoutes.some((path) =>
     req.nextUrl.pathname.startsWith(path)
   );
 
-  if (isProtectedRoute && !accessToken) {
-    return NextResponse.redirect(new URL("/", req.url));
+  if (isProtectedRoute) {
+    if (!accessToken) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+    if (token) {
+      const tokenParts = token.split("."); 
+      if (tokenParts.length === 3) {
+
+        console.log(tokenParts,'tkk')
+        try {
+          const tokenPayload = JSON.parse(atob(tokenParts[1])); 
+          console.log(tokenPayload); 
+    
+          const isExpired = tokenPayload.exp * 1000 < Date.now();
+          if (isExpired) {
+            console.log("Token expired");
+            
+              response.cookies.set("_s_t", "", { expires: new Date(0), path: "/" });
+              response.cookies.set("_s_r", "", { expires: new Date(0), path: "/" });
+              response.cookies.set("_s_ap", "", { expires: new Date(0), path: "/" });
+              response.cookies.set("_s_ag", "", { expires: new Date(0), path: "/" });
+
+            return NextResponse.redirect(new URL("/", req.url));
+          }
+        } catch (error) {
+          console.error("Invalid token:", error);
+        }
+      }
+    }
   }
 
-  // Return the modified response
   return response;
 }
+
 
 // Update matcher to include both i18n routes and protected routes
 export const config = {

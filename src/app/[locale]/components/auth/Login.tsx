@@ -73,7 +73,6 @@ export default function Login() {
     checkAuth();
   }, [router]);
 
-  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="relative min-h-screen flex items-center justify-center px-4 bg-cover bg-center" style={{ backgroundImage: "url('/loginBack.png')" }}>
@@ -143,7 +142,7 @@ export default function Login() {
               <input type="checkbox" className="w-4 h-4 accent-blue-600 cursor-pointer" />
               {t("remember-me")}
             </label>
-            <Link href="#" className="text-blue-600 hover:underline">{t("forgot-password")}?</Link>
+            <Link href="/forgot-password" className="text-blue-600 hover:underline">{t("forgot-password")}?</Link>
           </div>
           <button
             type="submit"

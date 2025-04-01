@@ -1,4 +1,4 @@
-import {z} from "zod"
+import {string, z} from "zod"
 
 
 export const signInSchema =z.object({
@@ -13,4 +13,8 @@ export const forgotPasswordSchema =z.object({
 
 export const resetPasswordSchema =z.object({
     password:z.string().min(4,"Password must be at least 4 characters")
+})
+
+export const roleSchema =z.object({
+    name:string()
 })

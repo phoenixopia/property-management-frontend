@@ -1,9 +1,12 @@
 'use server'
 import { z} from 'zod'
+import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-
+import { NextResponse } from 'next/server'
 import { signInSchema,forgotPasswordSchema, resetPasswordSchema } from '@/lib/zodTypes'
-let endPoint ="https://sasconerp.com/pms/api"
+// let endPoint ="https://sasconerp.com/pms/api"
+let endPoint ="http://192.168.0.179:8000/api"
+
 import { useRouter } from 'next/router'
 type LoginData = z.infer<typeof signInSchema>
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>
@@ -38,6 +41,25 @@ export const singIn =async (loginData:LoginData)=>{
         return resJson
       }
       
+}
+
+export const logOut =async () =>{
+              const cookieStore = await cookies()
+               try{
+               cookieStore.set("_s_t", "", { expires: new Date(0), path: "/" });
+               cookieStore.set("_s_r", "", { expires: new Date(0), path: "/" });
+               cookieStore.set("_s_ap", "", { expires: new Date(0), path: "/" });
+               cookieStore.set("_s_ag", "", { expires: new Date(0), path: "/" });
+
+             
+               }catch(error){
+                console.error("Failed to logout:", error);
+                throw new Error("Failed to logout");
+               }finally {
+                redirect('/');
+               
+            }
+        
 }
 
 export const forgotPassword =async (forgotData:ForgotPasswordData)=>{
@@ -90,4 +112,30 @@ export const resetPassword =async (resetData:ResetPasswordData)=>{
     return resJson
   }
   
+}
+
+export const getProfile =async (resetData:ResetPasswordData)=>{
+
+
+  const tokenData =resetData?.token
+
+  const res = await fetch(`${endPoint}/reset_password/${tokenData}`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({password:resetData?.password}),
+});
+
+const resJson =res.json();
+
+if(res?.status===200){
+  return {
+      status: res?.status,
+      data: resJson,
+    };
+}else{
+  return resJson
+}
+
 }

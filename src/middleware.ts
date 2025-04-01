@@ -24,15 +24,13 @@ export function middleware(req: NextRequest) {
       const tokenParts = token.split("."); 
       if (tokenParts.length === 3) {
 
-        console.log(tokenParts,'tkk')
+
         try {
           const tokenPayload = JSON.parse(atob(tokenParts[1])); 
-          console.log(tokenPayload); 
+          
     
           const isExpired = tokenPayload.exp * 1000 < Date.now();
-          if (isExpired) {
-            console.log("Token expired");
-            
+          if (isExpired) {        
               response.cookies.set("_s_t", "", { expires: new Date(0), path: "/" });
               response.cookies.set("_s_r", "", { expires: new Date(0), path: "/" });
               response.cookies.set("_s_ap", "", { expires: new Date(0), path: "/" });
@@ -51,10 +49,11 @@ export function middleware(req: NextRequest) {
 }
 
 
-// Update matcher to include both i18n routes and protected routes
+
 export const config = {
   matcher: [
-    "/((?!api|trpc|_next|_vercel|.*\\..*).*)", // Matches for i18n middleware
+'/((?!api|trpc|_next|_vercel|.*\\..*).*)',
+  '/([\\w-]+)?/reset-password/(.+)',
     "/dashboard/:path*", // Protect dashboard
     "/admin/:path*", // Protect admin
   ],

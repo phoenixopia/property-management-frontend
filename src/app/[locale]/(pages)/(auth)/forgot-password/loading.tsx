@@ -2,7 +2,7 @@
 export default function Loading() {
     // You can add any UI inside Loading, including a Skeleton.
     return(
-      <div className='flex md:ml-64 text-black dark:text-gray-300 bg-white dark:bg-[#292a2d] min-h-screen items-center justify-center' role='status'>
+      <div className='flex  text-black dark:text-gray-300 bg-white dark:bg-[#292a2d] min-h-screen items-center justify-center' role='status'>
 
 
       <svg aria-hidden="true" className="w-12 h-12 text-gray-200 animate-spin dark:text-gray-500 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

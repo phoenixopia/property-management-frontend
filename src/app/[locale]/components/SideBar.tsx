@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./theme/theme-toggle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,6 +10,8 @@ import { useLocale } from "next-intl";
 import { useTranslations } from 'next-intl'; 
 import EditProfileForm from "./forms/profileManagment/EditProfileForm";
 import { useAuth } from "@/hooks/useAuth";
+import { logOut } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 const SideBar = () => {
     const[edituser,setEditUser]=useState(false)
@@ -17,6 +19,7 @@ const SideBar = () => {
   const t = useTranslations('Dashboard'); 
   const t2 = useTranslations('full'); 
   const { hasRole, hasPermission } = useAuth();
+  const router = useRouter();
 
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false); 
@@ -38,6 +41,16 @@ const SideBar = () => {
   
     return hasAtLeastOneRole && hasAtLeastOnePermission; 
   };
+  useEffect(()=>{
+    const hasAccess = (requiredRoles: string[], requiredPermissions: string[]) => {
+      const hasAtLeastOneRole = requiredRoles.some(role => hasRole(role));
+      const hasAtLeastOnePermission = requiredPermissions.some(permission => hasPermission(permission));
+    
+      return hasAtLeastOneRole && hasAtLeastOnePermission; 
+    };
+  
+  },[router])
+ 
   
 
 
@@ -66,7 +79,9 @@ const SideBar = () => {
     const openEditProfileModal =()=>{
       setEditUser(true);
     }
-
+     const logOutClicked =()=>{
+      logOut();
+     }
     const closeEditProfileModal =()=>{
       setEditUser(false);
     }
@@ -281,7 +296,7 @@ const SideBar = () => {
 
 
 
-          <li className="w-full">
+          <li onClick={logOutClicked} className="w-full">
         
         <div className=" flex items-center w-full cursor-pointer ">
         

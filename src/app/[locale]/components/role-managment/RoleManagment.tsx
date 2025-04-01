@@ -5,16 +5,22 @@ import { faUserPlus, faFileExport, faPen, faTrash, faEye,faUsersGear } from '@fo
 import usersData from '../../../../usersData.json';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
-
+import { useMutation,useQuery,useQueryClient } from '@tanstack/react-query';
 import AddRoleForm from '../forms/roleManagment/AddRoleForm';
 import EditRoleForm from '../forms/roleManagment/EditRoleForm';
+import { getRoleWithPermissions } from '@/actions/roleAndPermissions';
 type User = {
     id: string;
     name: string;
     role: string;
     email: string;
   };
+
+
+
 const RoleManagment = () => {
+
+  const queryClient = useQueryClient();
 
   const[addRole,setAddRole]=useState(false);
     const [users, setUsers] = useState<User[]>([]); 
@@ -37,11 +43,14 @@ const RoleManagment = () => {
         setAddRole(false);
         setEditRole(false);
       }
-
+       const getRoleWithPerm= useQuery({
+        queryKey: ['getRoleWithPermission'],
+        queryFn: getRoleWithPermissions,
+      });
   useEffect(() => {
     setUsers(usersData);
   }, []);
-
+   console.log(getRoleWithPerm,'data from the query')
   return (
     <div className='flex flex-col justify-between p-4'>
       

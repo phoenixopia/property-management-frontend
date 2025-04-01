@@ -50,6 +50,7 @@ const {
  
     if (response?.status === 200) {
       toast.success('You changed your password Successfully!');
+      router.push('/');
    
     } else {
    

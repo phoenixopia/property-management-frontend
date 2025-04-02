@@ -1,14 +1,12 @@
 'use server'
 import { z} from 'zod'
-import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+
 import { signInSchema,forgotPasswordSchema, resetPasswordSchema } from '@/lib/zodTypes'
 import { revalidatePath } from 'next/cache';
-// let endPoint ="https://sasconerp.com/pms/api"
-let endPoint ="http://192.168.0.101:8000/api"
+let endPoint ="https://sasconerp.com/pms/api"
+// let endPoint ="http://192.168.0.101:8000/api"
 
-import { useRouter } from 'next/router'
 type LoginData = z.infer<typeof signInSchema>
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>
 type ResetPasswordData =z.infer<typeof resetPasswordSchema>& {
@@ -108,6 +106,33 @@ export async function fetchPermissions() {
     return data.data.map((perm:any) => ({ id: perm.codename, label: perm.name }));
   } catch (error) {
     console.error('Error fetching permissions:', error);
+    return [];
+  }
+}
+
+export async function fetchGroups() {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+  
+  try {
+    const res = await fetch(`${endPoint}/get_groups?page_size=1000000`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${accessToken}`
+      },
+    });
+
+    if (!res.ok) throw new Error('Failed to fetch groups');
+    
+    const data = await res.json();
+    return data.data.map((group: any) => ({ 
+      id: group.id.toString(), 
+      name: group.name,
+      permissions: group.permissions 
+    }));
+  } catch (error) {
+    console.error('Error fetching groups:', error);
     return [];
   }
 }

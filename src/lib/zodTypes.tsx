@@ -26,3 +26,12 @@ export const roleFormSchema = z.object({
   roleName: z.string().min(1, "Role name is required"),
   permissions: z.array(z.string()).min(1, "At least one permission is required"),
 });
+
+export const userFormSchema = z.object({
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  middle_name: z.string().optional(),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  groups: z.array(z.string()).min(1, "At least one group must be selected"),
+});

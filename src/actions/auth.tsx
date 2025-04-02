@@ -6,8 +6,6 @@ import { NextResponse } from 'next/server'
 import { signInSchema,forgotPasswordSchema, resetPasswordSchema } from '@/lib/zodTypes'
 let endPoint ="https://sasconerp.com/pms/api"
 // let endPoint ="http://192.168.0.179:8000/api"
-
-import { useRouter } from 'next/router'
 type LoginData = z.infer<typeof signInSchema>
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>
 type ResetPasswordData =z.infer<typeof resetPasswordSchema>& {

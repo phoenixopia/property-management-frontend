@@ -82,7 +82,24 @@
      "role-name":"የሚና ስም",
      "updating":"በማዘመን ላይ",
      "repeat-password":"የይለፍ ቃል ድገም",
-     "view-role":"ሚና ይመልከቱ"
+     "view-role":"ሚና ይመልከቱ",
+     "enter-password":"የይለፍ ቃል አስገባ",
+     "enter-email":"ኢሜል አስገባ",
+     "enter-last-name":"የአያት ስም አስገባ",
+     "enter-middle-name":"የአባት ስም አስገባ",
+     "enter-first-name":"የመጀመሪያ ስም አስገባ",
+     "nothing-to-show":"ምንም የሚታይ ነገር የለም።",
+     "user-created":"ተጠቃሚ ተፈጥሯል።",
+     "user-created-successfully":"ተጠቃሚ በተሳካ ሁኔታ ተፈጥሯል።",
+     "something-went-wrong":"የሆነ ችግር ተፈጥሯል።",
+     "successfully-updated-user":"ተጠቃሚ በተሳካ ሁኔታ ዘምኗል።"
+    
+
+
+
+
+
+
 
 
 

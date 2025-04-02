@@ -80,7 +80,19 @@
      "role-name":"Role Name",
      "updating":"Updating",
      "repeat-password":"Repeat Password",
-     "view-role":"View Role"
+     "view-role":"View Role",
+     "enter-password":"Enter Password",
+     "enter-email":"Enter Email",
+     "enter-last-name":"Enter Last Name",
+     "enter-middle-name":"Enter Middle Name",
+     "enter-first-name":"Enter First Name",
+     "nothing-to-show":"Nothing To Show!",
+     "user-created":"User Created",
+     "user-created-successfully":"User Created Successfully",
+     "something-went-wrong":"Something Went Wrong",
+     "successfully-updated-user":"Successfully Updated User"
+
+
 
      
      

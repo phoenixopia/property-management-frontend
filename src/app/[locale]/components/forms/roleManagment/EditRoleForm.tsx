@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useMutation,useQueryClient } from '@tanstack/react-query';
 import { updateRole, fetchPermissions } from '@/actions/roleAndPermissions';
@@ -27,7 +27,7 @@ type EditRoleFormValues = z.infer<typeof editRoleSchema>;
 
 const EditRoleForm = ({ roleId, currentName, currentPermissions }: EditRoleFormProps) => {
 
-
+   const [permLoading,setPermLoading]=useState(true);
   const queryClient = useQueryClient();
 
   const t = useTranslations("full");
@@ -52,6 +52,10 @@ const EditRoleForm = ({ roleId, currentName, currentPermissions }: EditRoleFormP
   useEffect(() => {
     const fetchPermissionsData = async () => {
       const perms = await fetchPermissions();
+      if(perms.length>0){
+        setPermLoading(false);
+      }
+  
       setPermissions(perms);
     };
     fetchPermissionsData();
@@ -68,9 +72,20 @@ const EditRoleForm = ({ roleId, currentName, currentPermissions }: EditRoleFormP
   // Mutation for updating the role
   const mutation = useMutation({
     mutationFn: (data: EditRoleFormValues) => updateRole(roleId, data.roleName, data.permissions),
-    onSuccess: () => {
-        toast.success("Successfully updated the role!");
-        queryClient.invalidateQueries({ queryKey: ['getRoleWithPermission'] });
+    onSuccess: (response) => {
+
+     
+          if(response?.success ===true){
+             queryClient.invalidateQueries({ queryKey: ['getRoleWithPermission'] });
+     
+      
+            
+             toast.success("Role successfully updated!");
+       
+           }else{
+     
+             toast.error(response?.message !==''?response?.message: "Failed to update the role!");
+           }
     },
     onError: (error) => {
       console.error('Error updating role:', error);
@@ -120,8 +135,9 @@ const EditRoleForm = ({ roleId, currentName, currentPermissions }: EditRoleFormP
           </div>
 
           <hr className="w-full col-span-2 bg-gray-50 text-gray-200 dark:text-gray-500 border-1 dark:bg-gray-700" />
-
-          <div className="grid col-span-2 grid-cols-3 gap-4">
+          {permLoading && 
+            <div>Loading permissions ...</div>}
+          <div className="grid col-span-2 grid-cols-3 gap-4 max-h-[12rem] overflow-y-auto">
             {permissions.map((perm) => (
               <div key={perm.id} className="flex items-center w-full">
                 <input
@@ -164,7 +180,10 @@ const EditRoleForm = ({ roleId, currentName, currentPermissions }: EditRoleFormP
               clipRule="evenodd"
             ></path>
           </svg>
-          {mutation.isPending ? t("updating") : t("edit-role")}
+          {mutation.isPending ? 
+          <div>
+            <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-current" />
+          </div> : t("edit-role")}
         </button>
       </form>
     </div>

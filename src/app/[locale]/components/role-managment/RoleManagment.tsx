@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import toast from 'react-hot-toast';
 import {
   faPen,
   faTrash,
@@ -9,11 +10,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery,useMutation,useQueryClient } from '@tanstack/react-query';
 import AddRoleForm from "../forms/roleManagment/AddRoleForm";
 import EditRoleForm from "../forms/roleManagment/EditRoleForm";
-import { getRoleWithPermissions } from "@/actions/roleAndPermissions";
+import { getRoleWithPermissions,deleteRole } from "@/actions/roleAndPermissions";
 import { count } from "console";
+import ViewRoleForm from "../forms/roleManagment/ViewRoleForm";
 interface Role {
   id: number;
   name: string;
@@ -25,11 +27,16 @@ type RoleEdit = {
   permissions: string[];
 };
 
+type DeleteGroupId ={
+  id:number
+}
 const RoleManagement = () => {
   const [addRole, setAddRole] = useState(false);
+  const queryClient =useQueryClient()
   const [editRole, setEditRole] = useState(false);
+  const [viewRole,setViewRole] =useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [confirmDelete, setConfirmDelete] = useState<{ id: number} | null>(null);
   const [currentRole, setCurrentRole] = useState<RoleEdit | null>(null);
   const locale = useLocale();
   const t = useTranslations("full");
@@ -38,6 +45,21 @@ const RoleManagement = () => {
     queryKey: ["getRoleWithPermission", currentPage],
     queryFn: () => getRoleWithPermissions(currentPage),
   });
+  
+  // const deleteGroupMutation =
+  const deleteMutation = useMutation({
+      mutationFn: ( id: number) => deleteRole(id),
+      onSuccess: () => {
+          toast.success("Successfully Deleted the role!");
+          setConfirmDelete(null);
+          queryClient.invalidateQueries({ queryKey: ['getRoleWithPermission',currentPage] });
+      },
+      onError: (error) => {
+        console.error('Error deleting the role', error);
+        toast.error("Error deleting the role!");
+  
+      },
+    });
 
   if (roleData.isPending) {
     return <div className="p-4">Loading roles...</div>;
@@ -48,10 +70,18 @@ const RoleManagement = () => {
   const handleEditClick = (role:any) => {
     setCurrentRole(role);
     setEditRole(true);
+    setViewRole(false);
+  };
+    
+  const handleViewClick = (role:any) => {
+    setCurrentRole(role);
+    setEditRole(false);
+    setViewRole(true)
+
   };
 
   const { data: roles, total_pages, previous, next ,count} = roleData?.data;
-  console.log(currentRole,'rolesCCCCCCCCCCCCCCCC')
+
 
   
   return (
@@ -91,14 +121,20 @@ const RoleManagement = () => {
                         className="text-dark dark:text-gray-200 text-sm cursor-pointer"
                       />
                     </button>
+                      <button 
+                        onClick={() => setConfirmDelete({ id: role?.id })} 
+                  >
                     <FontAwesomeIcon
                       icon={faTrash}
                       className="text-dark dark:text-gray-200 text-sm cursor-pointer"
                     />
+                    </button>
+                    <button onClick={() => handleViewClick(role)}>
                     <FontAwesomeIcon
                       icon={faEye}
                       className="text-dark dark:text-gray-200 text-sm cursor-pointer"
                     />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -178,6 +214,56 @@ const RoleManagement = () => {
               </div>
         </div>
       )}
+
+
+      {viewRole && (
+           
+           <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80">
+           <div className="relative bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl">
+             <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
+               <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
+                 {t("view-role")}
+               </h3>
+               <button onClick={() => setViewRole(false)}>
+                 ✖
+               </button>
+             </div>
+             {currentRole && (
+                 <ViewRoleForm
+                   roleId={currentRole.id}
+                   currentName={currentRole.name}
+                   currentPermissions={currentRole.permissions}
+                 />
+               )}          
+               </div>
+         </div>
+
+      )}
+
+          {confirmDelete && (
+                  <div className='fixed inset-0 bg-gray-800/90 flex justify-center items-center z-50'>
+                    <div className='bg-white shadow-xl p-3 rounded-lg w-full max-w-sm py-4'>
+                    <svg className="text-gray-600 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" ></path></svg>
+                    <p className="mb-4 text-center text-gray-600 ">Are you sure you want to delete this role?</p>
+                    
+                    <div className="flex justify-center items-center space-x-4">
+                        <button
+                         onClick={() => deleteMutation.mutate(confirmDelete.id)}
+                          className='px-4 py-2 cursor-pointer bg-red-500 text-white rounded hover:bg-red-600'
+                          disabled={deleteMutation.isPending}
+                        >
+                          Confirm
+                        </button>
+                        <button
+                          onClick={() => setConfirmDelete(null)}
+                          className='px-4 cursor-pointer py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
     </div>
   );
 };

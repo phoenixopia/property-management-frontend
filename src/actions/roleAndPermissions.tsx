@@ -5,8 +5,8 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { signInSchema,forgotPasswordSchema, resetPasswordSchema } from '@/lib/zodTypes'
 import { revalidatePath } from 'next/cache';
-let endPoint ="https://sasconerp.com/pms/api"
-// let endPoint ="http://192.168.0.179:8000/api"
+// let endPoint ="https://sasconerp.com/pms/api"
+let endPoint ="http://192.168.0.101:8000/api"
 
 import { useRouter } from 'next/router'
 type LoginData = z.infer<typeof signInSchema>
@@ -15,33 +15,7 @@ type ResetPasswordData =z.infer<typeof resetPasswordSchema>& {
     token: string; 
   };
 
-export const singIn =async (loginData:LoginData)=>{
-  
-    const res = await fetch(`${endPoint}/token`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({email:loginData.email,password:loginData.password}),
-      });
 
-
-      const resJson =await res.json();
-    
-
-      if(res?.status ===200){
-        const cookieStore = await cookies();
-        cookieStore.set("_s_t", resJson.access, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
-        cookieStore.set("_s_r", resJson.refresh, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
-        cookieStore.set("_s_ap", JSON.stringify(resJson.permissions), { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
-        cookieStore.set("_s_ag", JSON.stringify(resJson.groups), { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
-    
-        return { status: res.status, message: "Logged in successfully" };
-      }else{
-        return resJson
-      }
-      
-}
 
 
 
@@ -58,16 +32,13 @@ export const getRoleWithPermissions = async (page = 1) => {
   });
 
   const responseJson = await response.json();
-  console.log(responseJson, 'json data of role with permission');
   return responseJson;
 };
 
 
 export async function addRoleWithPermissions(roleName:string, selectedPermissions:string[]) {
   try {
-      // Step 1: Create Role
-      console.log(roleName,'string name')
-      console.log(selectedPermissions,'array per name')
+ 
       const cookieStore = await cookies();
       const accessToken = cookieStore.get('_s_t')?.value;
       const roleResponse = await fetch(`${endPoint}/post_group`, {
@@ -78,15 +49,18 @@ export async function addRoleWithPermissions(roleName:string, selectedPermission
           },
           body: JSON.stringify({ name: roleName }),
       });
-      console.log(roleResponse,'rrrrrrrrrrrrrr')
+    
       if (!roleResponse.ok) {
+        if(roleResponse?.status ===400){
+          return { success: false, message: 'Role with this name existed!' };
+        }
        
           throw new Error('Failed to create role');
       }
 
       const roleData = await roleResponse.json();
       const groupId = roleData.id; 
-        console.log(groupId,'ggggggggggggggggggggggggggggg')
+    
       const permissionResponse = await fetch(`${endPoint}/set_group_permissions`, {
           method: 'POST',
           headers: {
@@ -117,7 +91,7 @@ export async function fetchPermissions() {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
   try {
-    const res = await fetch('https://sasconerp.com/pms/api/get_permissions?page=1', {
+    const res = await fetch(`${endPoint}/get_permissions?page_size=1000`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -143,7 +117,7 @@ export async function updateRole(id: number, name: string, permissions: string[]
   const accessToken = cookieStore.get('_s_t')?.value;
 
   try {
-    const response = await fetch(`https://sasconerp.com/pms/api/update_group/${id}`, {
+    const response = await fetch(`${endPoint}/update_group/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -154,6 +128,39 @@ export async function updateRole(id: number, name: string, permissions: string[]
         permissions: permissions,
       }),
     });
+   
+
+   
+    if (!response.ok) {
+      if(response?.status ===400){
+        return { success: false, message: 'Role with this name existed!' };
+      }
+     
+      throw new Error('Failed to update the role');
+    }
+
+    return { success: true, message: 'Role updated successfully' };
+  } catch (error) {
+    console.error('Error updating role:', error);
+    throw new Error('An error occurred while updating the role.');
+  }
+}
+
+
+export async function deleteRole(id:number) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+ 
+  try {
+    const response = await fetch(`${endPoint}/delete_group/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    });
+
+ 
 
     if (!response.ok) {
       throw new Error('Failed to update the role');
@@ -165,4 +172,5 @@ export async function updateRole(id: number, name: string, permissions: string[]
     console.error('Error updating role:', error);
     throw new Error('An error occurred while updating the role.');
   }
+  
 }

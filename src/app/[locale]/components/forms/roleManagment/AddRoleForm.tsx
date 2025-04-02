@@ -1,18 +1,19 @@
 import React from "react";
 import { useTranslations } from "next-intl";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery ,useQueryClient} from "@tanstack/react-query";
 import { addRoleWithPermissions, fetchPermissions } from "@/actions/roleAndPermissions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { roleFormSchema } from "@/lib/zodTypes";
+import toast from "react-hot-toast";
 
 
 type RoleFormValues = z.infer<typeof roleFormSchema>;
 
 const AddRoleForm = () => {
   const t = useTranslations("full");
-  
+   const queryClient =useQueryClient();
   // Initialize React Hook Form with Zod resolver
   const {
     register,
@@ -40,13 +41,22 @@ const AddRoleForm = () => {
       return addRoleWithPermissions(data.roleName, data.permissions);
     },
     onSuccess: (response) => {
-      console.log(response, 'response after success mutation');
-      reset();
-      alert("Role created successfully!");
+   
+      if(response?.success ===true){
+        queryClient.invalidateQueries({ queryKey: ['getRoleWithPermission'] });
+
+        reset();
+        toast.success("Role created successfully!");
+  
+      }else{
+
+        toast.error(response?.message !==''?response?.message: "Failed to create role!");
+      }
+    
     },
     onError: (error: any) => {
       console.error("Error creating role:", error);
-      alert(error.message || "Failed to create role");
+      toast.error( "Failed to create role");
     },
   });
 
@@ -96,9 +106,9 @@ const AddRoleForm = () => {
             </span>
           </div>
 
-          <hr className="w-full col-span-2 bg-gray-50 border-1 dark:bg-gray-700" />
+          <hr className="w-full col-span-2 bg-gray-50 border-1 dark:bg-gray-500" />
 
-          <div className="grid col-span-2 grid-cols-3 gap-4">
+          <div className="grid col-span-2 grid-cols-3 gap-4 max-h-[12rem] overflow-y-auto">
             {permissionList?.map((perm: any) => (
               <div key={perm.id} className="flex items-center w-full">
                 <input
@@ -129,20 +139,7 @@ const AddRoleForm = () => {
           className="cursor-pointer text-white inline-flex items-center bg-blue-400 hover:bg-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
           disabled={mutation.isPending}
         >
-          {mutation.isPending ? (
-            <svg
-              className="animate-spin w-5 h-5 me-1"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 6v6l4 2" />
-            </svg>
-          ) : (
+      
             <svg className="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
@@ -150,8 +147,10 @@ const AddRoleForm = () => {
                 clipRule="evenodd"
               />
             </svg>
-          )}
-          {mutation.isPending ? "Saving..." : t("add-role")}
+          
+          {mutation.isPending ? <div>
+            <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-current" />
+          </div>: t("add-role")}
         </button>
       </form>
     </div>

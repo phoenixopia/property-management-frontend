@@ -157,12 +157,14 @@ const UserManagement = () => {
                             </tr>
                         </thead>
                         <tbody>
+                        <tr >
+
                         {isPending ? (
-                <tr className=' '>
-                     <td className='px-6 py-4'>Loading users...</td></tr>
-            ) : isError ? (
-                <tr className=''> <td className='px-6 py-4'>Error loading users...</td></tr>
-            ):""}
+                                    <td className='px-6 py-4'><p>Loading users...</p></td>
+                            ) : isError ? (
+                                <td className='px-6 py-4'><p>Error loading users!</p></td>
+                            ):""}
+                        </tr>
                   {(usersList?.length === 0 && isSuccess===true)? (
                       <tr className='bg-white dark:bg-[#333538]'>
                           <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
@@ -182,7 +184,7 @@ const UserManagement = () => {
                               ))} */}
                               dads
                               </td>
-                              <td className='px-6 py-4'>{user?.email ? user?.email : '-'}</td>
+                              <td className='px-6 py-4'>{user?.email ? user?.email :'-'}</td>
                               <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
                                   <button onClick={()=>openEditUserModal(user)}>
                                       <FontAwesomeIcon icon={faPen} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />

@@ -3,8 +3,8 @@
 import { cookies } from 'next/headers'
 
 import { revalidatePath } from 'next/cache';
-let endPoint ="https://sasconerp.com/pms/api"
-// let endPoint ="http://192.168.0.101:8000/api"
+// let endPoint ="https://sasconerp.com/pms/api"
+let endPoint ="http://192.168.0.179:8000/api"
 
 export const getAllUsers = async (page = 1, search = "") => {
   const cookieStore = await cookies();
@@ -103,7 +103,7 @@ export async function updateUser(userId: string, data: any) {
   const accessToken = cookieStore.get('_s_t')?.value;
     console.log(data,'data from the user to update')
   try {
-    const res = await fetch(`${endPoint}/new_update_user/${userId}`, {
+    const res = await fetch(`${endPoint}/update_user/${userId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -118,4 +118,62 @@ export async function updateUser(userId: string, data: any) {
     console.error('Error updating user:', error);
     throw error;
   }
+}
+
+
+export async function deactivateUser(id:number) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+ console.log(id,'id for banning')
+  try {
+    const response = await fetch(`${endPoint}/deactivate_user/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    });
+
+ 
+
+    if (!response.ok) {
+      throw new Error('Failed to deactivate the user');
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error updating deactivate user:', error);
+    throw new Error('An error occurred while deactivating the user.');
+  }
+  
+}
+
+
+export async function activateUser(id:number) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+ 
+  try {
+    const response = await fetch(`${endPoint}/activate_user/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    });
+
+ 
+
+    if (!response.ok) {
+      throw new Error('Failed to activate the user');
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error activating role:', error);
+    throw new Error('An error occurred while updating the activating the user.');
+  }
+  
 }

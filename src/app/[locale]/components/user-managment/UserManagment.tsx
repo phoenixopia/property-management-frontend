@@ -2,15 +2,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { faUserPlus, faFileExport, faPen, faTrash, faEye, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faFileExport, faPen, faTrash, faEye, faMagnifyingGlass,faBan,faLockOpen } from '@fortawesome/free-solid-svg-icons';
 import usersData from '../../../../usersData.json';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import AddUserForm from '../forms/userManagment/AddUserForm';
 import EditUserForm from '../forms/userManagment/EditUserForm';
-import { getAllUsers } from '@/actions/userManagmentAction';
+import { activateUser, getAllUsers } from '@/actions/userManagmentAction';
 import { debounce } from 'lodash'
-
+import { deactivateUser } from '@/actions/userManagmentAction';
+import toast from 'react-hot-toast';
+import { error } from 'console';
+import ViewUserData from '../forms/userManagment/ViewUserData';
 type User = {
     id: string;
     first_name: string;
@@ -19,9 +22,13 @@ type User = {
     last_name:string;
     groups: string[];
     user_permissions:string[];
+    is_active:boolean;
 };
 
 const UserManagement = () => {
+      const [confirmUserDeactivate, setConfirmUserDeactivate] = useState<{ id: number,name:string} | null>(null);
+      const [confirmActivateUser,setConfirmActivateUser]=useState <{id:number,name:string} | null>(null)
+      const queryClient =useQueryClient();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [addUser, setUser] = useState(false);
     const [editUser, setEditUser] = useState(false);
@@ -30,7 +37,8 @@ const UserManagement = () => {
     const [users, setUsers] = useState<User[]>([]); 
     const locale = useLocale();  
     const t = useTranslations('full'); 
-
+     const [currentUserView,setCurrentUserView]=useState(false);
+     const [currentUserData,setCurrentUserData]=useState();
     // Debounced search function
     const debouncedSearch = useCallback(
         debounce((query: string) => {
@@ -45,7 +53,7 @@ const UserManagement = () => {
         debouncedSearch(query);
     };
 
-    const { data: userData, isPending, isError } = useQuery({
+    const { data: userData, isPending, isError,isSuccess } = useQuery({
         queryKey: ["getAllUserData", currentPage, searchQuery],
         queryFn: () => getAllUsers(currentPage, searchQuery),
     });
@@ -73,6 +81,41 @@ const UserManagement = () => {
         setUser(false);
         setEditUser(false);
     };
+
+     const deactivateMutation = useMutation({
+          mutationFn: ( id: number) => deactivateUser(id),
+          onSuccess: () => {
+              toast.success("Successfully deactivate the user!");
+              setConfirmUserDeactivate(null);
+              queryClient.invalidateQueries({ queryKey: ['getAllUserData'] });
+          },
+          onError: (error) => {
+            console.error('Error deactivated the user', error);
+            toast.error("Error deleting the role!");
+      
+          },
+        });
+
+        const activateMutation =useMutation({
+            mutationFn:(id:number)=>activateUser(id),
+            onSuccess:()=>{
+                toast.success("Successfully activated user!")
+                setConfirmActivateUser(null);
+                queryClient.invalidateQueries({queryKey:['getAllUserData']})
+            },
+            onError:(error)=>{
+                console.error("Error on activating the user!")
+                toast.error("Error on activating the user!")
+            }
+        })
+
+        const viewUserData=(user:any)=>{
+            console.log(user,'userData after the click')
+            setCurrentUserView(true)
+            setCurrentUserData(user);
+            setEditUser(false);
+
+        }
   console.log(usersList,'usersList')
     return (
         <div className='flex flex-col justify-between p-4'>
@@ -101,11 +144,7 @@ const UserManagement = () => {
                     </button>
                 </div>
             </div>
-            {isPending ? (
-                <div className="p-4">Loading users...</div>
-            ) : isError ? (
-                <div className="p-4">Error loading users...</div>
-            ):""}
+        
             <div className='py-5'>
                 <div className='relative overflow-x-auto shadow-md rounded-sm max-h-[400px] overflow-y-auto'>
                     <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
@@ -118,24 +157,53 @@ const UserManagement = () => {
                             </tr>
                         </thead>
                         <tbody>
-                  {usersList?.length === 0 ? (
+                        {isPending ? (
+                <tr className=' '>
+                     <td className='px-6 py-4'>Loading users...</td></tr>
+            ) : isError ? (
+                <tr className=''> <td className='px-6 py-4'>Error loading users...</td></tr>
+            ):""}
+                  {(usersList?.length === 0 && isSuccess===true)? (
                       <tr className='bg-white dark:bg-[#333538]'>
                           <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                               {t('nothing-to-show')}
                           </td>
                       </tr>
                   ) : (
-                      usersList.map((user: User) => (
+                      usersList?.map((user: User) => (
                           <tr key={user.id} className='bg-white capitalize text-gray-500 dark:text-gray-200 border-b dark:bg-[#333538] dark:border-gray-700 border-gray-200'>
                               <td className='px-6 py-4'>{user?.first_name ? user?.first_name : '-'}</td>
-                              <td className='px-6 py-4'>{user?.groups[0] ? user?.groups[0] : '-'}</td>
+                              <td className='px-6 py-4'>
+                              {/* {user?.groups.map((item,index)=>(
+                                <p className='bg-gray-50 py-1'>
+                                  {user?.groups[index] ? user?.groups[index] : '-'}
+
+                                </p>
+                              ))} */}
+                              dads
+                              </td>
                               <td className='px-6 py-4'>{user?.email ? user?.email : '-'}</td>
                               <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
                                   <button onClick={()=>openEditUserModal(user)}>
                                       <FontAwesomeIcon icon={faPen} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
                                   </button>
-                                  <FontAwesomeIcon icon={faTrash} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
-                                  <FontAwesomeIcon icon={faEye} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
+
+                                {user?.is_active &&     <button      onClick={() => setConfirmUserDeactivate({ id: parseInt(user?.id),name:user?.first_name })} >
+                                  <FontAwesomeIcon icon={faBan} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
+
+                                  </button> }
+
+                                  {!user?.is_active && 
+                                  
+                                  <button      onClick={() => setConfirmActivateUser({ id: parseInt(user?.id),name:user?.first_name })} >
+                                  <FontAwesomeIcon icon={faLockOpen} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
+
+                                  </button> }
+
+                              <button onClick={()=>viewUserData(user)}>
+                              <FontAwesomeIcon icon={faEye} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
+
+                              </button>
                               </td>
                           </tr>
                       ))
@@ -175,6 +243,31 @@ const UserManagement = () => {
                 </div>
             </div>
 
+
+
+            {currentUserView && (
+           
+           <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-120">
+           
+           <div className="relative max-h-[80%] bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-2xl overflow-x-hidden overflow-y-auto">
+             <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
+               <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
+                 {t("view-user")}
+               </h3>
+               <button onClick={() => setCurrentUserView(false)}>
+                 ✖
+               </button>
+             </div>
+           
+                 <ViewUserData
+                   userData={currentUserData}
+                   
+                 />
+                    
+               </div>
+         </div>
+
+      )}
             {editUser && (
                 <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
                     <div className='relative bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl'>
@@ -210,9 +303,91 @@ const UserManagement = () => {
     </div>
   </div>
 )}
+
+{currentUserView && (
+           
+           <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-120">
+            <p>dsadsadfsaghdfhsagdfgf</p>
+           <div className="relative bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl">
+             <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
+               <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
+                 {t("view-user")}
+               </h3>
+               <button onClick={() => setCurrentUserView(false)}>
+                 ✖
+               </button>
+             </div>
+           
+                 <ViewUserData
+                   userData={currentUserData}
+                   
+                 />
+                    
+               </div>
+         </div>
+
+      )}
                     </div>
                 </div>
             )}
+{confirmActivateUser && (
+    <div className='fixed inset-0 bg-gray-800/90 flex justify-center items-center z-50'>
+    <div className='bg-white shadow-xl p-3 rounded-lg w-full max-w-sm py-4'>
+    <svg className="text-gray-600 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" ></path></svg>
+    <div className="flex items-center justify-center mb-4 text-center text-gray-600 gap-1 ">
+      
+     <p>Are you sure you want to activate</p> <p className="bg-gray-200 rounded-lg p-2">{confirmActivateUser?.name}</p><p>?</p>
+      
+      
+      </div>
+    
+    <div className="flex justify-center items-center space-x-4">
+        <button
+         onClick={() => activateMutation.mutate(confirmActivateUser?.id)}
+          className='px-4 py-2 cursor-pointer bg-green-500 text-white rounded hover:bg-green-600'
+          disabled={activateMutation.isPending}
+        >
+          Confirm
+        </button>
+        <button
+          onClick={() => setConfirmActivateUser(null)}
+          className='px-4 cursor-pointer py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{confirmUserDeactivate && (
+                  <div className='fixed inset-0 bg-gray-800/90 flex justify-center items-center z-50'>
+                    <div className='bg-white shadow-xl p-3 rounded-lg w-full max-w-sm py-4'>
+                    <svg className="text-gray-600 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" ></path></svg>
+                    <div className="flex items-center justify-center mb-4 text-center text-gray-600 gap-1 ">
+                      
+                     <p>Are you sure you want to deactivate</p> <p className="bg-gray-200 rounded-lg p-2">{confirmUserDeactivate?.name}</p><p>?</p>
+                      
+                      
+                      </div>
+                    
+                    <div className="flex justify-center items-center space-x-4">
+                        <button
+                         onClick={() => deactivateMutation.mutate(confirmUserDeactivate.id)}
+                          className='px-4 py-2 cursor-pointer bg-red-500 text-white rounded hover:bg-red-600'
+                          disabled={deactivateMutation.isPending}
+                        >
+                          Confirm
+                        </button>
+                        <button
+                          onClick={() => setConfirmUserDeactivate(null)}
+                          className='px-4 cursor-pointer py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
             {addUser && (
                 <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>

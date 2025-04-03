@@ -217,7 +217,7 @@ const SideBar = () => {
         
             <div
              
-              className={`${getLinkClasses("/property management")} `}
+              className={`${getLinkClasses("/property-management")} `}
             >
               
               <span className="ms-3">{t2('property-management')}</span>

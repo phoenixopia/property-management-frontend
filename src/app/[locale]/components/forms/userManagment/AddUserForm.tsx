@@ -135,21 +135,22 @@ const AddUserForm = () => {
             )}
           </div>
           <div className="col-span-2">
+          <span className='text-gray-800 text-center  dark:text-white' >
+                {t("select-role")}
+              </span>
             <select
               {...form.register("groups")}
               multiple
               className="flex p-3 text-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600 border-gray-300 rounded-lg w-full"
             >
-              <option className='text-gray-50 text-center bg-gray-800 dark:text-white' value="">
-                {t("select-role")}
-              </option>
+          
               {groupData.isPending ? (
                 <option disabled>Loading groups...</option>
               ) : (
                 groupData?.data.data?.map((group: any) => (
                   <option
                     key={group.id}
-                    className='text-gray-600 dark:text-white'
+                    className='text-gray-600 dark:text-white py-1'
                     value={group.name}
                   >
                     {group.name}

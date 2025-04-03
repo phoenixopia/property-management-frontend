@@ -179,7 +179,7 @@ const RoleManagement = () => {
 
       {addRole && (
         <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80">
-          <div className="relative bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl">
+          <div className="relative max-h-[80%] bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl">
             <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
               <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
                 {t("create-role")}
@@ -195,7 +195,7 @@ const RoleManagement = () => {
 
       {editRole && (
         <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80">
-          <div className="relative bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl">
+          <div className="relative max-h-[80%] bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl">
             <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
               <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
                 {t("edit-role")}
@@ -219,7 +219,7 @@ const RoleManagement = () => {
       {viewRole && (
            
            <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80">
-           <div className="relative bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl">
+           <div className="relative max-h-[80%] bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl">
              <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
                <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
                  {t("view-role")}

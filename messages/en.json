@@ -91,7 +91,23 @@
      "user-created-successfully":"User Created Successfully",
      "something-went-wrong":"Something Went Wrong",
      "successfully-updated-user":"Successfully Updated User",
-     "view-user":"View User"
+     "view-user":"View User",
+     "search":"Search",
+     "min-price":"Minimum price",
+     "max-price":"Maximum price",
+     "address":"Address",
+     "property-information":"Property Information",
+     "type":"Type",
+     "specifications":"Specifications",
+     "rent":"Rent",
+     "bedrooms":"Bedrooms",
+     "bathrooms":"Bathrooms",
+     "owner":"Owner",
+     "management":"Managment",
+     "add-new-property":"add new property",
+     "property-type":"property type"
+
+   
 
 
 

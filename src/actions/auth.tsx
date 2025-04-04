@@ -4,8 +4,8 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { signInSchema,forgotPasswordSchema, resetPasswordSchema } from '@/lib/zodTypes'
-// let endPoint ="https://sasconerp.com/pms/api"
-let endPoint ="http://192.168.0.179:8000/api"
+let endPoint ="https://sasconerp.com/pms/api"
+// let endPoint ="http://192.168.0.179:8000/api"
 type LoginData = z.infer<typeof signInSchema>
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>
 type ResetPasswordData =z.infer<typeof resetPasswordSchema>& {

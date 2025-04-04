@@ -3,8 +3,8 @@
 import { cookies } from 'next/headers'
 
 import { revalidatePath } from 'next/cache';
-// let endPoint ="https://sasconerp.com/pms/api"
-let endPoint ="http://192.168.0.179:8000/api"
+let endPoint ="https://sasconerp.com/pms/api"
+// let endPoint ="http://192.168.0.179:8000/api"
 
 export const getAllUsers = async (page = 1, search = "") => {
   const cookieStore = await cookies();

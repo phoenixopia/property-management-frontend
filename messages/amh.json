@@ -93,7 +93,23 @@
      "user-created-successfully":"ተጠቃሚ በተሳካ ሁኔታ ተፈጥሯል።",
      "something-went-wrong":"የሆነ ችግር ተፈጥሯል።",
      "successfully-updated-user":"ተጠቃሚ በተሳካ ሁኔታ ዘምኗል።",
-     "view-user":"ተጠቃሚን ይመልከቱ"
+     "view-user":"ተጠቃሚን ይመልከቱ",
+     "search":"ፈልግ",
+    "min-price":"ዝቅተኛ ዋጋ",
+     "max-price":"ከፍተኛ ዋጋ",
+     "address":"አድራሻ",
+     "property-information":"የንብረት መረጃ",
+     "type":"ዓይነት",
+     "specifications":"ዝርዝር መግለጫዎች",
+     "rent":"ኪራይ",
+     "bedrooms":"መኝታ ቤቶች",
+     "bathrooms":"መታጠቢያ ቤቶች",
+     "owner":"ባለቤት",
+     "management":"አስተዳደር",
+     "add-new-property":"አክል-አዲስ-ንብረት",
+     "property-type":"የንብረት አይነት"
+
+
 
     
 

@@ -4,8 +4,8 @@ import { cookies } from 'next/headers'
 
 import { signInSchema,forgotPasswordSchema, resetPasswordSchema } from '@/lib/zodTypes'
 import { revalidatePath } from 'next/cache';
-// let endPoint ="https://sasconerp.com/pms/api"
-let endPoint ="http://192.168.0.179:8000/api"
+let endPoint ="https://sasconerp.com/pms/api"
+// let endPoint ="http://192.168.0.179:8000/api"
 
 type LoginData = z.infer<typeof signInSchema>
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>

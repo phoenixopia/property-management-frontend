@@ -1,13 +1,15 @@
 "use client";
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useMutation,useQuery,useQueryClient } from '@tanstack/react-query';
 import { faPen, faTrash, faEye, faMagnifyingGlass, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import AddPropertyForm from '../forms/propertyManagment/AddPropertyForm';
 import PropertyDetail from './property-detail/PropertyDetail';
-import { useQuery } from '@tanstack/react-query';
-import { fetchProperties } from '@/actions/propertyManagmentAction';
+import toast from 'react-hot-toast';
+import { deleteProperty, fetchProperties } from '@/actions/propertyManagmentAction';
+import { property } from 'lodash';
 
 type Property = {
   id: number;
@@ -27,8 +29,11 @@ type Property = {
 };
 
 const PropertyManagement = () => {
+  const queryClient =useQueryClient();
   const [addProperty, setPropertyModal] = useState(false);
   const [propertyDetail, setPropertyDetail] = useState(false);
+    const [confirmDelete, setConfirmDelete] = useState<{ id: number ,name:string} | null>(null);
+    const [propertyMaintenance,setPropertyMaintenance]=useState(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [filters, setFilters] = useState({
     search: '',
@@ -60,6 +65,19 @@ const PropertyManagement = () => {
       page: '1' // Reset to first page when filters change
     }));
   };
+  const deleteMutation = useMutation({
+    mutationFn: ( id: number) => deleteProperty(id),
+    onSuccess: () => {
+        toast.success("Successfully Deleted the property!");
+        setConfirmDelete(null);
+        queryClient.invalidateQueries({ queryKey: ['properties'] });
+    },
+    onError: (error) => {
+      console.error('Error deleting the property', error);
+      toast.error("Error deleting the property!");
+
+    },
+  });
 
   const handlePageChange = (newPage: number) => {
     setFilters(prev => ({
@@ -80,18 +98,31 @@ const PropertyManagement = () => {
     setSelectedProperty(property);
     setPropertyDetail(true);
   };
+  const openAddMaintenance =(property:Property)=>{
+    setSelectedProperty(property)
+    setPropertyMaintenance(true);
+    setPropertyDetail(false);
+
+  }
 
   const closePropertyDetail = () => {
     setPropertyDetail(false);
     setSelectedProperty(null);
   };
 
+  const closePropertyMaintenance = () => {
+    setPropertyMaintenance(false);
+    setSelectedProperty(null);
+  };
+  
+
+
 
   return (
     <div className='flex flex-col justify-between p-4'>
       <div className='flex items-center flex-col xl:flex-row justify-between w-full gap-5 xl:gap-0'>
         {/* Search and Filter Section */}
-        <div className='flex flex-col md:flex-row gap-4 w-full'>
+        <div className='flex flex-col md:flex-row gap-4 w-[80%]'>
           <div className='relative'>
             <input
               type='text'
@@ -99,7 +130,7 @@ const PropertyManagement = () => {
               placeholder={t('search')}
               value={filters.search}
               onChange={handleFilterChange}
-              className='pl-10 pr-4 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
+              className='pl-10 pr-4 py-2 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
             />
             <FontAwesomeIcon 
               icon={faMagnifyingGlass} 
@@ -111,18 +142,18 @@ const PropertyManagement = () => {
             <input
               type='number'
               name='min'
-              placeholder={t('min-price')}
+              placeholder="Minimum Rent Price"
               value={filters.min}
               onChange={handleFilterChange}
-              className='px-4 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
+              className='px-4 py-2 border text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
             />
             <input
               type='number'
               name='max'
-              placeholder={t('max-price')}
+              placeholder='Maximum Rent Price'
               value={filters.max}
               onChange={handleFilterChange}
-              className='px-4 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
+              className='px-4 py-2 border text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
             />
           </div>
         </div>
@@ -187,8 +218,9 @@ const PropertyManagement = () => {
                                       className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
                                     />
                                   </button>
-                                  <FontAwesomeIcon 
+                           <FontAwesomeIcon 
                                     icon={faTrash} 
+                                    onClick={() => setConfirmDelete({ id: property?.id,name:property?.name })} 
                                     className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
                                   />
                                   <FontAwesomeIcon 
@@ -196,6 +228,11 @@ const PropertyManagement = () => {
                                     onClick={() => openPropertyDetail(property)} 
                                     className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
                                   />
+
+
+                                  <FontAwesomeIcon icon={faScrewdriverWrench}
+                                  onClick={()=>openAddMaintenance(property)}
+                                  className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
                                 </td>
                               </tr>
                             )) }
@@ -287,6 +324,70 @@ const PropertyManagement = () => {
           </div>
         </div>
       )}
+
+      {/* {propertyMaintenance && selectedProperty && (
+               <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
+               <div className='relative max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-md'>
+                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                   <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
+                     {t("property-detail")}
+                   </h3>
+                   <button 
+                     onClick={closePropertyMaintenance} 
+                     type="button" 
+                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                   >
+                     <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                     </svg>
+                     <span className="sr-only">Close modal</span>
+                   </button>
+                 </div>
+                 <PropertyDetail property={selectedProperty} />
+               </div>
+             </div>
+      )} */}
+
+
+{confirmDelete && (
+                  <div className='fixed inset-0 bg-gray-800/90 flex justify-center items-center z-50'>
+                    <div className='bg-white shadow-xl p-3 rounded-lg w-full max-w-sm py-4'>
+                    <svg className="text-gray-600 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" ></path></svg>
+                    <div className="flex items-center justify-center mb-4 text-center text-gray-600 gap-1 ">
+                      
+                     <p>Are you sure you want to delete</p> <p className="bg-gray-200 rounded-lg p-2 text-sm">{confirmDelete?.name}?</p>
+                      
+                      
+                      </div>
+                    
+                    <div className="flex justify-center items-center space-x-4">
+                      {deleteMutation?.isPending ?
+               <>
+              <button
+                         onClick={() => deleteMutation.mutate(confirmDelete.id)}
+                          className='px-4 py-2 cursor-pointer bg-red-500 text-white rounded hover:bg-red-600'
+                          disabled={deleteMutation.isPending}
+                        >
+                        processing..
+                        </button>
+               </>:<>  <button
+                         onClick={() => deleteMutation.mutate(confirmDelete.id)}
+                          className='px-4 py-2 cursor-pointer bg-red-500 text-white rounded hover:bg-red-600'
+                          disabled={deleteMutation.isPending}
+                        >
+                          Confirm
+                        </button></>}
+                      
+                        <button
+                          onClick={() => setConfirmDelete(null)}
+                          className='px-4 cursor-pointer py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
     </div>
   );
 };

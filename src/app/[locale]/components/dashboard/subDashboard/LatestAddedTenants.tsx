@@ -25,42 +25,42 @@ const LatestAddedTenants = () => {
       <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
           <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>sey is added</p>
 
        </div>
       </li>
       <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
           <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>tigist is added</p>
 
        </div>
       </li>
       <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
           <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>mandela is added</p>
 
        </div>
       </li>
       <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
           <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>bekila is added</p>
 
        </div>
       </li>
       <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
           <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe is added</p>
 
        </div>
       </li>
       <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
         <div className='flex flex-col font-sm'>
           <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
+          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>yohannes is added</p>
 
        </div>
       </li>

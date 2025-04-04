@@ -4,6 +4,8 @@ import { useLocale } from "next-intl";
 import { useTranslations } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery ,useQueryClient} from "@tanstack/react-query";
+
 import { z } from 'zod';
 import toast from 'react-hot-toast';
 import { createProperty,fetchOwners, fetchManagers } from '@/actions/propertyManagmentAction';
@@ -26,7 +28,10 @@ const propertySchema = z.object({
  type PropertyFormData = z.infer<typeof propertySchema>;
  
  const AddPropertyForm = ({ onSuccess }: { onSuccess: () => void }) => {
-   const t = useTranslations("full");
+  const t = useTranslations("full");
+  const queryClient = useQueryClient();
+
+
    const [owners, setOwners] = useState<{id: number, full_name: string}[]>([]);
    const [managers, setManagers] = useState<{id: number, full_name: string}[]>([]);
    const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,7 +79,27 @@ const propertySchema = z.object({
      fetchData();
    }, []);
  
-   // 3. Form submission handler
+
+
+   const mutation = useMutation({
+    mutationFn: (data: PropertyFormData) => 
+      createProperty(data),
+    onSuccess: (data) => {
+
+      console.log(data,'datass')
+      if (data.success) {
+         toast.success("successfull")
+        queryClient.invalidateQueries({ queryKey: ['properties'] });
+      } else {
+        toast.error(data.message);
+      }
+    },
+    onError: () => {
+      toast.error(t("something-went-wrong"));
+    },
+  });
+   
+
    const onSubmit: SubmitHandler<PropertyFormData> = async (data) => {
      try {
        setIsSubmitting(true);
@@ -88,18 +113,14 @@ const propertySchema = z.object({
  
        // Call the server action
        const result = await createProperty(propertyData);
-       
-       if (result.success) {
-         toast.success("Property created successfully");
-         reset();
-         onSuccess();
-       } else {
-         toast.error("Creating property failed!");
-       }
+      
      } catch (error) {
       toast.error("Creating property failed!");
      } finally {
        setIsSubmitting(false);
+       toast.success("successfully created")
+       queryClient.invalidateQueries({ queryKey: ['properties'] });
+
      }
    };
  
@@ -324,8 +345,8 @@ const propertySchema = z.object({
              >
                <option value="">select-status</option>
                <option value="available">available</option>
-               <option value="rented">rented</option>
-               <option value="maintenance">maintenance</option>
+               {/* <option value="rent">rent</option>
+               <option value="under_maintenance">uner maintenance</option> */}
              </select>
              {errors.status && (
                <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>

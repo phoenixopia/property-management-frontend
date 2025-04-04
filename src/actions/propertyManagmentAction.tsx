@@ -193,3 +193,32 @@ export async function fetchManagers() {
     throw new Error('Failed to fetch managers');
   }
 }
+
+
+export async function deleteProperty(id:number) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+ 
+  try {
+    const response = await fetch(`${endPoint}/delete_property/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    });
+
+ 
+
+    if (!response.ok) {
+      throw new Error('Failed to update the role');
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error updating role:', error);
+    throw new Error('An error occurred while updating the role.');
+  }
+  
+}

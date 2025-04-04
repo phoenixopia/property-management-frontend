@@ -2,6 +2,7 @@ import React from 'react';
 import Dashboard from '../../../components/dashboard/Dashboard';
 import { useTranslations } from 'next-intl'; 
 import MaintenanceManagment from '../../../components/maintenance-managment/MaintenanceManagment';
+import TenantManagement from '@/app/[locale]/components/tenant-management/TenantManagement';
 
 
 const page = () => {
@@ -18,7 +19,7 @@ const page = () => {
 
       
       <div className="pt-16 p-6 flex-grow overflow-auto">
-             <p>tenant page</p>
+             <TenantManagement/>
    
       </div>
     </div>

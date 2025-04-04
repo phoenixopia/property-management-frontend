@@ -16,7 +16,7 @@ type MaintenanceUsers={
     name: string;
     email: string;
   };
-const MaintenanceManagement = () => {
+const TenantManagement = () => {
     const[addUser,setUser]=useState(false);
     const[openUser,setOpenUser]=useState(false);
     const[editUser,setEditUser]=useState(false);
@@ -27,6 +27,7 @@ const MaintenanceManagement = () => {
 
       const openAddUserModal =()=>{
         setUser(true);
+        setEditUser(false)
       }
       const openEditUserModal =()=>{
         setUser(false);
@@ -42,9 +43,11 @@ const MaintenanceManagement = () => {
       }
    const openUserDetail=()=>{
     setOpenUser(true)
+    setEditUser(false)
    }
    const closeUserDetail=()=>{
     setOpenUser(false)
+    setEditUser(false);
    }
 
   useEffect(() => {
@@ -83,11 +86,8 @@ const MaintenanceManagement = () => {
               <tr>
                 <th className='px-6 py-3'>{t('name')}</th>
                 <th className='px-6 py-3'>{t('email')}</th>
-                <th className='px-6 py-3'>{t('status')}</th>
-                <th className='px-6 py-3'>{t('requested-date')}</th>
-                <th className='px-6 py-3'>{t('fixed-date')}</th>
-                <th className='px-6 py-3'>{t('description')}</th>
-                {/* <th className='px-6 py-3'>{t('action')}</th> */}
+                {/* <th className='px-6 py-3'>{t('status')}</th> */}
+                <th className='px-6 py-3'>{t('action')}</th>
 
 
                 
@@ -99,18 +99,15 @@ const MaintenanceManagement = () => {
               
                   <td className='px-6 py-4'>{user?.name}</td>
                   <td className='px-6 py-4'>{user?.email}</td>
-                  <td className='px-6 py-4'>{user?.status}</td>
-                  <td className='px-6 py-4'>{user?.requestedDate}</td>
-                  <td className='px-6 py-4'>{user?.fixedDate}</td>
-                  <td className='px-6 py-4'>{user?.discription}</td>
+                  {/* <td className='px-6 py-4'>{user?.status}</td> */}
 
-                  {/* <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
+                  <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
                     <button onClick={openEditUserModal} >
                      <FontAwesomeIcon icon={faPen} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
                     </button>
                     <FontAwesomeIcon icon={faTrash} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
                     <FontAwesomeIcon icon={faEye} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
-                  </td> */}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -231,4 +228,4 @@ const MaintenanceManagement = () => {
   );
 };
 
-export default MaintenanceManagement;
+export default TenantManagement

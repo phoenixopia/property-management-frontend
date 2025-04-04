@@ -8,8 +8,8 @@
      "setting":"ቅንብር",
      "user-managment":"የተጠቃሚ አስተዳደር",
      "sign-out":"ዘግተህ ውጣ",
-     "maintenance-title":"ጥገና ገጽ"
-
+     "maintenance-title":"ጥገና ገጽ",
+     "tenant-page":"ተከራይ-አስተዳደር"
 
     },
     "full": {
@@ -107,7 +107,10 @@
      "owner":"ባለቤት",
      "management":"አስተዳደር",
      "add-new-property":"አክል-አዲስ-ንብረት",
-     "property-type":"የንብረት አይነት"
+     "property-type":"የንብረት አይነት",
+     "tenant-management":"ተከራይ አስተዳደር"
+    
+
 
 
 

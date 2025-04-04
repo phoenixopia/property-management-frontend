@@ -69,7 +69,7 @@ const AddUserForm = () => {
   const onSubmit = (data: UserFormValues) => {
     mutation.mutate(data);
   };
-
+  
   return (
     <div>
       <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 md:p-5">

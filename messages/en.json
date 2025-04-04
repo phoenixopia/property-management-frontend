@@ -8,7 +8,9 @@
         "setting":"Setting",
         "user-managment":"User Managment",
         "sign-out":"Sign Out",
-        "maintenance-title":"Maintenance"
+        "maintenance-title":"Maintenance",
+     "tenant-page":"Tenant Page"
+
        },
     "full": {
       "add-user": "Add User",
@@ -105,7 +107,8 @@
      "owner":"Owner",
      "management":"Managment",
      "add-new-property":"add new property",
-     "property-type":"property type"
+     "property-type":"property type",
+     "tenant-management":"Tenant Management"
 
    
 

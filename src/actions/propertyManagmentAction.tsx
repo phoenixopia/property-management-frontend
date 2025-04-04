@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
+import { log } from 'console';
 
 type Property = {
   id: number;
@@ -48,8 +49,8 @@ export async function fetchProperties(
   const accessToken = cookieStore.get('_s_t')?.value;
 
 
-  const min = params.min ? Number(params.min) : 1
-  const max = params.max ? Number(params.max) : 800000000000000000;
+  const min = params.min ? Number(params.min) : 0
+  const max = params.max ? Number(params.max) : 120000000000;
   const search = params.search || '';
   const page = params.page ? Number(params.page) : 1;
   const page_size = params.page_size ? Number(params.page_size) : 10;
@@ -158,10 +159,8 @@ export async function fetchOwners() {
     }
 
     const data = await response.json();
-    return data.owners.map((id: number) => ({ 
-      id, 
-      name: `Owner ${id}` // You might want to fetch actual names from another endpoint
-    }));
+    console.log(data,'data after the form')
+    return data?.owners
 
   } catch (error) {
     console.error('Error fetching owners:', error);
@@ -186,10 +185,8 @@ export async function fetchManagers() {
     }
 
     const data = await response.json();
-    return data.managers.map((id: number) => ({ 
-      id, 
-      name: `Manager ${id}` // You might want to fetch actual names from another endpoint
-    }));
+    console.log(data,'managersData')
+    return data?.managers
 
   } catch (error) {
     console.error('Error fetching managers:', error);

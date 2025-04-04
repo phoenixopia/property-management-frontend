@@ -19,7 +19,7 @@ const propertySchema = z.object({
    bed_rooms: z.number().min(0, "Bedrooms must be positive").optional(),
    bath_rooms: z.number().min(0, "Bathrooms must be positive").optional(),
    status: z.string().min(1, "Status is required"),
-   owner_id: z.number().optional(),
+   owner_id: z.number().optional().nullable(),
    manager_id: z.number().optional().nullable(),
  });
  
@@ -27,8 +27,8 @@ const propertySchema = z.object({
  
  const AddPropertyForm = ({ onSuccess }: { onSuccess: () => void }) => {
    const t = useTranslations("full");
-   const [owners, setOwners] = useState<{id: number, name: string}[]>([]);
-   const [managers, setManagers] = useState<{id: number, name: string}[]>([]);
+   const [owners, setOwners] = useState<{id: number, full_name: string}[]>([]);
+   const [managers, setManagers] = useState<{id: number, full_name: string}[]>([]);
    const [isSubmitting, setIsSubmitting] = useState(false);
  
    const {
@@ -51,7 +51,7 @@ const propertySchema = z.object({
        bed_rooms: 0,
        bath_rooms: 0,
        status: '',
-       owner_id: undefined,
+       owner_id: null,
        manager_id: null,
      }
    });
@@ -67,12 +67,12 @@ const propertySchema = z.object({
          setOwners(ownersData);
          setManagers(managersData);
        } catch (error) {
-         toast.error(t('fetch-error'));
+         toast.error('fetch-error');
        }
      };
  
      fetchData();
-   }, [t]);
+   }, []);
  
    // 3. Form submission handler
    const onSubmit: SubmitHandler<PropertyFormData> = async (data) => {
@@ -104,11 +104,12 @@ const propertySchema = z.object({
    };
  
    // 4. Form UI
+    console.log(owners,"ownersList");
+    console.log(managers,"managerList");
+
    return (
      <div className="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
-       <h2 className="text-xl font-semibold mb-4 dark:text-white">
-         {t('add-new-property')}
-       </h2>
+ 
        
        <form onSubmit={handleSubmit(onSubmit)}>
          <div className="grid gap-4 mb-4 grid-cols-1 md:grid-cols-2">
@@ -132,26 +133,31 @@ const propertySchema = z.object({
              )}
            </div>
  
-           {/* Owner Selection */}
            <div className="col-span-2 md:col-span-1">
-             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-               {t('owner')}
-             </label>
-             <select
-               {...register("owner_id", { valueAsNumber: true })}
-               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-             >
-               <option value="">select-owner</option>
-               {owners.map((owner) => (
-                 <option key={owner.id} value={owner.id}>
-                   {owner.name}
-                 </option>
-               ))}
-             </select>
-           </div>
+  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+    {t('owner')}
+  </label>
+  <select
+    {...register("owner_id", { valueAsNumber: true })}
+    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+  >
+    
+    <option value="">no-manager</option>
+    {Array.isArray(owners) ? (
+      owners.map((owner) => (
+        
+        <option key={owner.id} value={owner.id} className="text-black">
+          {owner.full_name.trim()}
+        </option>
+      ))
+    ) : (
+      <option value="" disabled>Loading owners...</option>
+    )}
+  </select>
+</div>
  
            {/* Manager Selection */}
-           {/* <div className="col-span-2 md:col-span-1">
+           <div className="col-span-2 md:col-span-1">
              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                manager
              </label>
@@ -159,14 +165,15 @@ const propertySchema = z.object({
                {...register("manager_id", { valueAsNumber: true })}
                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
              >
-               <option value="">select-manager</option>
+               <option value="">no-manager</option>
                {managers.map((manager) => (
                  <option key={manager.id} value={manager.id}>
-                   {manager.name}
+                     {manager.full_name.trim()}
+                
                  </option>
                ))}
              </select>
-           </div> */}
+           </div>
  
            {/* Property Name */}
            <div className="col-span-2">

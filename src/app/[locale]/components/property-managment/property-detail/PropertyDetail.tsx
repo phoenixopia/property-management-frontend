@@ -106,7 +106,7 @@ const PropertyDetail = ({ property }: PropertyDetailProps) => {
           </div>
         </div>
 
-        {/* Owner/Manager Info (if available) */}
+   
         {(property.owner_id || property.manager_id) && (
           <div className='md:col-span-2 space-y-4 pt-4 border-t dark:border-gray-600'>
             <h3 className='text-lg font-semibold text-gray-800 dark:text-white'>
@@ -124,7 +124,7 @@ const PropertyDetail = ({ property }: PropertyDetailProps) => {
               
               {property.manager_id && (
                 <div className='bg-gray-50 dark:bg-gray-700 p-4 rounded-md'>
-                  <h4 className='font-medium mb-2'>{t('manager')}</h4>
+                  <h4 className='font-medium mb-2'>manager</h4>
                   <p>ID: {property.manager_id}</p>
                   {/* You would typically fetch manager details here */}
                 </div>

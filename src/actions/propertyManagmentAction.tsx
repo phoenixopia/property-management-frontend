@@ -222,3 +222,110 @@ export async function deleteProperty(id:number) {
   }
   
 }
+
+
+export const updateProperty = async (id: number, data: any) => {
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('_s_t')?.value;
+    const response = await fetch(`${endPoint}/update_property/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    console.log(response,'responseDataa')
+
+    if (!response.ok) {
+      throw new Error('Failed to update property');
+    }
+
+    const result = await response.json();
+  
+    return result;
+  } catch (error) {
+    console.error('Error updating property:', error);
+    throw error;
+  }
+};
+
+
+export async function getUserProfile(accessToken: string) {
+  try {
+    const response = await fetch(`${endPoint}/get_user_profile`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        access_token: accessToken
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch user profile');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+}
+
+export async function createMaintenanceRequest(requestData: any) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+
+  if (!accessToken) {
+    throw new Error('Authentication required');
+  }
+
+  try {
+    // First get the user ID from profile
+    const userProfile = await getUserProfile(accessToken);
+    const userId = userProfile.id;
+
+    const response = await fetch(`${endPoint}/post_maintenance_request`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        property_id: requestData.property_id,
+        description: requestData.description,
+        status: "pending" 
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('API Error:', errorData);
+      return { 
+        success: false, 
+        message: errorData.message || 'Failed to create maintenance request' 
+      };
+    }
+
+    const data = await response.json();
+   
+    
+    return { 
+      success: true, 
+      message: 'Maintenance request created successfully',
+      data 
+    };
+
+  } catch (error) {
+    console.error('Network Error:', error);
+    return { 
+      success: false, 
+      message: 'Network error occurred while creating maintenance request' 
+    };
+  }
+}

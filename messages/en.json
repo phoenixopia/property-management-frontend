@@ -108,7 +108,9 @@
      "management":"Managment",
      "add-new-property":"add new property",
      "property-type":"property type",
-     "tenant-management":"Tenant Management"
+     "tenant-management":"Tenant Management",
+     "property-maintenance":"Property Maintenance",
+     "maintenance-request":"Maintenance Request"
 
    
 

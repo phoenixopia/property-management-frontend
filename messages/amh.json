@@ -108,7 +108,10 @@
      "management":"አስተዳደር",
      "add-new-property":"አክል-አዲስ-ንብረት",
      "property-type":"የንብረት አይነት",
-     "tenant-management":"ተከራይ አስተዳደር"
+     "tenant-management":"ተከራይ አስተዳደር",
+     "property-maintenance":"የንብረት ጥገና",
+     "maintenance-request":"የጥገና-ጥያቄ"
+
     
 
 

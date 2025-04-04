@@ -10,7 +10,8 @@ import PropertyDetail from './property-detail/PropertyDetail';
 import toast from 'react-hot-toast';
 import { deleteProperty, fetchProperties } from '@/actions/propertyManagmentAction';
 import { property } from 'lodash';
-
+import EditPropertyForm from '../forms/propertyManagment/EditPropertyForm';
+import AddPropertyMaintenance from '../forms/propertymaintenance/AddPropertyMaintenance';
 type Property = {
   id: number;
   property_type: string;
@@ -42,7 +43,10 @@ const PropertyManagement = () => {
     page: '1',
     page_size: '10'
   });
+  const [editPropertyModal, setEditPropertyModal] = useState(false);
 
+
+  
   const locale = useLocale();  
   const t = useTranslations('full');
 
@@ -115,6 +119,15 @@ const PropertyManagement = () => {
     setSelectedProperty(null);
   };
   
+  const openEditPropertyModal = (property: Property) => {
+    setSelectedProperty(property);
+    setEditPropertyModal(true);
+  };
+  
+  const closeEditPropertyModal = () => {
+    setEditPropertyModal(false);
+    setSelectedProperty(null);
+  };
 
 
 
@@ -212,12 +225,12 @@ const PropertyManagement = () => {
                                 <td className='px-6 py-4'>{property.price}</td>
                                 <td className='px-6 py-4'>{property.status}</td>
                                 <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
-                                  <button onClick={() => setSelectedProperty(property)}>
-                                    <FontAwesomeIcon 
-                                      icon={faPen} 
-                                      className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-                                    />
-                                  </button>
+                                <button onClick={() => openEditPropertyModal(property)}>
+                                  <FontAwesomeIcon 
+                                    icon={faPen} 
+                                    className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
+                                  />
+                                </button>
                            <FontAwesomeIcon 
                                     icon={faTrash} 
                                     onClick={() => setConfirmDelete({ id: property?.id,name:property?.name })} 
@@ -325,12 +338,12 @@ const PropertyManagement = () => {
         </div>
       )}
 
-      {/* {propertyMaintenance && selectedProperty && (
+      {propertyMaintenance && selectedProperty && (
                <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
                <div className='relative max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-md'>
                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                    <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
-                     {t("property-detail")}
+                     {t("property-maintenance")}
                    </h3>
                    <button 
                      onClick={closePropertyMaintenance} 
@@ -343,10 +356,10 @@ const PropertyManagement = () => {
                      <span className="sr-only">Close modal</span>
                    </button>
                  </div>
-                 <PropertyDetail property={selectedProperty} />
+                 <AddPropertyMaintenance property={selectedProperty} />
                </div>
              </div>
-      )} */}
+      )}
 
 
 {confirmDelete && (
@@ -388,6 +401,29 @@ const PropertyManagement = () => {
                     </div>
                   </div>
                 )}
+
+{editPropertyModal && selectedProperty && (
+  <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
+    <div className='relative max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-md'>
+      <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+        <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
+          {t("edit-property")}
+        </h3>
+        <button 
+          onClick={closeEditPropertyModal} 
+          type="button" 
+          className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+        >
+          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+          </svg>
+          <span className="sr-only">Close modal</span>
+        </button>
+      </div>
+      <EditPropertyForm property={selectedProperty} onSuccess={closeEditPropertyModal} />
+    </div>
+  </div>
+)}
     </div>
   );
 };

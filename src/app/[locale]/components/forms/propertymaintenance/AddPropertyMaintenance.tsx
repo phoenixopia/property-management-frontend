@@ -58,12 +58,13 @@ const AddPropertyMaintenance = ({ property, onSuccess }: PropertyMaintenanceProp
   const mutation = useMutation({
     mutationFn: (data: MaintenanceFormData) => createMaintenanceRequest(data),
     onSuccess: (result) => {
+      console.log(result,'rssssssssssssssss')
       if (result.success) {
         toast.success('maintenance-request-created');
         reset();
         if (onSuccess) onSuccess();
       } else {
-        toast.error('request-failed');
+        toast.error(result?.message);
       }
     },
     onError: (error) => {

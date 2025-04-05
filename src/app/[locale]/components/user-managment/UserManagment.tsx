@@ -7,7 +7,7 @@ import { useLocale } from "next-intl";
 import { useTranslations } from 'next-intl'; 
 import AddUserForm from '../forms/userManagment/AddUserForm';
 import EditUserForm from '../forms/userManagment/EditUserForm';
-import { activateUser, getAllUsers, deactivateUser } from '@/actions/userManagmentAction';
+import { activateUser, getAllUsers, deactivateUser, exportAllUsers } from '@/actions/userManagmentAction';
 import { debounce } from 'lodash';
 import toast from 'react-hot-toast';
 import ViewUserData from '../forms/userManagment/ViewUserData';
@@ -92,10 +92,67 @@ const UserManagement = () => {
         }
     });
 
+
+
+  
+    const exportMutation = useMutation({
+        mutationFn: async () => {
+          const response = await exportAllUsers(currentPage, searchQuery);
+          if (response.status !== 200) {
+            throw new Error(response.error || "Failed to export clients.");
+          }
+          console.log(response,'response expor')
+
+          return response.clients;
+        },
+        onSuccess: (clients:any) => {
+
+            console.log(clients,'data of usersssssss')
+     
+          const csvContent = [
+            ["First Name", "Middle Name","Last Name","email", "Is_superuser", "Is_active", "Is_staff", "Address","Phone Number","Date joined","Roles"],
+            ...clients?.data.map((client:any) => [
+              client?.first_name || "N/A",
+              client?.middle_name || "N/A",
+              client?.last_name || "N/A",
+              client?.email || "N/A",
+              client?.is_superuser || "N/A",
+              client?.is_active || "N/A",
+              client?.is_staff || "N/A",
+              client?.address || "N/A",
+              client?.phone_number || "N/A",
+              new Date(client?.date_joined).toLocaleDateString(),
+              client?.groups.map((groupdata:any)=>groupdata),
+            ])
+          ].map(e => e.join(",")).join("\n");
+    
+          // Create a Blob and trigger download
+          const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "clients_export.csv");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+    
+          toast.success("Users exported successfully!");
+        },
+        onError: (error) => {
+          toast.error(error.message || "Failed to export users.");
+        },
+      });
+   
+    const handleExport = () => {
+        exportMutation.mutate();
+      };
+
     const viewUserData = (user: User) => {
         setCurrentUserView(true);
         setCurrentUserData(user);
     };
+
+
 
     return (
         <div className='flex flex-col justify-between p-4'>
@@ -118,9 +175,10 @@ const UserManagement = () => {
                         <FontAwesomeIcon icon={faUserPlus} />
                         {t('add-user')}
                     </button>
-                    <button className='flex cursor-pointer items-center capitalize text-sm justify-center rounded-md bg-gray-900 dark:bg-gray-600 py-3 px-5 gap-2 text-white'>
-                        <FontAwesomeIcon icon={faFileExport} />
-                        {t('export-csv')}
+                    <button  onClick={handleExport}
+                             disabled={exportMutation.isPending} className='flex cursor-pointer items-center capitalize text-sm justify-center rounded-md bg-gray-900 dark:bg-gray-600 py-3 px-5 gap-2 text-white'>
+                       
+                       {exportMutation.isPending ? "Exporting..." : <> <FontAwesomeIcon icon={faFileExport} />{t('export-csv')}</>}
                     </button>
                 </div>
             </div>

@@ -305,10 +305,10 @@ export async function createMaintenanceRequest(requestData: any) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('API Error:', errorData);
+    
       return { 
         success: false, 
-        message: errorData.message || 'Failed to create maintenance request' 
+        message: errorData?.error || 'Failed to create maintenance request' 
       };
     }
 

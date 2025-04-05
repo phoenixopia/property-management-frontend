@@ -22,6 +22,40 @@ export const getAllUsers = async (page = 1, search = "") => {
   return responseJson;
 };
 
+
+export const exportAllUsers = async (page = 1, search = "") => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+
+  const response = await fetch(`${endPoint}/get_users?page_size=999999999999999999&search=${search}`, {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+      }
+  });
+  console.log(response,'for export')
+
+  const responseJson = await response.json();
+  if(response?.status ===200){
+    return {
+      status: 200,
+      success: "Users retrieved successfully!",
+      clients: responseJson,
+    }
+  }else{
+    return {
+      status: 500,
+      error: "Failed to load users. Please try again.",
+    };
+  }
+
+};
+
+
+
+
+
 export async function createUserWithGroups(
   userData: {
     first_name: string;

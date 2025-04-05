@@ -126,7 +126,7 @@ const AddPropertyForm = ({ onSuccess }: { onSuccess: () => void }) => {
               {...register("owner_id", { valueAsNumber: true })}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option value="">no-manager</option>
+              <option value="">no-owner</option>
               {ownerData?.data.map((owner:any) => (
                 <option key={owner.id} value={owner.id} className="text-black">
                   {owner.full_name.trim()}

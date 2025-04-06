@@ -13,6 +13,7 @@ import { debounce } from 'lodash';
 import toast from 'react-hot-toast';
 import ViewUserData from '../forms/userManagment/ViewUserData';
 import { getAllTenants,exportAllTenants } from '@/actions/tenantManagmentAction';
+import { withAuth } from '@/hooks/withAuth';
 
 type User = {
     id: string;
@@ -407,4 +408,5 @@ const TenantManagement = () => {
     );
 };
 
-export default TenantManagement;
+
+export default withAuth(TenantManagement, ["system-admin"], ["auth.view_permission", "ednant"]);

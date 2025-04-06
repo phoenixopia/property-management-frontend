@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { faUserPlus, faFileExport, faPen, faTrash, faEye, faMagnifyingGlass, faBan, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
+import { withAuth } from '@/hooks/withAuth';
 import AddUserForm from '../forms/userManagment/AddUserForm';
 import EditUserForm from '../forms/userManagment/EditUserForm';
 import { activateUser, getAllUsers, deactivateUser, exportAllUsers } from '@/actions/userManagmentAction';
@@ -270,4 +271,6 @@ const MaintenanceManagment = () => {
     );
 };
 
-export default MaintenanceManagment;
+
+
+export default withAuth(MaintenanceManagment, ["maintenance", "system-admin"],["pms.view_maintenancerequest"]);

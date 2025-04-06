@@ -63,40 +63,40 @@ const SideBar = () => {
         icon: <FontAwesomeIcon icon={faUser} />,
         label: "user-managment",
         translationKey: "Dashboard",
-        requiredRoles: [],
-        requiredPermissions: []
+        requiredRoles: ["system-admin", "group 2"],
+        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
       },
       {
         path: "/property-management",
         icon: <FontAwesomeIcon icon={faBuilding} />,
         label: "property-management",
         translationKey: "full",
-        requiredRoles: [],
-        requiredPermissions: []
+        requiredRoles: ["system-admin", "group 2"],
+        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
       },
       {
         path: "/tenant-management",
         icon: <FontAwesomeIcon icon={faUsersRays} />,
         label: "tenant-management",
         translationKey: "full",
-        requiredRoles: [],
-        requiredPermissions: []
+        requiredRoles: ["system-admin", "group 2"],
+        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
       },
       {
         path: "/maintenance",
         icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
         label: "maintenance-requests",
         translationKey: "full",
-        requiredRoles: [],
-        requiredPermissions: []
+        requiredRoles: ["maintenance", "system-admin"],
+        requiredPermissions: ["pms.view_maintenancerequest"]
       },
       {
         path: "/role-managment",
         icon: <FontAwesomeIcon icon={faUsersGear} />,
         label: "role-managment",
         translationKey: "full",
-        requiredRoles: [],
-        requiredPermissions: []
+        requiredRoles: ["system-admin", "group 2"],
+        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
       },
       {
         path: `/settings`,

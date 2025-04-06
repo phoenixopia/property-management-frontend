@@ -12,6 +12,7 @@ import { deleteProperty, fetchProperties } from '@/actions/propertyManagmentActi
 import { property } from 'lodash';
 import EditPropertyForm from '../forms/propertyManagment/EditPropertyForm';
 import AddPropertyMaintenance from '../forms/propertymaintenance/AddPropertyMaintenance';
+import { withAuth } from '@/hooks/withAuth';
 type Property = {
   id: number;
   property_type: string;
@@ -428,4 +429,4 @@ const PropertyManagement = () => {
   );
 };
 
-export default PropertyManagement;
+export default withAuth(PropertyManagement, ["system-admin"], ["auth.view_permission", "ednant"]);

@@ -11,7 +11,7 @@ import { activateUser, getAllUsers, deactivateUser, exportAllUsers } from '@/act
 import { debounce } from 'lodash';
 import toast from 'react-hot-toast';
 import ViewUserData from '../forms/userManagment/ViewUserData';
-
+import { withAuth } from '@/hooks/withAuth';
 type User = {
     id: string;
     first_name: string;
@@ -399,4 +399,4 @@ const UserManagement = () => {
     );
 };
 
-export default UserManagement;
+export default withAuth(UserManagement, ["system-admin"], ["auth.view_permission", "ednant"]);

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import toast from 'react-hot-toast';
+import { withAuth } from "@/hooks/withAuth";
 import {
   faPen,
   faTrash,
@@ -272,5 +273,6 @@ const RoleManagement = () => {
     </div>
   );
 };
+export default withAuth(RoleManagement, ["system-admin"], ["auth.view_permission", "ednant"]);
 
-export default RoleManagement;
+

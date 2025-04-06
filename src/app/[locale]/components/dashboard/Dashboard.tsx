@@ -34,4 +34,4 @@ const Dashboard = () => {
   )
 }
 
-export default withAuth(Dashboard, ["system-admin", "group 2"], ["auth.view_permission", "ednant"]);
+export default withAuth(Dashboard, ["system-admin"], ["auth.view_permission", "ednant"]);

@@ -34,7 +34,7 @@ export const exportAllUsers = async (page = 1, search = "") => {
           "Authorization": `Bearer ${accessToken}`
       }
   });
-  console.log(response,'for export')
+
 
   const responseJson = await response.json();
   if(response?.status ===200){
@@ -135,7 +135,7 @@ export const getAllGroups = async (page = 1) => {
 export async function updateUser(userId: string, data: any) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
-    console.log(data,'data from the user to update')
+ 
   try {
     const res = await fetch(`${endPoint}/update_user/${userId}`, {
       method: 'PATCH',
@@ -158,7 +158,7 @@ export async function updateUser(userId: string, data: any) {
 export async function deactivateUser(id:number) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
- console.log(id,'id for banning')
+
   try {
     const response = await fetch(`${endPoint}/deactivate_user/${id}`, {
       method: 'DELETE',

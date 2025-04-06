@@ -80,7 +80,13 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
   });
 
   const onSubmit: SubmitHandler<PropertyFormData> = (data) => {
-    updatePropertyMutation.mutate(data);
+
+    const payload: PropertyFormData = {
+      ...data,
+      owner_id: data.owner_id === 0 ? null : data.owner_id,
+      manager_id: data.manager_id === 0 ? null : data.manager_id,
+    };
+    updatePropertyMutation.mutate(payload);
   };
 
   return (
@@ -111,9 +117,12 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('owner')}
             </label>
-            {ownerData?.isLoading ?<p className='text-black  dark:text-gray-100'>loading...</p> :ownerData?.isError?<p className='text-black dark:text-gray-100'>something went wrong!</p>:  <select
+            {ownerData?.isLoading ?<p className='text-black  dark:text-gray-100'>loading...</p> :ownerData?.isError?<p className='text-black dark:text-gray-100'>something went wrong!</p>:  
+            <select
 
-              {...register("owner_id", { valueAsNumber: true })}
+            {...register("owner_id", {
+              setValueAs: v => v === "" ? null : Number(v)
+            })}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">no-owner</option>
@@ -130,9 +139,11 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               manager
             </label>
-            {managerData?.isLoading ?<p className='text-black  dark:text-gray-100'>loading...</p> :managerData?.isError?<p className='text-black dark:text-gray-100'>something went wrong!</p>:  <select
-
-              {...register("manager_id", { valueAsNumber: true })}
+            {managerData?.isLoading ?<p className='text-black  dark:text-gray-100'>loading...</p> :managerData?.isError?<p className='text-black dark:text-gray-100'>something went wrong!</p>:  
+            <select
+            {...register("manager_id", {
+              setValueAs: v => v === "" ? null : Number(v)
+            })}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">no-manager</option>
@@ -291,10 +302,7 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
               {...register("status")}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option value="">select-status</option>
               <option value="available">available</option>
-              <option value="rented">rented</option>
-              <option value="maintenance">maintenance</option>
             </select>
             {errors.status && (
               <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>

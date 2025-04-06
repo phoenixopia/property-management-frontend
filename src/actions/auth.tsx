@@ -29,6 +29,7 @@ export const singIn =async (loginData:LoginData)=>{
 
       if(res?.status ===200){
         const cookieStore = await cookies();
+
         cookieStore.set("_s_t", resJson.access, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
         cookieStore.set("_s_r", resJson.refresh, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
         cookieStore.set("_s_ap", JSON.stringify(resJson.permissions), { httpOnly: true, secure: true, sameSite: "strict", path: "/" });

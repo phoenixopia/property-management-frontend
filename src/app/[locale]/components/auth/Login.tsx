@@ -37,19 +37,19 @@ export default function Login() {
     mutationFn: logIn,
     onSuccess: async (response) => {
       if (response?.status === 200) {
-        toast.success("Successfully signed in!");
-        
-        // Fetch updated user auth data
+      
         const authData = await getUserAuthData();
-        
-        // Redirect based on user role/permissions
+      
+
         if (authData.groups.length > 0 && authData.permissions.length > 0) {
+           toast.success("Successfully signed in!");
+
           router.push("/dashboard");
         } else {
           toast.error("Access denied: No permissions assigned.");
         }
       } else {
-        toast.error(response?.non_field_errors?.[0] || "An unexpected error occurred.");
+        toast.error(response?.detail|| "An unexpected error occurred.");
       }
     },
     onError: () => {

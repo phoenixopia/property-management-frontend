@@ -1,234 +1,273 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faFileExport, faPen, faTrash, faEye,faMagnifyingGlass,faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
-import maintenanceData from '../../../../maintenanceData.json';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { faUserPlus, faFileExport, faPen, faTrash, faEye, faMagnifyingGlass, faBan, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import AddUserForm from '../forms/userManagment/AddUserForm';
 import EditUserForm from '../forms/userManagment/EditUserForm';
-type MaintenanceUsers={
+import { activateUser, getAllUsers, deactivateUser, exportAllUsers } from '@/actions/userManagmentAction';
+import { getAllMaintenance } from '@/actions/maintenanceManagmentAction';
+import { debounce } from 'lodash';
+import toast from 'react-hot-toast';
+import ViewMaintenanceData from './singleMaintenanceData/ViewMaintenanceData';
+// import ViewmaintenanceData from '../forms/userManagment/ViewmaintenanceData';
+
+type User = {
     id: string;
-    fixedDate:string,
-    requestedDate:string,
-    discription:string,
-    status:string,
-    name: string;
+    first_name: string;
+    role: string;
     email: string;
-  };
-const MaintenanceManagement = () => {
-    const[addUser,setUser]=useState(false);
-    const[openUser,setOpenUser]=useState(false);
-    const[editUser,setEditUser]=useState(false);
-
-    const [users, setUsers] = useState<MaintenanceUsers[]>([]); 
-      const locale = useLocale();  
-      const t = useTranslations('full'); 
-
-      const openAddUserModal =()=>{
-        setUser(true);
-      }
-      const openEditUserModal =()=>{
-        setUser(false);
-        setEditUser(true);
-      }
-      const closeEditUserPage =()=>{
-        setUser(false);
-        setEditUser(false);
-      }
-      const closeAddUserPage =()=>{
-        setUser(false);
-        setEditUser(false);
-      }
-   const openUserDetail=()=>{
-    setOpenUser(true)
-   }
-   const closeUserDetail=()=>{
-    setOpenUser(false)
-   }
-
-  useEffect(() => {
-    setUsers(maintenanceData);
-  }, []);
-
-  return (
-    <div className='flex flex-col justify-between p-4'>
-      <div className='flex items-center flex-col xl:flex-row  justify-between w-full gap-5 xl:gap-0'>
-        <div className='relative w-[100%] xl:w-[28rem] pr-4 mb-2 sm:mb-0'>
-          <input
-            type='text'
-         placeholder={`${t("search-user")}...`}
-            className='border border-gray-300 dark:border-gray-700 p-2 pl-10 rounded-lg w-full dark:text-gray-200 focus:outline-none  placeholder-gray-400 text-gray-700'
-          />
-                     <FontAwesomeIcon icon={faMagnifyingGlass}      className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-white'/>
-
-      
-        </div>
-
-
-
-
-
-        {/* <div className='flex justify-end gap-2'>
-          <button   onClick={openAddUserModal} className='flex cursor-pointer flex-row text-sm capitalize items-center justify-center rounded-md bg-gray-900 dark:bg-gray-600 py-3 px-5 gap-2 text-white'>
-            <FontAwesomeIcon icon={faScrewdriverWrench} />
-           {t('add-maintenance-request')}
-          </button>
-        </div> */}
-      </div>
-      <div className='py-5'>
-        <div className='relative overflow-x-auto shadow-md rounded-sm max-h-[400px] overflow-y-auto'>
-          <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
-            <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#444548] dark:text-gray-200'>
-              <tr>
-                <th className='px-6 py-3'>{t('name')}</th>
-                <th className='px-6 py-3'>{t('email')}</th>
-                <th className='px-6 py-3'>{t('status')}</th>
-                <th className='px-6 py-3'>{t('requested-date')}</th>
-                <th className='px-6 py-3'>{t('fixed-date')}</th>
-                <th className='px-6 py-3'>{t('description')}</th>
-                {/* <th className='px-6 py-3'>{t('action')}</th> */}
-
-
-                
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id} onClick={openUserDetail} className=' cursor-pointer bg-white capitalize text-gray-500 dark:text-gray-200 border-b dark:bg-[#333538] dark:border-gray-700 border-gray-200'>
-              
-                  <td className='px-6 py-4'>{user?.name}</td>
-                  <td className='px-6 py-4'>{user?.email}</td>
-                  <td className='px-6 py-4'>{user?.status}</td>
-                  <td className='px-6 py-4'>{user?.requestedDate}</td>
-                  <td className='px-6 py-4'>{user?.fixedDate}</td>
-                  <td className='px-6 py-4'>{user?.discription}</td>
-
-                  {/* <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
-                    <button onClick={openEditUserModal} >
-                     <FontAwesomeIcon icon={faPen} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
-                    </button>
-                    <FontAwesomeIcon icon={faTrash} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
-                    <FontAwesomeIcon icon={faEye} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
-                  </td> */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className='flex w-full justify-between my-2 p-4 flex-col xl:flex-row items-center gap-3 xl:gap-0 shadow-sm dark:bg-[#333538]'>
-       
-
-           <div>
-
-             <p className='text-gray-600 dark:text-gray-200'>Showing 1 to 11 of 11 entries</p>
-           </div>
-
-           <div className='flex items-center justify-center gap-x-2'>
-
-            <span className='p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-b-md'>
-            {t("previous")}
-            </span>
-
-            <p className='p-1 px-4 bg-gray-200 dark:bg-gray-500 dark:text-gray-200 text-gray-800 rounded-md'>1</p>
-
-            <span className='p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-b-md'>
-              {t("next")}</span>
-
-           </div>
-
-
-        </div>
-      </div>
-
-      {editUser&&(
-        <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
-          <div className='relative bg-white  dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl'>
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-600 dark:text-white ">
-                    {t("edit-user")}
-                </h3>
-                <button onClick={closeEditUserPage}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
-                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span className="sr-only">Close modal</span>
-                </button>
-            </div>
-            {/* <ClientForm client={selectedClient} /> */}
-            {/* <EditUserForm/> */}
-          </div>
-        </div>
-      )}
-    {openUser && (
-        <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
-          <div className='relative bg-white  dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-3xl'>
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-600 dark:text-white ">
-                    {t("user-detail")}
-                </h3>
-                <button onClick={closeUserDetail}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
-                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span className="sr-only">Close modal</span>
-                </button>
-            </div>
-                <div className='flex flex-col w-full'>
-
-                    <div className='grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-600 dark:text-white text-sm p-6'>
-                          <div>
-                            <span>{t("name")}: Kebede Tola</span>
-                            </div> 
-                            <div>
-                            <span>{t("phone-number")}: +251939582545</span>
-                            </div>
-                            <div>
-                            <span>{t("email")}: tenant@gmail.com</span>
-                            </div>
-                            <div>
-                            <span>{t("property-name")}: Penthouse A </span>
-                            </div> 
-                            <div>
-                            <span>{t("city")}: Addis Ababa</span>
-                            </div>  
-                            <div>
-                            <span>{t("price")}: 45000</span>
-                            </div>  
-                            <div>
-                            <span>{t("zip-code")}: 1000</span>
-                            </div>  
-                      </div>
-
-                  </div>
-          </div>
-        </div>
-      )}
-
-
-      {addUser && (
-        <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
-          <div className='relative bg-white  dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-md'>
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-600 dark:text-white ">
-                    {t("create-user")}
-                </h3>
-                <button onClick={closeAddUserPage}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
-                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span className="sr-only">Close modal</span>
-                </button>
-            </div>
-            {/* <ClientForm client={selectedClient} /> */}
-            <AddUserForm/>
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
+    last_name: string;
+    groups: string[];
+    user_permissions: string[];
+    is_active: boolean;
 };
 
-export default MaintenanceManagement;
+const MaintenanceManagment = () => {
+    const [startDate, setStartDate] = useState("");
+     const [endDate, setEndDate] = useState("");
+    // const [confirmUserDeactivate, setConfirmUserDeactivate] = useState<{ id: number, name: string } | null>(null);
+    // const [confirmActivateUser, setConfirmActivateUser] = useState<{ id: number, name: string } | null>(null);
+    // const queryClient = useQueryClient();
+    // const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    // const [addUser, setUser] = useState(false);
+    // const [editUser, setEditUser] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState("");
+    const locale = useLocale();  
+    const t = useTranslations('full'); 
+    const [currentUserView, setCurrentUserView] = useState(false);
+    const [currentmaintenanceData, setCurrentmaintenanceData] = useState<User | null>(null);
+
+    // const debouncedSearch = useCallback(
+    //     debounce((query: string) => {
+    //         setSearchQuery(query);
+    //         setCurrentPage(1);
+    //     }, 500),
+    //     []
+    // );
+
+    // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     debouncedSearch(e.target.value);
+    // };
+
+    const { data: maintenanceData, isPending, isError, isSuccess } = useQuery({
+      queryKey: ["getAllMaintenanceData", currentPage, searchQuery, startDate, endDate],
+      queryFn: () => getAllMaintenance(currentPage, searchQuery, startDate, endDate),
+    });
+
+   
+    const maintenanceList = maintenanceData?.data || [];
+    const total_pages = maintenanceData?.total_pages || 0;
+    const previous = maintenanceData?.previous || false;
+    const next = maintenanceData?.next || false;
+    const count = maintenanceData?.count || 0;
+
+
+
+ 
+
+
+  
+    const exportMutation = useMutation({
+        mutationFn: async () => {
+          const response = await exportAllUsers(currentPage, searchQuery);
+          if (response.status !== 200) {
+            throw new Error(response.error || "Failed to export clients.");
+          }
+
+
+          return response.clients;
+        },
+        onSuccess: (clients:any) => {
+
+  
+          const csvContent = [
+            ["First Name", "Middle Name","Last Name","email", "Is_superuser", "Is_active", "Is_staff", "Address","Phone Number","Date joined","Roles"],
+            ...clients?.data.map((client:any) => [
+              client?.first_name || "N/A",
+              client?.middle_name || "N/A",
+              client?.last_name || "N/A",
+              client?.email || "N/A",
+              client?.is_superuser || "N/A",
+              client?.is_active || "N/A",
+              client?.is_staff || "N/A",
+              client?.address || "N/A",
+              client?.phone_number || "N/A",
+              new Date(client?.date_joined).toLocaleDateString(),
+              client?.groups.map((groupdata:any)=>groupdata),
+            ])
+          ].map(e => e.join(",")).join("\n");
+    
+          // Create a Blob and trigger download
+          const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "clients_export.csv");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+    
+          toast.success("Users exported successfully!");
+        },
+        onError: (error) => {
+          toast.error(error.message || "Failed to export users.");
+        },
+      });
+   
+    const handleExport = () => {
+        exportMutation.mutate();
+      };
+
+    const viewmaintenanceData = (dataMaintenance: any) => {
+        setCurrentUserView(true);
+        setCurrentmaintenanceData(dataMaintenance);
+    };
+
+
+
+    return (
+        <div className='flex flex-col justify-between p-4'>
+            <div className='flex items-center flex-col xl:flex-row justify-between w-full gap-5 xl:gap-0'>
+             
+
+                <div className='flex justify-end gap-2'>
+
+                <div className='flex justify-end gap-2'>
+                    <div className="flex gap-4 items-center">
+                        <label htmlFor="startDate" className="text-sm text-gray-600 dark:text-gray-200">Start-date</label>
+                        <input
+                            type="date"
+                            id="startDate"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Select start date"
+                        />
+                    </div>
+
+                    <div className="flex gap-4 items-center">
+                        <label htmlFor="endDate" className="text-sm text-gray-600 dark:text-gray-200">End-date</label>
+                        <input
+                            type="date"
+                            id="endDate"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Select end date"
+                        />
+                    </div>
+                </div>
+                
+                    {/* <button  onClick={handleExport}
+                             disabled={exportMutation.isPending} className='flex cursor-pointer items-center capitalize text-sm justify-center rounded-md bg-gray-900 dark:bg-gray-600 py-3 px-5 gap-2 text-white'>
+                       
+                       {exportMutation.isPending ? "Exporting..." : <> <FontAwesomeIcon icon={faFileExport} />{t('export-csv')}</>}
+                    </button> */}
+                </div>
+            </div>
+        
+            <div className='py-5'>
+                <div className='relative overflow-x-auto shadow-md rounded-sm max-h-[400px] overflow-y-auto'>
+                    <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+                        <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#444548] dark:text-gray-200'>
+                            <tr>
+                                <th className='px-6 py-3'>Applicant Name</th>
+                                <th className='px-6 py-3'>Description</th>
+                               <th className='px-6 py-3'>{t('status')}</th>
+                                <th className='px-6 py-3'>Requested_At</th>
+                                <th className='px-6 py-3'>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {isPending ? (
+                                <tr>
+                                    <td colSpan={4} className='px-6 py-4 text-center'>Loading...</td>
+                                </tr>
+                            ) : isError ? (
+                                <tr>
+                                    <td colSpan={4} className='px-6 py-4 text-center'>Failed to load user!</td>
+                                </tr>
+                            ) : maintenanceList?.length === 0 && isSuccess ? (
+                                <tr>
+                                    <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                        {t('nothing-to-show')}
+                                    </td>
+                                </tr>
+                            ) : (
+                                maintenanceList?.map((data: any) => (
+                                    <tr key={data.id} className='bg-white capitalize text-gray-500 dark:text-gray-200 border-b dark:bg-[#333538] dark:border-gray-700 border-gray-200'>
+                                        <td className='px-6 py-4'>{data?.user_id?.first_name || '-'} {data?.user_id?.last_name || '-'}</td>
+                                        <td className='px-6 py-4'>{data?.description || '-'}</td>
+                                        <td className='px-6 py-4'>{data?.status || '-'}</td>
+                                        <td className='px-6 py-4'>{data?.requested_at || '-'}</td>
+                                        <td className='px-6 py-4'>
+                                            <div className='flex flex-row space-x-4 items-center'>                      
+                                                <button onClick={() => viewmaintenanceData(data)}>
+                                                    <FontAwesomeIcon icon={faEye} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className='flex w-full justify-between my-2 p-4 flex-col xl:flex-row items-center gap-3 xl:gap-0 shadow-sm dark:bg-[#333538]'>
+                    <div>
+                        <p className='text-gray-600 dark:text-gray-200'>Showing {maintenanceList.length} of {count} entries</p>
+                    </div>
+
+                    <div className='flex items-center justify-center gap-x-2'>
+                        <button 
+                            className={`p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-b-md ${
+                                !previous && "opacity-50 cursor-not-allowed"
+                            }`}
+                            disabled={!previous}
+                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        >
+                            {t("previous")}
+                        </button>
+                        <p className='p-1 px-4 bg-gray-200 dark:bg-gray-500 dark:text-gray-200 text-gray-800 rounded-md'>
+                            {currentPage}
+                        </p>
+                        <button
+                            className={`p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-b-md ${
+                                !next && "opacity-50 cursor-not-allowed"
+                            }`}
+                            disabled={!next}
+                            onClick={() => setCurrentPage((prev) => prev + 1)}
+                        >
+                            {t("next")}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {currentUserView && currentmaintenanceData && (
+                <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-120">
+                    <div className="relative max-h-[80%] bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-2xl overflow-x-hidden overflow-y-auto">
+                        <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
+                            <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
+                            Maintenance Detail
+                            </h3>
+                            <button onClick={() => setCurrentUserView(false)}>
+                                ✖
+                            </button>
+                        </div>
+                        <ViewMaintenanceData maintenanceData={currentmaintenanceData} />
+                    </div>
+                </div>
+            )}
+
+         
+        </div>
+    );
+};
+
+export default MaintenanceManagment;

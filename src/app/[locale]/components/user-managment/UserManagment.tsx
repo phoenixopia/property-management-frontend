@@ -101,13 +101,13 @@ const UserManagement = () => {
           if (response.status !== 200) {
             throw new Error(response.error || "Failed to export clients.");
           }
-          console.log(response,'response expor')
+      
 
           return response.clients;
         },
         onSuccess: (clients:any) => {
 
-            console.log(clients,'data of usersssssss')
+         
      
           const csvContent = [
             ["First Name", "Middle Name","Last Name","email", "Is_superuser", "Is_active", "Is_staff", "Address","Phone Number","Date joined","Roles"],

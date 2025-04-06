@@ -1,119 +1,46 @@
-"use client"
-import React,{useState} from 'react'
-import { faRectangleList } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useLocale } from "next-intl";  
-import { useTranslations } from 'next-intl'; 
+'use client';
+
+import React from 'react';
+import { faRectangleList ,faList} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslations } from 'next-intl';
+
+const tenants = [
+  'Sey', 'Tigist', 'Mandela', 'Bekila', 'Ababe',
+  'Yohannes', 'Ababe Bekila', 'Ababe Bekila', 'Ababe Bekila', 'Ababe Bekila', 'Ababe Bekila'
+];
 
 const LatestAddedTenants = () => {
-      const t2 =useTranslations('full')
-    
+  const t = useTranslations('full');
+
   return (
-  
+    <div className="w-full max-w-md overflow-auto max-h-[28rem] p-4 rounded-xl shadow-md bg-white dark:bg-[#2f2f32]">
+      <div className="flex items-center justify-start gap-2 mb-4">
+            <span className=''>       
+                <FontAwesomeIcon icon={faList} className='text-black w-4 dark:text-gray-50 text-2xl'/>
+             </span>
+        <p className='text-gray-800 dark:text-gray-50 text-sm font-bold '>
+          {t('latest-added-tenants')}
+        </p>
+      </div>
 
-    <div className='flex flex-col w-[28rem]  overflow-auto max-h-[28rem]  '>
-     <div className='flex flex-row items-center justify-center gap-2'>
-     <span className=''>       
-         <FontAwesomeIcon icon={faRectangleList} className='text-black w-4 dark:text-gray-50 text-2xl'/>
-      </span>
-      <p className='text-gray-800 dark:text-gray-50 text-sm font-bold '>{t2('latest-added-tenants')}</p>
-     </div>
-     <div className='flex flex-row p-4'>
-  
-     
-    <ul className=' ps-5 w-full my-4 space-y-4'>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>sey is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>tigist is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>mandela is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>bekila is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>yohannes is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
-
-       </div>
-      </li>
-      <li className='flex w-full bg-white dark:bg-[#38393c] py-2 px-4 rounded-lg' >
-        <div className='flex flex-col font-sm'>
-          <p className='text-gray-800 dark:text-gray-100 text-sm font-bold'>10/6/2024</p>
-          <p className=' font-extralight text-gray-500 dark:text-gray-300  capitalize text-[0.75rem] p-1'>Ababe bekila is added</p>
-
-       </div>
-      </li>
-     
-     
-     
-     
-     
-
-   
-    </ul>
-
-     </div>
-    
-     
+      <ul className="space-y-3">
+        {tenants.map((name, index) => (
+          <li
+            key={index}
+            className="flex flex-col bg-gray-50 dark:bg-[#38393c] p-3 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-[#444547] transition"
+          >
+            <span className="text-gray-800 dark:text-gray-100 text-sm font-semibold">
+              10/6/2024
+            </span>
+            <span className="text-gray-500 dark:text-gray-300 text-xs">
+              {name.toLowerCase()} is-added
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
+  );
+};
 
-  )
-}
-
-export default LatestAddedTenants
+export default LatestAddedTenants;

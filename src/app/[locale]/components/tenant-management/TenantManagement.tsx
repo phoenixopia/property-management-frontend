@@ -103,14 +103,13 @@ const TenantManagement = () => {
           if (response.status !== 200) {
             throw new Error(response.error || "Failed to export clients.");
           }
-          console.log(response,'response expor')
+       
 
           return response.clients;
         },
         onSuccess: (clients:any) => {
 
-            console.log(clients,'data of usersssssss')
-         console.log(clients,'clientsData')
+   
          if(clients?.data.length==0){
           toast.error('There is no data to export!')
           return

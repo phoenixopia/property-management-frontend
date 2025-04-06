@@ -89,7 +89,13 @@ const AddPropertyForm = ({ onSuccess }: { onSuccess: () => void }) => {
   });
 
   const onSubmit: SubmitHandler<PropertyFormData> = (data) => {
-    createPropertyMutation.mutate(data);
+
+    const payload: PropertyFormData = {
+      ...data,
+      owner_id: data.owner_id === 0 ? null : data.owner_id,
+      manager_id: data.manager_id === 0 ? null : data.manager_id,
+    };
+    createPropertyMutation.mutate(payload);
   };
 
   return (
@@ -121,9 +127,11 @@ const AddPropertyForm = ({ onSuccess }: { onSuccess: () => void }) => {
               {t('owner')}
             </label>
 
-            {ownerData?.isLoading ?<p className='text-black  dark:text-gray-100'>loading...</p> :ownerData?.isError?<p className='text-black dark:text-gray-100'>something went wrong!</p>:  <select
-
-              {...register("owner_id", { valueAsNumber: true })}
+            {ownerData?.isLoading ?<p className='text-black  dark:text-gray-100'>loading...</p> :ownerData?.isError?<p className='text-black dark:text-gray-100'>something went wrong!</p>:  
+            <select
+            {...register("owner_id", {
+              setValueAs: v => v === "" ? null : Number(v)
+            })}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">no-owner</option>
@@ -142,8 +150,11 @@ const AddPropertyForm = ({ onSuccess }: { onSuccess: () => void }) => {
               manager
             </label>
 
-            {managerData?.isLoading ?<p className='text-black  dark:text-gray-100'>loading...</p> :managerData?.isError?<p className='text-black dark:text-gray-100'>something went wrong!</p>:  <select
-              {...register("manager_id", { valueAsNumber: true })}
+            {managerData?.isLoading ?<p className='text-black  dark:text-gray-100'>loading...</p> :managerData?.isError?<p className='text-black dark:text-gray-100'>something went wrong!</p>:  
+            <select
+            {...register("manager_id", {
+              setValueAs: v => v === "" ? null : Number(v)
+            })}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">no-manager</option>

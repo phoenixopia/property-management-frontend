@@ -71,7 +71,7 @@ export async function fetchProperties(
       }
     });
     
-    console.log(response,'respppppppppppp')
+  
     
     if (!response.ok) {
       throw new Error(`Failed to fetch properties: ${response.statusText}`);
@@ -86,7 +86,6 @@ export async function fetchProperties(
 
 export async function createProperty(propertyData: any) {
 
-  console.log(propertyData,'dadsda')
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
   const endpoint = 'https://sasconerp.com/pms/api/post_property';
@@ -114,7 +113,7 @@ export async function createProperty(propertyData: any) {
         manager_id: propertyData.manager_id || null
       })
     });
-   console.log(response,'after adding')
+ 
     if (!response.ok) {
       const errorData = await response.json();
       console.error('API Error:', errorData);
@@ -159,7 +158,7 @@ export async function fetchOwners() {
     }
 
     const data = await response.json();
-    console.log(data,'data after the form')
+
     return data?.owners
 
   } catch (error) {
@@ -185,7 +184,7 @@ export async function fetchManagers() {
     }
 
     const data = await response.json();
-    console.log(data,'managersData')
+
     return data?.managers
 
   } catch (error) {
@@ -237,7 +236,6 @@ export const updateProperty = async (id: number, data: any) => {
       body: JSON.stringify(data),
     });
 
-    console.log(response,'responseDataa')
 
     if (!response.ok) {
       throw new Error('Failed to update property');
@@ -276,56 +274,3 @@ export async function getUserProfile(accessToken: string) {
   }
 }
 
-export async function createMaintenanceRequest(requestData: any) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('_s_t')?.value;
-
-  if (!accessToken) {
-    throw new Error('Authentication required');
-  }
-
-  try {
-    // First get the user ID from profile
-    const userProfile = await getUserProfile(accessToken);
-    const userId = userProfile.id;
-
-    const response = await fetch(`${endPoint}/post_maintenance_request`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      },
-      body: JSON.stringify({
-        user_id: userId,
-        property_id: requestData.property_id,
-        description: requestData.description,
-        status: "pending" 
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-    
-      return { 
-        success: false, 
-        message: errorData?.error || 'Failed to create maintenance request' 
-      };
-    }
-
-    const data = await response.json();
-   
-    
-    return { 
-      success: true, 
-      message: 'Maintenance request created successfully',
-      data 
-    };
-
-  } catch (error) {
-    console.error('Network Error:', error);
-    return { 
-      success: false, 
-      message: 'Network error occurred while creating maintenance request' 
-    };
-  }
-}

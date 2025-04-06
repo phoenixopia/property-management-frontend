@@ -143,7 +143,7 @@ const PropertyManagement = () => {
               placeholder={t('search')}
               value={filters.search}
               onChange={handleFilterChange}
-              className='pl-10 pr-4 py-2 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
+              className='pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-gray-700 border-gray-300 dark:border-gray-700 dark:text-white w-full'
             />
             <FontAwesomeIcon 
               icon={faMagnifyingGlass} 
@@ -158,7 +158,7 @@ const PropertyManagement = () => {
               placeholder="Minimum Rent Price"
               value={filters.min}
               onChange={handleFilterChange}
-              className='px-4 py-2 border text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
+              className='px-4 py-2 border text-sm rounded-lg dark:bg-gray-700 border-gray-300 dark:border-gray-700 dark:text-white w-full'
             />
             <input
               type='number'
@@ -166,7 +166,7 @@ const PropertyManagement = () => {
               placeholder='Maximum Rent Price'
               value={filters.max}
               onChange={handleFilterChange}
-              className='px-4 py-2 border text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full'
+              className='px-4 py-2 border text-sm rounded-lg dark:bg-gray-700 border-gray-300 dark:border-gray-700 dark:text-white w-full'
             />
           </div>
         </div>

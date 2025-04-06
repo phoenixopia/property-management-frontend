@@ -35,7 +35,7 @@ export const exportAllTenants = async (page = 1, search = "") => {
           "Authorization": `Bearer ${accessToken}`
       }
   });
-  console.log(response,'for export')
+
 
   const responseJson = await response.json();
   if(response?.status ===200){

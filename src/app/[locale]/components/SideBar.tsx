@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useTransition } from "react";
+import { getUserProfileInfo } from "@/actions/profileManagmentAction";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,7 +37,7 @@ const SideBar = () => {
   // State management
   const [editUserOpen, setEditUserOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+  const [isPending, startTransition] = useTransition();
   // Hooks
   const locale = useLocale();  
   const t = useTranslations('Dashboard'); 
@@ -53,8 +55,8 @@ const SideBar = () => {
         icon: <FontAwesomeIcon icon={faHouse} />,
         label: "dashboardTitle",
         translationKey: "Dashboard",
-        requiredRoles: ["new group 3", "group 2"],
-        requiredPermissions: ["pms.view_notification", "admin.change_logentry"]
+        requiredRoles: ["system-admin", "group 2"],
+        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
       },
       {
         path: "/user-managment",
@@ -141,10 +143,16 @@ const SideBar = () => {
     return [
       "flex items-center w-full p-2 rounded-l-lg group",
       isActive 
-        ? "text-white bg-gray-900 dark:bg-gray-700 ml-2" 
+        ? "text-white bg-gray-900 dark:bg-gray-700 ml-2 " 
         : "text-black dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 hover:ml-2"
     ].join(" ");
   };
+  const handleLogout = () => {
+    startTransition(() => {
+      logOut();
+    });
+  };
+  const profileData = useQuery({ queryKey: ['todos'], queryFn: getUserProfileInfo })
 
   const getIconClasses = (path: string) => 
     pathname === `/${locale}${path}`
@@ -159,10 +167,12 @@ const SideBar = () => {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
             </svg>
-            <span className="text-gray-600 dark:text-gray-200 text-sm">Loading sidebar...</span>
+     
           </div>
         </div>
       );
+
+      
 
   return (
     <>
@@ -204,24 +214,23 @@ const SideBar = () => {
               aria-label="Notifications"
             />
           </div>
-          
-          <div className="relative flex flex-col items-center w-full mx-4 px-7 py-2 border-1 border-gray-50 shadow-2xs dark:bg-gray-600 dark:border-gray-800 gap-2">
+         
+          <div className="relative flex flex-col items-center w-full mx-4 px-7 py-2 border-1 border-gray-50 shadow-2xs dark:bg-[#292b30] dark:border-gray-800 gap-2">
             <FontAwesomeIcon 
               icon={faCircleUser} 
-              className="text-5xl text-gray-800 dark:text-gray-400"
+              className="text-5xl text-gray-800 dark:text-gray-300"
             />
             <button
               onClick={() => setEditUserOpen(true)}
-              className="absolute right-4 top-4 size-6 rounded-full bg-white flex items-center justify-center"
+              className="absolute right-22 cursor-pointer top-2 size-6 rounded-full bg-white flex items-center justify-center"
               aria-label="Edit profile"
             >
               <FontAwesomeIcon icon={faPen} className="text-[0.7rem] text-gray-800 dark:text-gray-800" />
             </button>
-            <div className="flex flex-col items-center">
-              <span className="font-bold text-black dark:text-white">AdminName</span>
-              <span className="text-[0.68rem] text-gray-400 dark:text-white">
-                AdminName@gmail.com
-              </span>
+            <div className="flex flex-col items-center dark:text-gray-100 text-gray-700 text-sm">
+              {profileData?.isPending?<p className="">Lodaing...</p> :profileData.isError?<p>Failed to load the profile</p>:<p>{profileData?.data.email}</p>}
+      
+           
             </div>
           </div>
         </div>
@@ -250,19 +259,25 @@ const SideBar = () => {
               )
             ))}
 
-            {/* Logout Button */}
-            <li>
+          
+            <li  >
               <button 
-                onClick={logOut}
+                onClick={handleLogout}
+                disabled={isPending}
                 className="w-full text-left flex items-center"
                 aria-label="Sign out"
               >
                 <FontAwesomeIcon 
                   icon={faRightFromBracket} 
-                  className="w-5 h-5 text-black dark:text-white"
+                  className={`${
+                    isPending ? 'w-5 h-5 text-black dark:text-white cursor-not-allowed' : 'w-5 h-5 text-black dark:text-white cursor-pointer'
+                  } `}
+      
                 />
-                <div className="flex items-center hover:bg-gray-300 dark:hover:bg-gray-600 w-full hover:ml-2 p-2 rounded-l-lg text-black dark:text-white">
-                  <span className="ms-3">{t('sign-out')}</span>
+              <div className={`flex items-center hover:bg-gray-300 dark:hover:bg-gray-600 w-full hover:ml-2 p-2 rounded-l-lg text-black dark:text-white ${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+                
+                
+                <span className="ms-3">{isPending ? 'Logging out...' : `${t('sign-out')}`}  </span>
                 </div>
               </button>
             </li>

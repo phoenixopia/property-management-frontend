@@ -70,7 +70,11 @@ export default function Login() {
     const checkAuth = async () => {
       const authData = await getUserAuthData();
       if (authData.groups.length > 0 && authData.permissions.length > 0) {
-        router.push("/dashboard");
+        if (authData.groups.includes("maintenance")) {
+          router.push("/maintenance");
+        } else {
+          router.push("/dashboard");
+        }
       } else {
         setLoading(false);
       }

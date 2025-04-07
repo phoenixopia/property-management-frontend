@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -36,6 +36,9 @@ interface EditPropertyFormProps {
 const EditPropertyForm = ({ property, onSuccess }: any) => {
   const t = useTranslations("full");
   const queryClient = useQueryClient();
+  const inputRef =useRef(null);
+  const [propertyForm,setPropertyForm]=useState(true);
+  const [propertyGallaryForm,setpropertyGallaryForm]=useState(false);
 
   
   const {
@@ -79,6 +82,17 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
     }
   });
 
+  const setPropertyFormActive=()=>{
+               setPropertyForm(true)
+               setpropertyGallaryForm(false)
+  }
+
+  const setpropertyGallaryFormActive=()=>{
+    setPropertyForm(false);
+    setpropertyGallaryForm(true);
+  }
+ const selectedImage =inputRef?.current;
+ console.log(selectedImage,'gallary Image selected')
   const onSubmit: SubmitHandler<PropertyFormData> = (data) => {
 
     const payload: PropertyFormData = {
@@ -91,13 +105,23 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <div className='flex flex-row rounded-lg my-2 font-bold text-sm text-white'>
+      <div onClick={()=>setPropertyFormActive()} className={`flex ${propertyForm? `bg-gray-800 text-gray-100 `:`bg-gray-200 text-gray-800 `} cursor-pointer  flex-row w-full justify-evenly p-4 rounded-l-lg`}>
+      <span >Property-Data</span>
+      </div>
+      <div onClick={()=>setpropertyGallaryFormActive()}  className={`flex ${propertyGallaryForm? `bg-gray-800 text-gray-100 `:`bg-gray-200 text-gray-800 `} cursor-pointer  flex-row w-full justify-evenly p-4 rounded-r-lg`}>
+      <span >Gallary</span>
+      </div>
+      </div>
+  
+
+  { propertyForm &&  <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4 mb-4 grid-cols-1 md:grid-cols-2">
           
           {/* Property Type */}
           <div className="col-span-2">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              property-type
+            <label className="block capitalize mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Property-type
             </label>
             <select
               {...register("property_type")}
@@ -334,7 +358,16 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
             )}
           </button>
         </div>
-      </form>
+      </form> }
+      {propertyGallaryForm && 
+      <div className='flex flex-col text-sm font-semibold'>
+        <p className='py-2'>Manage Property Images</p>
+           <div className='py-2'>
+           <input ref={inputRef} className='bg-[#464646] text-gray-50 text-sm w-full text-center p-4 rounded-lg' type="file" accept="image/*"/>
+          </div>
+      </div>
+      }
+     
     </div>
   );
 };

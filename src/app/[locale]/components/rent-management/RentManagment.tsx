@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation,useQuery,useQueryClient } from '@tanstack/react-query';
-import { faPen, faTrash, faEye, faMagnifyingGlass, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash, faEye, faMagnifyingGlass, faScrewdriverWrench, faPlus,faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import AddPropertyForm from '../forms/propertyManagment/AddPropertyForm';
-import PropertyDetail from './property-detail/PropertyDetail';
+// import PropertyDetail from './property-detail/PropertyDetail';
 import toast from 'react-hot-toast';
 import { deleteProperty, fetchProperties } from '@/actions/propertyManagmentAction';
 import { property } from 'lodash';
@@ -30,13 +30,14 @@ type Property = {
   manager_id: number | null;
 };
 
-const PropertyManagement = () => {
+const RentManagment = () => {
   const queryClient =useQueryClient();
   const [addProperty, setPropertyModal] = useState(false);
   const [propertyDetail, setPropertyDetail] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState<{ id: number ,name:string} | null>(null);
     const [propertyMaintenance,setPropertyMaintenance]=useState(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [filterComponent,setFilterComponent]=useState(false);
   const [filters, setFilters] = useState({
     search: '',
     min: '',
@@ -129,59 +130,123 @@ const PropertyManagement = () => {
     setEditPropertyModal(false);
     setSelectedProperty(null);
   };
+  const openFilterComp =()=>{
+    setFilterComponent(!filterComponent)
+  }
 
 
 
   return (
     <div className='flex flex-col justify-between p-4'>
-      <div className='flex items-center flex-col xl:flex-row justify-between w-full gap-5 xl:gap-0'>
-        {/* Search and Filter Section */}
-        <div className='flex flex-col md:flex-row gap-4 w-[80%]'>
-          <div className='relative'>
-            <input
-              type='text'
-              name='search'
-              placeholder={t('search')}
-              value={filters.search}
-              onChange={handleFilterChange}
-              className='pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-gray-700 border-gray-300 dark:border-gray-700 dark:text-white w-full'
-            />
-            <FontAwesomeIcon 
-              icon={faMagnifyingGlass} 
-              className='absolute left-3 top-3 text-gray-400'
-            />
-          </div>
-          
-          <div className='flex gap-2'>
-            <input
-              type='number'
-              name='min'
-              placeholder="Minimum Rent Price"
-              value={filters.min}
-              onChange={handleFilterChange}
-              className='px-4 py-2 border text-sm rounded-lg dark:bg-gray-700 border-gray-300 dark:border-gray-700 dark:text-white w-full'
-            />
-            <input
-              type='number'
-              name='max'
-              placeholder='Maximum Rent Price'
-              value={filters.max}
-              onChange={handleFilterChange}
-              className='px-4 py-2 border text-sm rounded-lg dark:bg-gray-700 border-gray-300 dark:border-gray-700 dark:text-white w-full'
-            />
-          </div>
+ 
+      <div className='flex items-center justify-between w-full gap-5 xl:gap-0'>
+        <div onClick={()=>openFilterComp()} className='flex p-5 cursor-pointer bg-gray-100 dark:bg-gray-300 rounded-full size-5 items-center justify-center'>
+             
+                                <FontAwesomeIcon 
+                                    icon={faFilter} 
+                                    className='text-dark dark:text-gray-800 text-sm ' 
+                                  />
         </div>
+
+       
+     
 
         <div className='flex justify-end gap-2'>
           <button 
             onClick={openaddPropertyModal} 
             className='flex cursor-pointer flex-row text-sm capitalize items-center justify-center rounded-md bg-gray-900 dark:bg-gray-600 py-3 px-5 gap-2 text-white'
           >
-            <FontAwesomeIcon icon={faScrewdriverWrench} />
-            {t('add-property')}
+            <FontAwesomeIcon icon={faPlus} />
+            {t('add-rent')}
           </button>
         </div>
       </div>
+    
+      {filterComponent&&
+      <div className='relative w-full overflow-x-auto border-gray-200 dark:border-[#27282b] border-1 p-4  rounded-sm  overflow-y-auto  py-3 my-2'>
+           <div className='flex flex-col md:flex-row gap-4 w-[100%]'>
+      
+      <div className='flex gap-2 md:gap-2  flex-col 2xl:flex-row w-full min-w-full '>
+           <div className='flex flex-col items-center  dark:bg-[#27282b] bg-[#f3f4f6] rounded-lg'>
+               <p className='font-semibold text-gray-700 pt-4 dark:text-gray-100 text-sm'>Select rent start date range?</p>
+   
+                <div className='flex flex-col gap-2 p-3 lg:flex-row items-center'>
+                  <div className="flex gap-4 items-center">
+                          <label htmlFor="startDate" className="text-sm text-gray-700  dark:text-gray-100 truncate">start-date</label>
+                          <input
+                              type="date"
+                              id="startDate"
+                      
+                              className="border text-gray-700 dark:text-gray-100 text-sm border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Select start date"
+                          />
+                      </div>
+
+                      <div className="flex gap-4 items-center">
+                          <label htmlFor="endDate" className="text-sm text-gray-600 dark:text-gray-200 truncate">end-date</label>
+                          <input
+                              type="date"
+                              id="endDate"
+                      
+                              className="border text-gray-700 dark:text-gray-100 text-sm border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Select end date"
+                          />
+                      </div>
+                </div>
+          </div>
+          <div className='flex flex-col items-center dark:bg-[#27282b] bg-[#f3f4f6]  rounded-lg'>
+               <p className='font-semibold text-gray-700 pt-4 dark:text-gray-100 text-sm'>Select rent end date range?</p>
+   
+                <div className='flex flex-col gap-2 p-3 lg:flex-row items-center'>
+                  <div className="flex gap-4 items-center">
+                          <label htmlFor="startDate" className="text-sm text-gray-700  dark:text-gray-100 truncate">start-date</label>
+                          <input
+                              type="date"
+                              id="startDate"
+                      
+                              className="border text-gray-700 dark:text-gray-100 text-sm border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Select start date"
+                          />
+                      </div>
+
+                      <div className="flex gap-4 items-center">
+                          <label htmlFor="endDate" className="text-sm text-gray-600 dark:text-gray-200 truncate">end-date</label>
+                          <input
+                              type="date"
+                              id="endDate"
+                      
+                              className="border text-gray-700 dark:text-gray-100 text-sm border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Select end date"
+                          />
+                      </div>
+                </div>
+          </div>
+    
+
+       
+          <div className='flex flex-col items-center dark:bg-[#27282b] bg-[#f3f4f6]  rounded-lg p-5 '>
+               <p className='font-semibold text-gray-700  dark:text-gray-100 text-sm'>Select rent status?</p>
+  
+            <select
+              
+                  className="dark:bg-[#27282b] bg-[#f3f4f6]  truncate w-[12rem] mt-2  border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">select-status</option>
+                  <option value="active">Active</option>
+                  <option value="expired">Expired</option>
+                  <option value="terminated">Terminated</option>
+                </select>
+            
+                   
+          </div>
+
+
+       
+       
+            </div>
+            
+    </div>
+        </div>}
 
       <div className='py-5'>
         <div className='relative overflow-x-auto shadow-md rounded-sm max-h-[400px] overflow-y-auto'>
@@ -316,7 +381,7 @@ const PropertyManagement = () => {
         </div>
       )}
 
-      {propertyDetail && selectedProperty && (
+      {/* {propertyDetail && selectedProperty && (
         <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
           <div className='relative max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl'>
             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
@@ -337,7 +402,7 @@ const PropertyManagement = () => {
             <PropertyDetail property={selectedProperty} />
           </div>
         </div>
-      )}
+      )} */}
 
       {propertyMaintenance && selectedProperty && (
                <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
@@ -429,4 +494,4 @@ const PropertyManagement = () => {
   );
 };
 
-export default withAuth(PropertyManagement, ["system-admin"], ["auth.view_permission", "ednant"]);
+export default withAuth(RentManagment, ["system-admin"], ["auth.view_permission", "ednant"]);

@@ -110,7 +110,10 @@
      "property-type":"property type",
      "tenant-management":"Tenant Management",
      "property-maintenance":"Property Maintenance",
-     "maintenance-request":"Maintenance Request"
+     "maintenance-request":"Maintenance Request",
+     "rent-management":"Rent Management",
+     "add-rent":"Add Rent",
+     "add-filter":"Add Filter"
 
    
 

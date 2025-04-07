@@ -1,6 +1,6 @@
 
 export default function Loading() {
-    // You can add any UI inside Loading, including a Skeleton.
+
     return(
  
       <div className='flex md:ml-64 text-black dark:text-gray-300 bg-white dark:bg-[#292a2d] min-h-screen items-center justify-center' role='status'>

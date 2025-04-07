@@ -16,7 +16,8 @@ import {
   faUsersGear, 
   faPen, 
   faScrewdriverWrench, 
-  faBuilding,faUsersRays
+  faBuilding,faUsersRays,
+  faBuildingUser
 } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
@@ -70,6 +71,14 @@ const SideBar = () => {
         path: "/property-management",
         icon: <FontAwesomeIcon icon={faBuilding} />,
         label: "property-management",
+        translationKey: "full",
+        requiredRoles: ["system-admin", "group 2"],
+        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+      },
+      {
+        path: "/rent-management",
+        icon: <FontAwesomeIcon icon={faBuildingUser} />,
+        label: "rent-management",
         translationKey: "full",
         requiredRoles: ["system-admin", "group 2"],
         requiredPermissions: ["auth.view_permission", "admin.change_logentry"]

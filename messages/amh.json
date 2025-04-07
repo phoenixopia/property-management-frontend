@@ -110,24 +110,9 @@
      "property-type":"የንብረት አይነት",
      "tenant-management":"ተከራይ አስተዳደር",
      "property-maintenance":"የንብረት ጥገና",
-     "maintenance-request":"የጥገና-ጥያቄ"
-
-    
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
+     "maintenance-request":"የጥገና-ጥያቄ",
+     "rent-management":"ኪራይ-አስተዳደር",
+     "add-rent":"ኪራይ ጨምር"
 
     },
     "Step2": {

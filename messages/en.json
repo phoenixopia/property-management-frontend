@@ -113,7 +113,20 @@
      "maintenance-request":"Maintenance Request",
      "rent-management":"Rent Management",
      "add-rent":"Add Rent",
-     "add-filter":"Add Filter"
+     "add-filter":"Add Filter",
+     "rent-type":"Rent Type",
+     "property":"Property",
+     "payment-cycle":"Payment cycle",
+     "start-date":"Start Date",
+     "end-date":"End Date",
+     "rent-amount":"Rent Amount",
+     "deposit-amount":"Deposit Amount",
+     "tenant":"Tenant",
+     "update-rent":"Update Rent"
+
+
+
+
 
    
 

@@ -112,7 +112,22 @@
      "property-maintenance":"የንብረት ጥገና",
      "maintenance-request":"የጥገና-ጥያቄ",
      "rent-management":"ኪራይ-አስተዳደር",
-     "add-rent":"ኪራይ ጨምር"
+     "add-rent":"ኪራይ ጨምር",
+     "rent-type":"የኪራይ ዓይነት",
+     "property":"ንብረት",
+     "payment-cycle":"የክፍያ ዑደት",
+     "start-date":"የመጀመሪያ ቀን",
+     "end-date":"የመጨረሻ ቀን",
+     "rent-amount":"የኪራይ መጠን",
+     "deposit-amount":"የተቀማጭ መጠን",
+     "tenant":"ተከራይ",
+     "update-rent":"ኪራይን አዘምን"
+
+     
+
+
+
+
 
     },
     "Step2": {

@@ -202,11 +202,11 @@ const PropertyManagement = () => {
 
             {isPending ? (
                                 <tr>
-                                    <td colSpan={4} className='px-6 py-4 text-center'>Loading...</td>
+                                    <td colSpan={7} className='px-6 py-4 text-center'>Loading...</td>
                                 </tr>
                             ) : error ? (
                                 <tr>
-                                    <td colSpan={4} className='px-6 py-4 text-center'>Failed to load user!</td>
+                                    <td colSpan={7} className='px-6 py-4 text-center'>Failed to load user!</td>
                                 </tr>
                             ) : data?.data?.length === 0 && isSuccess ? (
                                 <tr>

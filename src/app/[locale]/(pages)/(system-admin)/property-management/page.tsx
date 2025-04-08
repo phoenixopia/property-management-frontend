@@ -10,7 +10,7 @@ const page = () => {
 
   
   return (
-    <div className=" md:ml-64 text-black dark:text-gray-300 bg-white dark:bg-[#292a2d] min-h-screen ">
+    <div className=" md:ml-60 text-black dark:text-gray-300 bg-white dark:bg-[#292a2d] min-h-screen ">
         <div className="fixed top-0 left-0 right-0   bg-white dark:bg-[#292a2d]">
         <div className="flex justify-end items-center py-4 px-12">
           <span className="text-black  dark:text-gray-300 text-sm font-semibold">{t2('property-management')}</span>

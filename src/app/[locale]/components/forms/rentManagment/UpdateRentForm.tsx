@@ -57,7 +57,11 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
 
       ...rent,
       start_date: rent?.end_date ? format(new Date(rent?.end_date),"yyyy-MM-dd"):undefined,
-      end_date: rent?.end_date ? format(new Date(rent?.end_date),"yyyy-MM-dd"):undefined
+      end_date: rent?.end_date ? format(new Date(rent?.end_date),"yyyy-MM-dd"):undefined,
+      user_id:rent?.user_id?.id ? rent?.user_id?.id:undefined,
+      property_id:rent?.property_id?.id?rent.property_id?.id:undefined
+
+      
 
 
 
@@ -263,8 +267,7 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
             )}
           </div>
 
-          {/* Rest of the form fields */}
-          {/* Rent Type */}
+      
           <div className="col-span-2 md:col-span-1">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('rent-type')} *

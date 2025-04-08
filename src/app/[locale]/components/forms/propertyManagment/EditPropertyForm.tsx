@@ -9,6 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from 'zod';
 import toast from 'react-hot-toast';
 import { updateProperty, fetchOwners, fetchManagers } from '@/actions/propertyManagmentAction';
+import PropertyImageCarousel from './PropertyImageCarousel';
 
 const propertySchema = z.object({
   property_type: z.string().min(1, "Property type is required"),
@@ -362,6 +363,7 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
       {propertyGallaryForm && 
       <div className='flex flex-col text-sm font-semibold'>
         <p className='py-2'>Manage Property Images</p>
+        <PropertyImageCarousel/>
            <div className='py-2'>
            <input ref={inputRef} className='bg-[#464646] text-gray-50 text-sm w-full text-center p-4 rounded-lg' type="file" accept="image/*"/>
           </div>

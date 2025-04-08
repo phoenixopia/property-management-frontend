@@ -171,7 +171,7 @@ const SideBar = () => {
       if (!shouldShowSidebar) return null;
 
 
-      
+      console.log(profileData,'dsads')
 
   return (
     <>
@@ -200,7 +200,7 @@ const SideBar = () => {
 
       {/* Sidebar Content */}
       <aside
-        className={`fixed top-0 left-0 z-50 w-64 h-screen transition-transform bg-gray-100 dark:bg-[#212327] ${
+        className={`fixed top-0 left-0 z-50 w-60 h-screen transition-transform bg-gray-100 dark:bg-[#212327] ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
@@ -215,23 +215,42 @@ const SideBar = () => {
           </div>
          
           <div className="relative flex flex-col items-center w-full mx-4 px-7 py-2 border-1 border-gray-50 shadow-2xs dark:bg-[#292b30] dark:border-gray-800 gap-2">
-            <FontAwesomeIcon 
-              icon={faCircleUser} 
-              className="text-5xl text-gray-800 dark:text-gray-300"
-            />
-            <button
-              onClick={() => setEditUserOpen(true)}
-              className="absolute right-22 cursor-pointer top-2 size-6 rounded-full bg-white flex items-center justify-center"
-              aria-label="Edit profile"
-            >
-              <FontAwesomeIcon icon={faPen} className="text-[0.7rem] text-gray-800 dark:text-gray-800" />
-            </button>
-            <div className="flex flex-col items-center dark:text-gray-100 text-gray-700 text-sm">
-              {profileData?.isPending?<p className="">Lodaing...</p> :profileData.isError?<p>Failed to load the profile</p>:<p>{profileData?.data.email}</p>}
-      
-           
+              {profileData?.isPending ? (
+                <p>Loading...</p>
+              ) : profileData?.isError ? (
+                <p>Failed to load the profile</p>
+              ) : profileData?.data.profile_image ? (
+                <img
+                  src={profileData.data.profile_image}
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faCircleUser}
+                  className="text-5xl text-gray-800 dark:text-gray-300"
+                />
+              )}
+
+              <button
+                onClick={() => setEditUserOpen(true)}
+                className="absolute right-22 cursor-pointer top-2 size-6 rounded-full bg-white flex items-center justify-center"
+                aria-label="Edit profile"
+              >
+                <FontAwesomeIcon icon={faPen} className="text-[0.7rem] text-gray-800 dark:text-gray-800" />
+              </button>
+
+              <div className="flex flex-col items-center dark:text-gray-100 text-gray-700 text-sm truncate">
+                {profileData?.isPending ? (
+                  <p>Loading...</p>
+                ) : profileData?.isError ? (
+                  <p>Failed to load the profile</p>
+                ) : (
+                  <p>{profileData.data.email}</p>
+                )}
+              </div>
             </div>
-          </div>
+
         </div>
         {isLoading && (
                 <div className="fixed top-0 left-0 w-64 h-screen bg-gray-100 dark:bg-[#212327] flex items-center justify-center">

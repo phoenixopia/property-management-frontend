@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono,Inter } from "next/font/google";
 import "./globals.css";
 import {NextIntlClientProvider, hasLocale} from 'next-intl';
 import {notFound} from 'next/navigation';
@@ -15,6 +15,10 @@ config.autoAddCss = false;
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
 });
 
 const geistMono = Geist_Mono({
@@ -44,7 +48,7 @@ interface RootLayoutProps {
     return (
       <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased transition-all`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased transition-all`}
       >
       <NextIntlClientProvider>
         <ThemeProvider  defaultTheme="system">

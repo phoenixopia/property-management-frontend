@@ -9,7 +9,7 @@ const Page = () => {
 
 
   return (
-    <div className="flex flex-col p-4 md:ml-64 text-black dark:text-white bg-white dark:bg-[#292a2d] min-h-screen">
+    <div className="flex flex-col p-4 md:ml-60 text-black dark:text-white bg-white dark:bg-[#292a2d] min-h-screen">
      
       <div className="fixed top-0 left-0 right-0 p-4 z-10 bg-white dark:bg-[#292a2d]">
         <div className="flex justify-end items-center">

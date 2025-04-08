@@ -121,7 +121,27 @@
      "rent-amount":"የኪራይ መጠን",
      "deposit-amount":"የተቀማጭ መጠን",
      "tenant":"ተከራይ",
-     "update-rent":"ኪራይን አዘምን"
+     "update-rent":"ኪራይን አዘምን",
+     "loading":"በመጫን ላይ",
+     "showing-entries":"ግቤቶችን በማሳየት ላይ",
+     "active":"ንቁ",
+     "rent-start-date-range":"ኪራይ መጀመሪያ ቀን ክልል",
+     "from":"ከ",
+      "up-to":"እስከ",
+      "rent-end-date-range":"ኪራይ መጨረሻ ቀን ክልል",
+      "rent-status":"የኪራይ ሁኔታ",
+      "all-statuses":"ሁሉም-ሁኔታዎች",
+      "expired":"ጊዜው አልፎበታል",
+      "terminated":"ተቋርጧል",
+      "pending":"በመጠባበቅ ላይ",
+      "completed":"ተጠናቋል"
+    
+
+     
+
+
+
+
 
      
 

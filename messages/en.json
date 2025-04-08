@@ -122,7 +122,22 @@
      "rent-amount":"Rent Amount",
      "deposit-amount":"Deposit Amount",
      "tenant":"Tenant",
-     "update-rent":"Update Rent"
+     "update-rent":"Update Rent",
+     "loading":"Loading",
+     "showing-entries":"Showing Entries",
+     "active":"Active",
+     "rent-start-date-range":"Rent Start Date Range",
+      "from":"From",
+      "up-to":"Up To",
+      "rent-end-date-range":"Rent End Date Range",
+      "rent-status":"Rent Status",
+      "all-statuses":"All Statuses",
+      "expired":"Expired",
+      "terminated":"Terminated",
+      "pending":"Pending",
+      "completed":"Completed"
+
+
 
 
 

@@ -147,7 +147,7 @@ const RentManagement = () => {
                     />
                   </div>
                   <div className="flex gap-2 items-center">
-                    <label htmlFor="start_date_max" className="text-sm text-gray-700 dark:text-gray-100 truncate">{t('to')}</label>
+                    <label htmlFor="start_date_max" className="text-sm text-gray-700 dark:text-gray-100 truncate">{t('up-to')}</label>
                     <input
                       type="date"
                       id="start_date_max"
@@ -175,7 +175,7 @@ const RentManagement = () => {
                     />
                   </div>
                   <div className="flex gap-2 items-center">
-                    <label htmlFor="end_date_max" className="text-sm text-gray-700 dark:text-gray-100 truncate">{t('to')}</label>
+                    <label htmlFor="end_date_max" className="text-sm text-gray-700 dark:text-gray-100 truncate">{t('up-to')}</label>
                     <input
                       type="date"
                       id="end_date_max"
@@ -200,6 +200,8 @@ const RentManagement = () => {
                   <option value="active">{t('active')}</option>
                   <option value="expired">{t('expired')}</option>
                   <option value="terminated">{t('terminated')}</option>
+                  <option value="completed">{t('completed')}</option>
+
                 </select>
               </div>
 

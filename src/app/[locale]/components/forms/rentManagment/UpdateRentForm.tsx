@@ -8,8 +8,9 @@ import { z } from 'zod';
 import toast from 'react-hot-toast';
 import { update_rent, search_tenants, search_properties } from "@/actions/rentManagmentAction";
 import { debounce } from 'lodash';
+import { format } from "date-fns";
 
-// Schema for rent form data (same as AddRentForm)
+
 const rentSchema = z.object({
   user_id: z.coerce.number().min(1, "Tenant is required"),
   property_id: z.coerce.number().min(1, "Property is required"),
@@ -52,7 +53,15 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
     watch,
   } = useForm<RentFormData>({
     resolver: zodResolver(rentSchema),
-    defaultValues: {
+    defaultValues:rent ?{
+
+      ...rent,
+      start_date: rent?.end_date ? format(new Date(rent?.end_date),"yyyy-MM-dd"):undefined,
+      end_date: rent?.end_date ? format(new Date(rent?.end_date),"yyyy-MM-dd"):undefined
+
+
+
+    }: {
       user_id: rent.user_id.id,
       property_id: rent.property_id.id,
       rent_type: rent.rent_type,
@@ -146,7 +155,7 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
-
+    console.log(rent,'rentshow')
   return (
     <div className="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
       <form onSubmit={handleSubmit(onSubmit)}>

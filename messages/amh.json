@@ -135,7 +135,12 @@
       "terminated":"ተቋርጧል",
       "pending":"በመጠባበቅ ላይ",
       "completed":"ተጠናቋል",
-      "clear-filters":"ማጣሪያዎችን አጽዳ"
+      "clear-filters":"ማጣሪያዎችን አጽዳ",
+      "properties-under-maintenance":"በጥገና ላይ ያሉ ንብረቶች",
+      "Are you sure you want to change the request":"እርግጠኛ ነዎት ጥያቄውን መቀየር ይፈልጋሉ",
+      "Before you make this request,The maintenance problem must have to be fixed":"ይህን ጥያቄ ከማቅረብዎ በፊት የጥገና ችግሩ መስተካከል አለበት"
+
+
     
 
      

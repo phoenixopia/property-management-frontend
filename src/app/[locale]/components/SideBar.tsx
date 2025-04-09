@@ -219,9 +219,10 @@ const SideBar = () => {
                 <p>Loading...</p>
               ) : profileData?.isError ? (
                 <p>Failed to load the profile</p>
-              ) : profileData?.data.profile_image ? (
+              ) : profileData?.data?.profile_picture
+               ? (
                 <img
-                  src={profileData.data.profile_image}
+                  src={profileData?.data?.profile_picture}
                   alt="Profile"
                   className="w-16 h-16 rounded-full object-cover"
                 />
@@ -246,7 +247,7 @@ const SideBar = () => {
                 ) : profileData?.isError ? (
                   <p>Failed to load the profile</p>
                 ) : (
-                  <p>{profileData.data.email}</p>
+                  <p>{profileData?.data?.email}</p>
                 )}
               </div>
             </div>

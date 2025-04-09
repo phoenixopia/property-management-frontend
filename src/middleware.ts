@@ -16,7 +16,7 @@ export function middleware(req: NextRequest) {
   
   const accessToken = req.cookies.get("_s_t");
   const token = accessToken?.value; 
-  const protectedRoutes = ["/dashboard", "/maintenance"];
+  const protectedRoutes = ["/dashboard", "/user-managment","/property-management","/maintenance"];
   
 
   const pathWithoutLocale = pathParts.slice(2).join('/') || '/';

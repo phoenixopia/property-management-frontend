@@ -13,19 +13,23 @@ const PropertyImageCarousel = () => {
   const dummyImages: Image[] = [
     {
       id: 1,
-      url: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+      url: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      caption:"front"
     },
     {
       id: 2,
-      url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+      url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      caption:"back"
     },
     {
       id: 3,
-      url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+      url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      caption:"side"
     },
     {
       id: 4,
-      url: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+      url: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      caption:"Left"
     },
   ];
 
@@ -56,17 +60,16 @@ const PropertyImageCarousel = () => {
 
   return (
     <div className="relative w-full">
-      {/* Main Carousel */}
+  
       <div className="relative h-64 md:h-80 lg:h-96 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700">
-        {/* Main Image */}
+
         <img
           src={dummyImages[currentIndex].url}
           alt={dummyImages[currentIndex].caption || 'Property image'}
           className="w-full h-full object-cover cursor-pointer"
           onClick={() => openModal(dummyImages[currentIndex])}
         />
-        
-        {/* Navigation Arrows */}
+
         <button
           onClick={prevImage}
           className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
@@ -80,7 +83,7 @@ const PropertyImageCarousel = () => {
           <FaChevronRight />
         </button>
         
-        {/* Image Indicator */}
+      
         <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
           {dummyImages.map((_, index) => (
             <button
@@ -92,7 +95,6 @@ const PropertyImageCarousel = () => {
         </div>
       </div>
       
-      {/* Thumbnail Gallery */}
       <div className="grid grid-cols-4 gap-2 mt-4">
         {dummyImages.map((image, index) => (
           <div 
@@ -105,11 +107,13 @@ const PropertyImageCarousel = () => {
               alt={image.caption || `Thumbnail ${index + 1}`}
               className="w-full h-full object-cover"
             />
+            <p className='text-black'>{selectedImage?.caption}</p>
+
           </div>
         ))}
       </div>
       
-      {/* Image Modal */}
+    
       {showModal && selectedImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
           <div className="relative max-w-4xl w-full">
@@ -118,7 +122,7 @@ const PropertyImageCarousel = () => {
               alt={selectedImage.caption || 'Property image'}
               className="w-full max-h-[80vh] object-contain"
             />
-    
+            <p className='text-black absolute top-2 left-2'>{selectedImage?.caption}</p>
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 bg-black/70 text-white p-2 rounded-full hover:bg-black"

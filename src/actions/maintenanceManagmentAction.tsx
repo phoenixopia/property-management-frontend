@@ -84,7 +84,7 @@ export async function createMaintenanceRequest(requestData: any) {
           description: requestData.description
         })
       });
-  
+      console.log(response,'response when it created')
       if (!response.ok) {
         const errorData = await response.json();
       
@@ -145,4 +145,37 @@ export async function createMaintenanceRequest(requestData: any) {
     const responseJson = await response.json();
     return responseJson;
   };
+
+
+export async function resolveMaintenance(id:number) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+ console.log(id);
+  try {
+    const response = await fetch(`${endPoint}/resolve_maintenance_request`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+         id: id,
+      })
+    });
+    const result = await response.json();
+
+    console.log(response,'data after resolve')
+
+    if (!response.ok) {
+      throw new Error('Failed to update the maintenance status');
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error updating role:', error);
+    throw new Error('An error occurred while updating the maintenance status.');
+  }
+  
+}
+
   

@@ -136,7 +136,11 @@
       "terminated":"Terminated",
       "pending":"Pending",
       "completed":"Completed",
-      "clear-filters":"Clear Filters"
+      "clear-filters":"Clear Filters",
+      "properties-under-maintenance":"Properties Under Maintenance",
+      "Are you sure you want to change the request":"Are you sure you want to change the request",
+      "Before you make this request,The maintenance problem must have to be fixed":"Before you make this request,The maintenance problem must have to be fixed"
+
       
      
 

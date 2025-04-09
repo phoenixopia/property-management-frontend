@@ -2,14 +2,14 @@
 import React, { useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { faUserPlus, faFileExport, faPen, faTrash, faEye, faMagnifyingGlass, faBan, faLockOpen } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faFileExport, faPen, faTrash, faEye, faMagnifyingGlass, faBan, faLockOpen,faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import { withAuth } from '@/hooks/withAuth';
 import AddUserForm from '../forms/userManagment/AddUserForm';
 import EditUserForm from '../forms/userManagment/EditUserForm';
 import { activateUser, getAllUsers, deactivateUser, exportAllUsers } from '@/actions/userManagmentAction';
-import { getAllMaintenance } from '@/actions/maintenanceManagmentAction';
+import { getAllMaintenance, resolveMaintenance } from '@/actions/maintenanceManagmentAction';
 import { debounce } from 'lodash';
 import toast from 'react-hot-toast';
 import ViewMaintenanceData from './singleMaintenanceData/ViewMaintenanceData';
@@ -41,6 +41,9 @@ const MaintenanceManagment = () => {
     const t = useTranslations('full'); 
     const [currentUserView, setCurrentUserView] = useState(false);
     const [currentmaintenanceData, setCurrentmaintenanceData] = useState<User | null>(null);
+    const [fixedMaintenanceData, setFixedMaintenanceData] = useState<User | null>(null);
+
+    const [fixedMaintenanceView,setFixedMaintenanceView]=useState(false);
 
     // const debouncedSearch = useCallback(
     //     debounce((query: string) => {
@@ -65,7 +68,7 @@ const MaintenanceManagment = () => {
     const previous = maintenanceData?.previous || false;
     const next = maintenanceData?.next || false;
     const count = maintenanceData?.count || 0;
-
+    const queryClient= useQueryClient();
 
 
  
@@ -124,11 +127,33 @@ const MaintenanceManagment = () => {
       };
 
     const viewmaintenanceData = (dataMaintenance: any) => {
+        setFixedMaintenanceView(false);
+
         setCurrentUserView(true);
         setCurrentmaintenanceData(dataMaintenance);
     };
 
 
+    const fixedMaintenanceRequest =(dataMaintenance:any)=>{
+        setFixedMaintenanceView(true);
+            setCurrentUserView(false);
+            setFixedMaintenanceData(dataMaintenance)
+    }
+      const fixMaintenance = useMutation({
+        mutationFn: ( id: number) => resolveMaintenance(id),
+        onSuccess: () => {
+            toast.success("Successfully updated the status!");
+            setFixedMaintenanceView(false);
+            queryClient.invalidateQueries({ queryKey: ['getAllMaintenanceData'] });
+        },
+        onError: (error) => {
+          console.error('Error updating the status', error);
+          toast.error("Error updating the status!");
+    
+        },
+      });
+      console.log(fixMaintenance,'fixDaaaaaaaaaa')
+      console.log(maintenanceList,'fixed maintenance data')
 
     return (
         <div className='flex flex-col justify-between p-4'>
@@ -210,6 +235,10 @@ const MaintenanceManagment = () => {
                                                 <button onClick={() => viewmaintenanceData(data)}>
                                                     <FontAwesomeIcon icon={faEye} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
                                                 </button>
+                                             {data?.status!="resolved" &&   <button onClick={() => fixedMaintenanceRequest(data)}>
+                                                    <FontAwesomeIcon icon={faCircleCheck} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
+                                                </button>}
+                                              
                                             </div>
                                         </td>
                                     </tr>
@@ -264,6 +293,49 @@ const MaintenanceManagment = () => {
                         <ViewMaintenanceData maintenanceData={currentmaintenanceData} />
                     </div>
                 </div>
+            )}
+
+            {fixedMaintenanceView && fixedMaintenanceData && (
+                            <div>
+                                      <div className='fixed inset-0 bg-gray-800/90 flex justify-center items-center z-50'>
+                                  
+                    <div className='bg-white shadow-xl p-3 rounded-lg w-full max-w-sm py-4'>
+                
+
+                        <div className='flex justify-end'>
+                                             <button className='text-gray-800' onClick={() => setFixedMaintenanceView(false)}>
+                                                    ✖
+                                                </button>
+                            </div>
+                       <hr className="h-px mt-4 bg-gray-200 border-0 dark:bg-gray-400" />
+          
+                 
+                       <div className="flex flex-col items-center justify-center mb-4 text-center text-gray-600 gap-1 ">
+                      
+                        <p className='flex text-gray-800 py-2'>{t('Are you sure you want to change the request')}?</p>
+                        <div className='py-3'>
+                        <p className='text-red-950 text-xs'>{t('Before you make this request,The maintenance problem must have to be fixed')}!</p>
+                        </div>
+                      
+                         <div className='flex w-full justify-evenly'>
+                            <button     disabled={fixMaintenance.isPending} onClick={() => fixMaintenance.mutate(parseInt(fixedMaintenanceData?.id))} className='bg-[#51a2ff] px-4 text-white py-2 rounded-sm'>
+                                {fixMaintenance?.isPending ? 'Processing...' : "Fixed"}
+                                   
+                            </button>
+                            <button className='bg-red-900 px-4 py-2 text-white rounded-sm' onClick={() => setFixedMaintenanceView(false)}>
+                                     Cancel
+                            </button>
+                            </div>
+                      </div>
+                    
+                    <div className="flex justify-center items-center space-x-4">
+       
+           
+                      </div>
+                    </div>
+                  </div>
+                                </div>
+
             )}
 
          

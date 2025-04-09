@@ -8,6 +8,11 @@ let endPoint ="https://sasconerp.com/pms/api"
 export async function getUserProfileInfo() {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('_s_t')?.value;
+    if (!accessToken) {
+     
+      return null;
+    }
+  
   try {
     const response = await fetch(`${endPoint}/get_user_profile`, {
       method: 'POST',

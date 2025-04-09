@@ -16,14 +16,14 @@ const StaticsData = () => {
   const totalProperties = 5000; 
   const t2=useTranslations('full')
   const data = {
-    labels: [`${t2('occupied-properties')}`,`${t2('available-properties')}`],
+    labels: [`${t2('occupied-properties')}`,`${t2('available-properties')}`,`${t2('properties-under-maintenance')}`],
     datasets: [
       {
-       
-        data: [1200, 600],
+        data: [1200, 600,250],
         backgroundColor: [
           '#01567d',
-          '#426cf5'
+          '#426cf5',
+          '#9298a1'
         ]
 
       },

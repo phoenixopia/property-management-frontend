@@ -100,9 +100,25 @@ const SideBar = () => {
         requiredPermissions: ["pms.view_maintenancerequest"]
       },
       {
-        path: "/role-managment",
+        path: "#",
         icon: <FontAwesomeIcon icon={faUsersGear} />,
-        label: "role-managment",
+        label: "logs",
+        translationKey: "full",
+        requiredRoles: ["system-admin", "group 2"],
+        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+      },
+      {
+        path: "#",
+        icon: <FontAwesomeIcon icon={faUsersGear} />,
+        label: "transactions-logs",
+        translationKey: "full",
+        requiredRoles: ["system-admin", "group 2"],
+        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+      },
+      {
+        path: "#",
+        icon: <FontAwesomeIcon icon={faUsersGear} />,
+        label: "system-settings",
         translationKey: "full",
         requiredRoles: ["system-admin", "group 2"],
         requiredPermissions: ["auth.view_permission", "admin.change_logentry"]

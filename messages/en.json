@@ -134,6 +134,10 @@
       "all-statuses":"All Statuses",
       "expired":"Expired",
       "terminated":"Terminated",
+      "logs":"Logs",
+      "transactions-logs":"Transactions Logs",
+      "system-settings":"System Settings",
+
       "pending":"Pending",
       "completed":"Completed",
       "clear-filters":"Clear Filters",

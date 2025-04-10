@@ -1,0 +1,175 @@
+{
+    "Home": {
+      "title": "NextJS",
+      "description": "dis"
+    },
+    "Dashboard":{
+        "dashboardTitle":"Dashboard",
+        "setting":"Setting",
+        "user-managment":"User Managment",
+        "sign-out":"Sign Out",
+        "maintenance-title":"Maintenance",
+     "tenant-page":"Tenant Page"
+
+       },
+    "full": {
+      "add-user": "Add User",
+      "export-csv": "Export CSV",
+      "search-user":"Search User",
+      "all-role":"All Role",
+      "id":"Id",
+      "name":"Name",
+      "action":"Action",
+      "role":"Role",
+      "select-role":"Select Role",
+      "email":"Email",
+      "change-theme":"Change Theme",
+      "multi-language":"Multi Language",
+      "next":"Next",
+      "previous":"Previous",
+      "create-user":"Create User",
+      "choose-language":"Choose a Language",
+      "english":"English",
+      "amharic":"አማርኛ",
+      "role-managment":"Role Managment",
+      "create-role":"Create Role",
+      "add-role":"Add Role",
+      "edit-role":"Edit Role",
+      "permssions":"Permssions",
+      "edit-user":"Edit User",
+      "latest-maintenance-request":"Latest maintenance Request",
+      "edit-profile":"Change Profile",
+      "update":"Update",
+      "minutes":"minutes",
+      "ago":"ago",
+      "maintenance":"Maintenance",
+      "maintenance-requests":"Maintenance Requests",
+      "status":"Status",
+      "requested-date":"Requested Date",
+      "fixed-date":"Fixed Date",
+      "description":"Description",
+      "add-maintenance-request":"Add Maintenance Request",
+      "user-detail":"User Detail",
+      "phone-number":"Tel",
+      "property-name":"Property Name",
+     "city":"City",
+     "price":"Price",
+     "zip-code":"Zip-code",
+     "property-management":"Property Managment",
+     "owner-name":"Owner Name",
+     "manager-name":"Manager Name",
+     "lease-id":"Lease-Id",
+     "add-property":"Add Property",
+     "edit-property":"Edit Property",
+     "property-detail":"Property Detail",
+     "lease-detail":"Lease Detail",
+     "select-owner":"Select Owner",
+     "select-manager":"Select Manager",
+      "welcome":"Welcome",
+     "login":"Login",
+     "forgot-password":"Forgot password",
+     "password":"Password",
+     "remember-me":"Remember Me",
+     "latest-added-tenants":"Latest Added Tenants",
+     "occupied-properties":"Occupied Properties",
+     "available-properties":"Available Properties",
+     "reset-your-password":"Reset Your Password",
+     "enter-the-email-associated-with-your-account-and-we-will-send-you-password-reset-instructions":"Enter the email associated with your account and we will send you password reset instructions",
+     "change-your-password":"Change your password",
+     "enter-new-password-below-to-change-password":"Enter new password below to change password",
+     "reset-password":"Reset Password",
+     "permissions":"permissions",
+     "role-name":"Role Name",
+     "updating":"Updating",
+     "repeat-password":"Repeat Password",
+     "view-role":"View Role",
+     "enter-password":"Enter Password",
+     "enter-email":"Enter Email",
+     "enter-last-name":"Enter Last Name",
+     "enter-middle-name":"Enter Middle Name",
+     "enter-first-name":"Enter First Name",
+     "nothing-to-show":"Nothing To Show!",
+     "user-created":"User Created",
+     "user-created-successfully":"User Created Successfully",
+     "something-went-wrong":"Something Went Wrong",
+     "successfully-updated-user":"Successfully Updated User",
+     "view-user":"View User",
+     "search":"Search",
+     "min-price":"Minimum price",
+     "max-price":"Maximum price",
+     "address":"Address",
+     "property-information":"Property Information",
+     "type":"Type",
+     "specifications":"Specifications",
+     "rent":"Rent",
+     "bedrooms":"Bedrooms",
+     "bathrooms":"Bathrooms",
+     "owner":"Owner",
+     "management":"Managment",
+     "add-new-property":"add new property",
+     "property-type":"property type",
+     "tenant-management":"Tenant Management",
+     "property-maintenance":"Property Maintenance",
+     "maintenance-request":"Maintenance Request",
+     "rent-management":"Rent Management",
+     "add-rent":"Add Rent",
+     "add-filter":"Add Filter",
+     "rent-type":"Rent Type",
+     "property":"Property",
+     "payment-cycle":"Payment cycle",
+     "start-date":"Start Date",
+     "end-date":"End Date",
+     "rent-amount":"Rent Amount",
+     "deposit-amount":"Deposit Amount",
+     "tenant":"Tenant",
+     "update-rent":"Update Rent",
+     "loading":"Loading",
+     "showing-entries":"Showing Entries",
+     "active":"Active",
+     "rent-start-date-range":"Rent Start Date Range",
+      "from":"From",
+      "up-to":"Up To",
+      "rent-end-date-range":"Rent End Date Range",
+      "rent-status":"Rent Status",
+      "all-statuses":"All Statuses",
+      "expired":"Expired",
+      "terminated":"Terminated",
+      "logs":"Logs",
+      "transactions-logs":"Transactions Logs",
+      "system-settings":"System Settings",
+
+      "pending":"Pending",
+      "completed":"Completed",
+      "clear-filters":"Clear Filters",
+      "properties-under-maintenance":"Properties Under Maintenance",
+      "Are you sure you want to change the request":"Are you sure you want to change the request",
+      "Before you make this request,The maintenance problem must have to be fixed":"Before you make this request,The maintenance problem must have to be fixed"
+
+      
+     
+
+
+
+
+
+
+
+   
+
+
+
+     
+     
+
+
+
+
+      
+    },
+    "Step2": {
+      "title": "Step 2 Title",
+      "EXPLANATION_PARAGRAPH1": "lorem ipsum",
+      "EXPLANATION_PARAGRAPH2": "lorem ipsum",
+      "EXPLANATION_PARAGRAPH3": "lorem ipsum"
+    }
+  }

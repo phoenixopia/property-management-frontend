@@ -1,0 +1,23 @@
+[
+    { "id": "100001", "name": "John Doe", "role": "Admin", "email": "johndoe@example.com" },
+    { "id": "100002", "name": "Jane Smith", "role": "User", "email": "janesmith@example.com" },
+    { "id": "100003", "name": "Michael Brown", "role": "Manager", "email": "michaelbrown@example.com" },
+    { "id": "100004", "name": "Emily White", "role": "Tenant", "email": "emilywhite@example.com" },
+    { "id": "100005", "name": "David Wilson", "role": "Moderator", "email": "davidwilson@example.com" },
+    { "id": "100006", "name": "Olivia Johnson", "role": "Admin", "email": "oliviajohnson@example.com" },
+    { "id": "100007", "name": "William Taylor", "role": "User", "email": "williamtaylor@example.com" },
+    { "id": "100008", "name": "Sophia Anderson", "role": "Manager", "email": "sophiaanderson@example.com" },
+    { "id": "100009", "name": "James Thomas", "role": "Tenant", "email": "jamesthomas@example.com" },
+    { "id": "100010", "name": "Charlotte Martinez", "role": "Moderator", "email": "charlottemartinez@example.com" },
+    { "id": "100011", "name": "Liam Hernandez", "role": "Admin", "email": "liamhernandez@example.com" },
+    { "id": "100012", "name": "Emma Young", "role": "User", "email": "emmayoung@example.com" },
+    { "id": "100013", "name": "Noah King", "role": "Manager", "email": "noahking@example.com" },
+    { "id": "100014", "name": "Ava Scott", "role": "Tenant", "email": "avascott@example.com" },
+    { "id": "100015", "name": "Benjamin Green", "role": "Moderator", "email": "benjamingreen@example.com" },
+    { "id": "100016", "name": "Lucas Adams", "role": "Admin", "email": "lucasadams@example.com" },
+    { "id": "100017", "name": "Mia Nelson", "role": "User", "email": "mianelson@example.com" },
+    { "id": "100018", "name": "Ethan Carter", "role": "Manager", "email": "ethancarter@example.com" },
+    { "id": "100019", "name": "Amelia Perez", "role": "Tenant", "email": "ameliaperez@example.com" },
+    { "id": "100020", "name": "Alexander Hall", "role": "Moderator", "email": "alexanderhall@example.com" }
+  ]
+  

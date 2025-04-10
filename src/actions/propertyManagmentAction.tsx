@@ -251,6 +251,31 @@ export const updateProperty = async (id: number, data: any) => {
 };
 
 
+export const postPropertyPicture = async (formData: FormData) => {
+  console.log(formData,'f,')
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+  try {
+    const response = await fetch(`${endPoint}/post_property_picture`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: formData,
+    });
+    console.log(response,'dsad')
+    if (!response.ok) {
+      throw new Error('Failed to upload image');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
+};
+
+
 export async function getUserProfile(accessToken: string) {
   try {
     const response = await fetch(`${endPoint}/get_user_profile`, {

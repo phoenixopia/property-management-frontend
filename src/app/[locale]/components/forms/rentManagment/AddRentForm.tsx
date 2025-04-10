@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -60,18 +60,41 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
     }
   });
 
+  // Debounced search functions with useCallback
+  const debouncedPropertySearch = useCallback(
+    debounce((term: string) => {
+      setPropertySearchTerm(term);
+    }, 300),
+    []
+  );
+
+  const debouncedTenantSearch = useCallback(
+    debounce((term: string) => {
+      setTenantSearchTerm(term);
+    }, 300),
+    []
+  );
+
+  // Cleanup debounce functions on unmount
+  useEffect(() => {
+    return () => {
+      debouncedPropertySearch.cancel();
+      debouncedTenantSearch.cancel();
+    };
+  }, [debouncedPropertySearch, debouncedTenantSearch]);
+
   // Search properties with debounce
   const propertiesData = useQuery({
     queryKey: ['properties', propertySearchTerm],
     queryFn: () => search_properties(propertySearchTerm),
-    enabled: propertySearchTerm.length > 2, // Only search when user has typed at least 3 characters
+    enabled: propertySearchTerm.length > 2 && showPropertyDropdown,
   });
 
   // Search tenants with debounce
   const tenantsData = useQuery({
     queryKey: ['tenants', tenantSearchTerm],
     queryFn: () => search_tenants(tenantSearchTerm),
-    enabled: tenantSearchTerm.length > 2, // Only search when user has typed at least 3 characters
+    enabled: tenantSearchTerm.length > 2 && showTenantDropdown,
   });
 
   // Mutation for creating rent
@@ -100,23 +123,18 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
     createRentMutation.mutate(data);
   };
 
-  // Debounced search functions
-  const debouncedPropertySearch = debounce((term: string) => {
-    setPropertySearchTerm(term);
-  }, 300);
-
-  const debouncedTenantSearch = debounce((term: string) => {
-    setTenantSearchTerm(term);
-  }, 300);
-
   const handlePropertySearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedPropertySearch(e.target.value);
-    setShowPropertyDropdown(true);
+    const term = e.target.value;
+    setPropertySearchTerm(term);
+    debouncedPropertySearch(term);
+    setShowPropertyDropdown(term.length > 0);
   };
 
   const handleTenantSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedTenantSearch(e.target.value);
-    setShowTenantDropdown(true);
+    const term = e.target.value;
+    setTenantSearchTerm(term);
+    debouncedTenantSearch(term);
+    setShowTenantDropdown(term.length > 0);
   };
 
   const handlePropertySelect = (property: any) => {
@@ -131,8 +149,21 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
     setSelectedTenant(tenant);
     setValue("user_id", tenant.id);
     setShowTenantDropdown(false);
-    setTenantSearchTerm(tenant.email); // Or tenant.full_name if available
+    setTenantSearchTerm(tenant.email);
   };
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.dropdown-container')) {
+        setShowPropertyDropdown(false);
+        setShowTenantDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
@@ -140,7 +171,7 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
         <div className="grid gap-4 mb-4 grid-cols-1 md:grid-cols-2">
           
           {/* Tenant Selection - Searchable */}
-          <div className="col-span-2 md:col-span-1 relative">
+          <div className="col-span-2 md:col-span-1 relative dropdown-container">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('tenant')} *
             </label>
@@ -176,7 +207,7 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
                       className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                       onClick={() => handleTenantSelect(tenant)}
                     >
-                      {tenant.email} {/* Or display tenant.full_name if available */}
+                      {tenant.email}
                     </div>
                   ))
                 )}
@@ -185,7 +216,7 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
           </div>
 
           {/* Property Selection - Searchable */}
-          <div className="col-span-2 md:col-span-1 relative">
+          <div className="col-span-2 md:col-span-1 relative dropdown-container">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('property')} *
             </label>
@@ -228,9 +259,6 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
               </div>
             )}
           </div>
-
-          {/* Rest of the form fields */}
-          {/* Rent Type */}
           <div className="col-span-2 md:col-span-1">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('rent-type')} *

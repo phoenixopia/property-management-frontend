@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState,useEffect,useTransition } from "react";
+import React, { useState, useEffect, useTransition } from "react";
 import { getUserProfileInfo } from "@/actions/profileManagmentAction";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -48,90 +48,90 @@ const SideBar = () => {
   const { hasRole, hasPermission, user, refreshAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
-
-    // Navigation configuration
-    const NAV_ITEMS: NavItem[] = [
-      {
-        path: "/dashboard",
-        icon: <FontAwesomeIcon icon={faHouse} />,
-        label: "dashboardTitle",
-        translationKey: "Dashboard",
-        requiredRoles: ["system-admin", "group 2"],
-        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-      },
-      {
-        path: "/user-managment",
-        icon: <FontAwesomeIcon icon={faUser} />,
-        label: "user-managment",
-        translationKey: "Dashboard",
-        requiredRoles: ["system-admin", "group 2"],
-        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-      },
-      {
-        path: "/property-management",
-        icon: <FontAwesomeIcon icon={faBuilding} />,
-        label: "property-management",
-        translationKey: "full",
-        requiredRoles: ["system-admin", "group 2"],
-        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-      },
-      {
-        path: "/rent-management",
-        icon: <FontAwesomeIcon icon={faBuildingUser} />,
-        label: "rent-management",
-        translationKey: "full",
-        requiredRoles: ["system-admin", "group 2"],
-        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-      },
-      {
-        path: "/tenant-management",
-        icon: <FontAwesomeIcon icon={faUsersRays} />,
-        label: "tenant-management",
-        translationKey: "full",
-        requiredRoles: ["system-admin", "group 2"],
-        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-      },
-      {
-        path: "/maintenance",
-        icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
-        label: "maintenance-requests",
-        translationKey: "full",
-        requiredRoles: ["maintenance", "system-admin"],
-        requiredPermissions: ["pms.view_maintenancerequest"]
-      },
-      {
-        path: "#",
-        icon: <FontAwesomeIcon icon={faUsersGear} />,
-        label: "logs",
-        translationKey: "full",
-        requiredRoles: ["system-admin", "group 2"],
-        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-      },
-      {
-        path: "#",
-        icon: <FontAwesomeIcon icon={faUsersGear} />,
-        label: "transactions-logs",
-        translationKey: "full",
-        requiredRoles: ["system-admin", "group 2"],
-        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-      },
-      {
-        path: "#",
-        icon: <FontAwesomeIcon icon={faUsersGear} />,
-        label: "system-settings",
-        translationKey: "full",
-        requiredRoles: ["system-admin", "group 2"],
-        requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-      },
-      {
-        path: `/settings`,
-        icon: <FontAwesomeIcon icon={faGear} />,
-        label: "setting",
-        translationKey: "Dashboard",
-        requiredRoles: [],
-        requiredPermissions: []
-      }
-    ];
+  // Navigation configuration
+  const NAV_ITEMS: NavItem[] = [
+    {
+      path: "/dashboard",
+      icon: <FontAwesomeIcon icon={faHouse} />,
+      label: "dashboardTitle",
+      translationKey: "Dashboard",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: "/user-managment",
+      icon: <FontAwesomeIcon icon={faUser} />,
+      label: "user-managment",
+      translationKey: "Dashboard",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: "/property-management",
+      icon: <FontAwesomeIcon icon={faBuilding} />,
+      label: "property-management",
+      translationKey: "full",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: "/rent-management",
+      icon: <FontAwesomeIcon icon={faBuildingUser} />,
+      label: "rent-management",
+      translationKey: "full",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: "/tenant-management",
+      icon: <FontAwesomeIcon icon={faUsersRays} />,
+      label: "tenant-management",
+      translationKey: "full",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: "/maintenance",
+      icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
+      label: "maintenance-requests",
+      translationKey: "full",
+      requiredRoles: ["maintenance", "system-admin"],
+      requiredPermissions: ["pms.view_maintenancerequest"]
+    },
+    {
+      path: "#",
+      icon: <FontAwesomeIcon icon={faUsersGear} />,
+      label: "logs",
+      translationKey: "full",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: "#",
+      icon: <FontAwesomeIcon icon={faUsersGear} />,
+      label: "transactions-logs",
+      translationKey: "full",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: "#",
+      icon: <FontAwesomeIcon icon={faUsersGear} />,
+      label: "system-settings",
+      translationKey: "full",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: `/settings`,
+      icon: <FontAwesomeIcon icon={faGear} />,
+      label: "setting",
+      translationKey: "Dashboard",
+      requiredRoles: [],
+      requiredPermissions: []
+    }
+  ];
+  
   const validRoutes = NAV_ITEMS.map(item => `/${locale}${item.path}`);
   const shouldShowSidebar = validRoutes.includes(pathname);
 
@@ -149,13 +149,6 @@ const SideBar = () => {
     }
   }, [user, shouldShowSidebar]);
 
- 
-
-
-  // Derived values
-
-
-  // Helper functions
   const checkAccess = (roles: string[], permissions: string[]) => {
     const roleCheck = roles.length === 0 || roles.some(role => hasRole(role));
     const permissionCheck = permissions.length === 0 || 
@@ -172,26 +165,24 @@ const SideBar = () => {
         : "text-black dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 hover:ml-2"
     ].join(" ");
   };
+  
   const handleLogout = () => {
     startTransition(() => {
       logOut();
     });
   };
-  const profileData = useQuery({ queryKey: ['todos'], queryFn: getUserProfileInfo })
+  
+  const profileData = useQuery({ queryKey: ['profileData'], queryFn: getUserProfileInfo })
 
   const getIconClasses = (path: string) => 
     pathname === `/${locale}${path}`
       ? "w-5 h-5 text-black dark:text-white"
       : "w-5 h-5 text-black dark:text-white";
 
-      if (!shouldShowSidebar) return null;
-
-
-      console.log(profileData,'dsads')
+  if (!shouldShowSidebar) return null;
 
   return (
     <>
-    
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="md:hidden absolute p-2 mt-2 text-sm z-40 text-black dark:text-gray-100 rounded-lg"
@@ -218,7 +209,7 @@ const SideBar = () => {
       <aside
         className={`fixed top-0 left-0 z-50 w-60 h-screen transition-transform bg-gray-100 dark:bg-[#212327] ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0`}
+        } md:translate-x-0 flex flex-col`}
       >
         {/* User Profile Section */}
         <div className="flex flex-col items-center gap-2 py-6">
@@ -231,105 +222,103 @@ const SideBar = () => {
           </div>
          
           <div className="relative flex flex-col items-center w-full mx-4 px-7 py-2 border-1 border-gray-50 shadow-2xs dark:bg-[#292b30] dark:border-gray-800 gap-2">
+            {profileData?.isPending ? (
+              <p>Loading...</p>
+            ) : profileData?.isError ? (
+              <p>Failed to load the profile</p>
+            ) : profileData?.data?.profile_picture ? (
+              <img
+                src={profileData?.data?.profile_picture}
+                alt="Profile"
+                className="w-16 h-16 rounded-full object-cover"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                className="text-5xl text-gray-800 dark:text-gray-300"
+              />
+            )}
+
+            <button
+              onClick={() => setEditUserOpen(true)}
+              className="absolute right-22 cursor-pointer top-2 size-6 rounded-full bg-white flex items-center justify-center"
+              aria-label="Edit profile"
+            >
+              <FontAwesomeIcon icon={faPen} className="text-[0.7rem] text-gray-800 dark:text-gray-800" />
+            </button>
+
+            <div className="flex flex-col items-center dark:text-gray-100 text-gray-700 text-sm truncate">
               {profileData?.isPending ? (
                 <p>Loading...</p>
               ) : profileData?.isError ? (
                 <p>Failed to load the profile</p>
-              ) : profileData?.data?.profile_picture
-               ? (
-                <img
-                  src={profileData?.data?.profile_picture}
-                  alt="Profile"
-                  className="w-16 h-16 rounded-full object-cover"
-                />
               ) : (
-                <FontAwesomeIcon
-                  icon={faCircleUser}
-                  className="text-5xl text-gray-800 dark:text-gray-300"
-                />
+                <p>{profileData?.data?.email}</p>
               )}
-
-              <button
-                onClick={() => setEditUserOpen(true)}
-                className="absolute right-22 cursor-pointer top-2 size-6 rounded-full bg-white flex items-center justify-center"
-                aria-label="Edit profile"
-              >
-                <FontAwesomeIcon icon={faPen} className="text-[0.7rem] text-gray-800 dark:text-gray-800" />
-              </button>
-
-              <div className="flex flex-col items-center dark:text-gray-100 text-gray-700 text-sm truncate">
-                {profileData?.isPending ? (
-                  <p>Loading...</p>
-                ) : profileData?.isError ? (
-                  <p>Failed to load the profile</p>
-                ) : (
-                  <p>{profileData?.data?.email}</p>
-                )}
-              </div>
             </div>
-
+          </div>
         </div>
-        {isLoading && (
-                <div className="fixed top-0 left-0 w-64 h-screen bg-gray-100 dark:bg-[#212327] flex items-center justify-center">
-                  <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-gray-500 animate-spin" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                    </svg>
-            
-                  </div>
-                </div>
-              )}
-        <div className="h-full pl-3 py-4 overflow-y-auto">
-          <ul className="space-y-2 font-medium text-sm">
-            {NAV_ITEMS.map((item) => (
-              checkAccess(item.requiredRoles, item.requiredPermissions) && (
-                <li key={item.path}>
-                  <Link href={item.path} passHref>
-                    <div className="flex items-center w-full">
-                      <span className={getIconClasses(item.path)}>
-                        {item.icon}
-                      </span>
-                      <div className={getLinkClasses(item.path)}>
-                        <span className="ms-3">
-                          {item.translationKey === "Dashboard" 
-                            ? t(item.label)
-                            : t2(item.label)}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              )
-            ))}
 
-          
-            <li  >
-              <button 
-                onClick={handleLogout}
-                disabled={isPending}
-                className="w-full text-left flex items-center"
-                aria-label="Sign out"
-              >
-                <FontAwesomeIcon 
-                  icon={faRightFromBracket} 
-                  className={`${
-                    isPending ? 'w-5 h-5 text-black dark:text-white cursor-not-allowed' : 'w-5 h-5 text-black dark:text-white cursor-pointer'
-                  } `}
-      
-                />
-              <div className={`flex items-center hover:bg-gray-300 dark:hover:bg-gray-600 w-full hover:ml-2 p-2 rounded-l-lg text-black dark:text-white ${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
-                
-                
-                <span className="ms-3">{isPending ? 'Logging out...' : `${t('sign-out')}`}  </span>
-                </div>
-              </button>
-            </li>
-          </ul>
+        {isLoading && (
+          <div className="fixed top-0 left-0 w-64 h-screen bg-gray-100 dark:bg-[#212327] flex items-center justify-center">
+            <div className="flex items-center space-x-2">
+              <svg className="w-5 h-5 text-gray-500 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+              </svg>
+            </div>
+          </div>
+        )}
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="h-full pl-3 py-4">
+            <ul className="space-y-2 font-medium text-sm">
+              {NAV_ITEMS.map((item) => (
+                checkAccess(item.requiredRoles, item.requiredPermissions) && (
+                  <li key={item.path}>
+                    <Link href={item.path} passHref>
+                      <div className="flex items-center w-full">
+                        <span className={getIconClasses(item.path)}>
+                          {item.icon}
+                        </span>
+                        <div className={getLinkClasses(item.path)}>
+                          <span className="ms-3">
+                            {item.translationKey === "Dashboard" 
+                              ? t(item.label)
+                              : t2(item.label)}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                )
+              ))}
+
+              <li>
+                <button 
+                  onClick={handleLogout}
+                  disabled={isPending}
+                  className="w-full text-left flex items-center"
+                  aria-label="Sign out"
+                >
+                  <FontAwesomeIcon 
+                    icon={faRightFromBracket} 
+                    className={`${
+                      isPending ? 'w-5 h-5 text-black dark:text-white cursor-not-allowed' : 'w-5 h-5 text-black dark:text-white cursor-pointer'
+                    } `}
+                  />
+                  <div className={`flex items-center hover:bg-gray-300 dark:hover:bg-gray-600 w-full hover:ml-2 p-2 rounded-l-lg text-black dark:text-white ${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+                    <span className="ms-3">{isPending ? 'Logging out...' : `${t('sign-out')}`}</span>
+                  </div>
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </aside>
 
-      {/* Edit Profile Modal - Kept exactly as original */}
+      {/* Edit Profile Modal */}
       {editUserOpen && (
         <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
           <div className='relative bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl'>

@@ -139,9 +139,15 @@
       "logs":"መዝገቦች",
       "transactions-logs":"ግብይቶች ምዝግብ",
       "system-settings":"የስርዓት-ቅንብሮች",
+      "property-details":"የንብረት ዝርዝሮች",
+     "tenant-details":"ተከራይ ዝርዝሮች",
+      "created-at":"የተፈጠረው",
+      "financial-details":"የፋይናንስ ዝርዝሮች",
+      "date-details":"የቀን ዝርዝሮች",
+      "property-images":"የንብረት ምስሎች",
 
-
-
+      
+     
       "properties-under-maintenance":"በጥገና ላይ ያሉ ንብረቶች",
       "Are you sure you want to change the request":"እርግጠኛ ነዎት ጥያቄውን መቀየር ይፈልጋሉ",
       "Before you make this request,The maintenance problem must have to be fixed":"ይህን ጥያቄ ከማቅረብዎ በፊት የጥገና ችግሩ መስተካከል አለበት"

@@ -162,7 +162,7 @@ const MaintenanceManagment = () => {
 
                 <div className='flex justify-end gap-2'>
 
-                <div className='flex justify-end gap-2'>
+                <div className='flex flex-col sm:flex-row  gap-2'>
                     <div className="flex gap-4 items-center">
                         <label htmlFor="startDate" className="text-sm text-gray-600 dark:text-gray-200">Start-date</label>
                         <input
@@ -227,7 +227,7 @@ const MaintenanceManagment = () => {
                                 maintenanceList?.map((data: any) => (
                                     <tr key={data.id} className='bg-white capitalize text-gray-500 dark:text-gray-200 border-b dark:bg-[#333538] dark:border-gray-700 border-gray-200'>
                                         <td className='px-6 py-4'>{data?.user_id?.first_name || '-'} {data?.user_id?.last_name || '-'}</td>
-                                        <td className='px-6 py-4'>{data?.description || '-'}</td>
+                                        <td className='px-6 py-4 truncate max-w-[200px]'>{data?.description || '-'}</td>
                                         <td className='px-6 py-4'>{data?.status || '-'}</td>
                                         <td className='px-6 py-4'>{data?.requested_at || '-'}</td>
                                         <td className='px-6 py-4'>

@@ -135,12 +135,22 @@
       "expired":"Expired",
       "terminated":"Terminated",
       "logs":"Logs",
+      "property-details":"Property Details",
       "transactions-logs":"Transactions Logs",
       "system-settings":"System Settings",
-
+      "rent-details":"Rent Details",
       "pending":"Pending",
       "completed":"Completed",
       "clear-filters":"Clear Filters",
+      "tenant-details":"Tenant Detail",
+      "created-at":"Created At",
+      "financial-details":"Financial Details",
+      "date-details":"Date Details",
+      "property-images":"Property Images",
+
+
+
+
       "properties-under-maintenance":"Properties Under Maintenance",
       "Are you sure you want to change the request":"Are you sure you want to change the request",
       "Before you make this request,The maintenance problem must have to be fixed":"Before you make this request,The maintenance problem must have to be fixed"

@@ -82,7 +82,7 @@ const FeaturesBlocks = () => {
 
   return (
     <section className="relative">
-      <div className="absolute inset-0 top-1/2 md:mt-24 lg:mt-0 bg-gray-100 pointer-events-none" aria-hidden="true"></div>
+      <div className="absolute inset-0 top-1/2 md:mt-24 lg:mt-0 bg-gray-50 pointer-events-none" aria-hidden="true"></div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         <div className="py-12 md:py-20">

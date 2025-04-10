@@ -84,10 +84,10 @@ export default function Login() {
 
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 bg-cover bg-center" style={{ backgroundImage: "url('/loginBack.png')" }}>
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-xs"></div>
-      <div className="absolute end-0 top-0 p-15">
-        <div className="relative flex items-center gap-2 z-100 shadow-2xl">
+    <div className="relative min-h-screen flex items-center justify-center px-4 bg-cover bg-center" style={{ backgroundImage: "url('/tech-back.jpg')" }}>
+      {/* <div className="absolute inset-0 bg-black/800 backdrop-blur-xs"></div> */}
+      <div className="absolute start-0 top-0 p-15">
+        <div className="relative flex items-center gap-2 z-100 ">
           <Language />
         </div>
       </div>

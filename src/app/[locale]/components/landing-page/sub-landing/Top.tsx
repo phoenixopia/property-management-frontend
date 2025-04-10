@@ -43,9 +43,10 @@ const Top = () => {
 
   return (
     <div className="relative">
+          <div className="absolute  inset-0 2xl:top-1/10 2xl:bottom-1/10  bg-[url(/tech-back.jpg)] bg-no-repeat bg-cover " aria-hidden="true"></div>
+          <div className="absolute  inset-0 2xl:top-1/10 2xl:bottom-1/10 bg-white/80 bg-no-repeat bg-cover " aria-hidden="true"></div>
 
-      <div className="absolute inset-0 2xl:top-1/10 2xl:bottom-1/10  bg-gray-100 pointer-events-none" aria-hidden="true"></div>
-      <motion.div 
+  <motion.div 
       className='max-w-7xl mx-auto relative'
       initial="hidden"
       whileInView="visible"

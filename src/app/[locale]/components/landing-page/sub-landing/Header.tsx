@@ -112,9 +112,9 @@ const Header = () => {
            }}
            className="hover:text-[#285E67] transition duration-200"
          >
-           <Link href='/about-us'>
+           {/* <Link href='/about-us'>
               About Us
-           </Link>
+           </Link> */}
          </motion.li>
                 <motion.li
            

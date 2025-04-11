@@ -246,7 +246,7 @@ const PropertyDetail = ({ property }: PropertyDetailProps) => {
           <div className='relative max-w-4xl w-full'>
             <button
               onClick={() => setShowModal(false)}
-              className='absolute top-4 right-4 z-10 text-white text-2xl'
+              className='absolute top-4 right-4 z-10 bg-black size-8 rounded-full text-white text-2xl'
             >
               <FontAwesomeIcon icon={faTimes} />
             </button>

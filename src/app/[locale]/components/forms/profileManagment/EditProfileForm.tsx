@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation,useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { createUserProfilePic } from '@/actions/profileManagmentAction';
 import toast from 'react-hot-toast';
@@ -20,6 +20,7 @@ type FormData = z.infer<typeof schema>;
 
 const EditProfileForm = () => {
   const t = useTranslations('full');
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -37,6 +38,8 @@ const EditProfileForm = () => {
     },
     onSuccess: () => {
       toast.success('Profile picture updated!');
+      queryClient.invalidateQueries({ queryKey: ['profileData'] });
+
     },
     onError: () => {
       toast.error('Failed to update profile picture.');

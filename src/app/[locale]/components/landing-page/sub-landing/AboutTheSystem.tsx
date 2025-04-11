@@ -30,8 +30,8 @@ const AboutTheSystem = () => {
 
   const featureCards = [
     {
-      title: "Secure Owner Portal",
-      description: "Access your dedicated property management dashboard with provider-issued credentials",
+      title: "Property Management",
+      description: "Users manage property listings within the system. Each property can include detailed information like location, type, and number of rental units. The system tracks the status of units to help with leasing operations.",
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -44,8 +44,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Portfolio Configuration",
-      description: "Set up property groups, management teams, and customized reporting views",
+      title: "Tenant Management",
+      description: "This feature enables the registration and management of tenant profiles, including personal details and lease agreements. Lease tracking includes features such as renewal, termination, and historical recordkeeping for better tenant lifecycle management.",
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -62,8 +62,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Property Onboarding",
-      description: "Add properties, tenants, and lease details to start comprehensive management",
+      title: "Rent Payment and Transactions",
+      description: "The system integrates with multiple payment gateways (PayPal, Stripe, Flutterwave, and bank transfer) to facilitate secure rent collection. It automates the generation of rent invoices and tracks payment history and outstanding balances.",
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -79,8 +79,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Property Onboarding",
-      description: "Add properties, tenants, and lease details to start comprehensive management",
+      title: "Maintenance Request Management",
+      description: "Tenants can submit maintenance requests via the platform. Property managers can view, assign, and update the status of these requests. This ensures timely resolution of issues and better communication between tenants and managers.",
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -96,8 +96,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Property Onboarding",
-      description: "Add properties, tenants, and lease details to start comprehensive management",
+      title: "Reports and Analytics",
+      description: "The system provides powerful reporting features that allow landlords and property managers to generate financial summaries. Reports include income statements, expense tracking, overdue rent, and maintenance history, offering insights for strategic decision-making.",
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -113,8 +113,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Property Onboarding",
-      description: "Add properties, tenants, and lease details to start comprehensive management",
+      title: "Document Management System",
+      description: "Upload and manage lease agreements, ID documents, payment receipts, and maintenance records. Documents are stored securely and can be downloaded when needed.",
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -160,7 +160,7 @@ const AboutTheSystem = () => {
                 // whileHover={{ y: -5 }}
               >
                 <div className='flex flex-row items-center'>
-                {feature.icon}
+                {/* {feature.icon} */}
                 <h4 className="text-lg font-bold leading-snug tracking-tight mb-1 text-gray-900 text-center">
                   {feature.title}
                 </h4>

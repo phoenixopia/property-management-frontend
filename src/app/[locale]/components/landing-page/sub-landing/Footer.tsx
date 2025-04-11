@@ -4,8 +4,15 @@ import Link from 'next/link';
 const Footer = () => {
   return (
     <div className='flex w-full justify-normal md:justify-between flex-col md:flex-row  items-center gap-2'>
-      <div className='flex px-16 text-xs'>
-           <p>Logo</p>
+      <div className='flex items-center px-16 text-xs'>
+        <Link href="/" className='cursor-pointer'>
+        <img   
+                src="/pms_logo.png"
+                alt="Profile"
+                className="xl:w-12  xl:h-12 w-10 h-10 rounded-full object-cover"
+              />
+        </Link>
+        
 
            <div className='flex pl-12 space-x-4'>
             <Link href="/" className='cursor-pointer'>Home</Link>
@@ -15,7 +22,7 @@ const Footer = () => {
             <Link href="contact-us">Contact Us</Link>
            </div>
       </div>
-      <div className='flex items-center'>
+      <div className='flex items-center gap-2'>
       <p>
        Copyright © {new Date().getFullYear()} pms
          

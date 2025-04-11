@@ -35,6 +35,7 @@ type Rent = {
   status: string;
   created_at: string;
 };
+type ViewMode = 'edit' | 'view';
 
 const RentManagement = () => {
   const queryClient = useQueryClient();
@@ -42,7 +43,7 @@ const RentManagement = () => {
   const [confirmDelete, setConfirmDelete] = useState<{ id: number, name: string } | null>(null);
   const [selectedRent, setSelectedRent] = useState<Rent | null>(null);
   const [filterComponent, setFilterComponent] = useState(false);
-  
+  const [viewMode, setViewMode] = useState<ViewMode>('edit');
   const [filters, setFilters] = useState({
     search: '',
     status: '',
@@ -277,22 +278,29 @@ const RentManagement = () => {
                     </span>
                   </td>
                   <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
-                    <button onClick={() => setSelectedRent(rent)}>
-                      <FontAwesomeIcon 
-                        icon={faPen} 
-                        className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-                      />
-                    </button>
+                  <button onClick={() => {
+                          setSelectedRent(rent);
+                          setViewMode('edit');
+                        }}>
+                          <FontAwesomeIcon 
+                            icon={faPen} 
+                            className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
+                          />
+                        </button>
                     {/* <FontAwesomeIcon 
                       icon={faTrash} 
                       onClick={() => setConfirmDelete({ id: rent.id, name: rent.property_id.name })} 
                       className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
                     /> */}
-                    <FontAwesomeIcon 
-                      icon={faEye} 
-                      onClick={() => setSelectedRent(rent)} 
-                      className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-                    />
+                <FontAwesomeIcon 
+                icon={faEye} 
+                onClick={() => {
+                  setSelectedRent(rent);
+                  setViewMode('view');
+                }} 
+                className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
+              />
+
                   </td>
                 </tr>
               ))}
@@ -336,35 +344,142 @@ const RentManagement = () => {
           </div>
         )}
       </div>
-
       {selectedRent && (
-        <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
-          <div className='relative max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl'>
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
-                {t("update-rent")}
-              </h3>
-              <button 
-                onClick={() => setSelectedRent(null)} 
-                type="button" 
-                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                </svg>
-                <span className="sr-only">Close modal</span>
-              </button>
+  <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
+    <div className={`relative ${viewMode === 'view' ? 'max-w-2xl' : 'max-w-xl'} max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full`}>
+      <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+        <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
+          {viewMode === 'edit' ? t("update-rent") : t("rent-details")}
+        </h3>
+        <button 
+          onClick={() => setSelectedRent(null)} 
+          type="button" 
+          className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+        >
+          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+          </svg>
+          <span className="sr-only">Close modal</span>
+        </button>
+      </div>
+      
+      {viewMode === 'edit' ? (
+        <UpdateRentForm 
+          onSuccess={() => {
+            setSelectedRent(null);
+            queryClient.invalidateQueries({ queryKey: ['rents'] });
+          }} 
+          rent={selectedRent} 
+        />
+      ) : (
+        <div className="p-4 md:p-5 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Property Details */}
+            <div className="col-span-2">
+              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                {t('property-details')}
+              </h4>
+              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('name')}: </span>
+                  {selectedRent.property_id.name}
+                </p>
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('address')}: </span>
+                  {selectedRent.property_id.address}, {selectedRent.property_id.city}, {selectedRent.property_id.state}
+                </p>
+              </div>
             </div>
-            <UpdateRentForm 
-              onSuccess={() => {
-                setSelectedRent(null);
-                queryClient.invalidateQueries({ queryKey: ['rents'] });
-              }} 
-              rent={selectedRent} 
-            />
+
+            {/* Tenant Details */}
+            <div>
+              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                {t('tenant-details')}
+              </h4>
+              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('name')}: </span>
+                  {selectedRent.user_id.first_name} {selectedRent.user_id.last_name}
+                </p>
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('email')}: </span>
+                  {selectedRent.user_id.email}
+                </p>
+              </div>
+            </div>
+
+            {/* Rent Details */}
+            <div>
+              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                {t('rent-details')}
+              </h4>
+              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('rent-type')}: </span>
+                  {selectedRent.rent_type}
+                </p>
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('payment-cycle')}: </span>
+                  {selectedRent.payment_cycle}
+                </p>
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('status')}: </span>
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    selectedRent.status === 'active' ? 'bg-green-100 text-green-800' :
+                    selectedRent.status === 'expired' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {selectedRent.status}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            {/* Financial Details */}
+            <div>
+              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                {t('financial-details')}
+              </h4>
+              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('rent-amount')}: </span>
+                  {selectedRent.rent_amount.toLocaleString()} 
+                </p>
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('deposit-amount')}: </span>
+                  {selectedRent.deposit_amount.toLocaleString()} 
+                </p>
+              </div>
+            </div>
+
+            {/* Date Details */}
+            <div>
+              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                {t('date-details')}
+              </h4>
+              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('start-date')}: </span>
+                  {new Date(selectedRent.start_date).toLocaleDateString()}
+                </p>
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('end-date')}: </span>
+                  {new Date(selectedRent.end_date).toLocaleDateString()}
+                </p>
+                <p className="text-gray-700 dark:text-gray-200">
+                  <span className="font-medium">{t('created-at')}: </span>
+                  {new Date(selectedRent.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
           </div>
+
+       
         </div>
       )}
+    </div>
+  </div>
+)}
 
       {addRentModal && (
         <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>

@@ -14,7 +14,7 @@ const LatestAddedTenants = () => {
   const t = useTranslations('full');
 
   return (
-    <div className="w-full max-w-md overflow-auto max-h-[28rem] p-4 rounded-xl shadow-md bg-white dark:bg-[#2f2f32]">
+    <div className="w-full max-w-md overflow-auto max-h-[28rem] p-4 rounded-xl   dark:bg-[#2f2f32]">
       <div className="flex items-center justify-start gap-2 mb-4">
             <span className=''>       
                 <FontAwesomeIcon icon={faList} className='text-black w-4 dark:text-gray-50 text-2xl'/>

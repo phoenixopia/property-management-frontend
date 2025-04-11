@@ -2,54 +2,43 @@
 import React, { useState } from 'react';
 import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 
-interface Image {
+interface PropertyImage {
   id: number;
-  url: string;
-  caption?: string;
+  description: string;
+  property_image: string;
 }
 
-const PropertyImageCarousel = () => {
-  // Dummy data for images
-  const dummyImages: Image[] = [
-    {
-      id: 1,
-      url: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      caption:"front"
-    },
-    {
-      id: 2,
-      url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      caption:"back"
-    },
-    {
-      id: 3,
-      url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      caption:"side"
-    },
-    {
-      id: 4,
-      url: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      caption:"Left"
-    },
-  ];
+interface PropertyImageCarouselProps {
+  property: {
+    name: string;
+    address: string;
+    city: string;
+    state: string;
+    property_pictures: PropertyImage[];
+  };
+}
 
+const PropertyImageCarousel = ({ property }: PropertyImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [selectedImage, setSelectedImage] = useState<PropertyImage | null>(null);
+
+  // Use actual property images or fallback to empty array
+  const images = property?.property_pictures || [];
 
   const nextImage = () => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === dummyImages.length - 1 ? 0 : prevIndex + 1
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   const prevImage = () => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? dummyImages.length - 1 : prevIndex - 1
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
 
-  const openModal = (image: Image) => {
+  const openModal = (image: PropertyImage) => {
     setSelectedImage(image);
     setShowModal(true);
   };
@@ -60,72 +49,110 @@ const PropertyImageCarousel = () => {
 
   return (
     <div className="relative w-full">
-  
-      <div className="relative h-64 md:h-80 lg:h-96 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700">
-
-        <img
-          src={dummyImages[currentIndex].url}
-          alt={dummyImages[currentIndex].caption || 'Property image'}
-          className="w-full h-full object-cover cursor-pointer"
-          onClick={() => openModal(dummyImages[currentIndex])}
-        />
-
-        <button
-          onClick={prevImage}
-          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
-        >
-          <FaChevronLeft />
-        </button>
-        <button
-          onClick={nextImage}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
-        >
-          <FaChevronRight />
-        </button>
-        
-      
-        <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
-          {dummyImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`h-2 w-2 rounded-full ${currentIndex === index ? 'bg-white' : 'bg-white/50'}`}
-            />
-          ))}
-        </div>
+      {/* Property Address Display */}
+      <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{property.name}</h3>
+        <p className="text-gray-600 dark:text-gray-300">
+          {property.address}, {property.city}, {property.state}
+        </p>
       </div>
-      
-      <div className="grid grid-cols-4 gap-2 mt-4">
-        {dummyImages.map((image, index) => (
-          <div 
-            key={image.id}
-            className={`relative h-20 cursor-pointer overflow-hidden rounded-lg ${currentIndex === index ? 'ring-2 ring-blue-500' : ''}`}
-            onClick={() => setCurrentIndex(index)}
-          >
+
+      {/* Main Carousel */}
+      {images.length > 0 ? (
+        <>
+          <div className="relative h-64 md:h-80 lg:h-96 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700">
             <img
-              src={image.url}
-              alt={image.caption || `Thumbnail ${index + 1}`}
-              className="w-full h-full object-cover"
+              src={images[currentIndex].property_image}
+              alt={images[currentIndex].description || 'Property image'}
+              className="w-full h-full object-cover cursor-pointer"
+              onClick={() => openModal(images[currentIndex])}
             />
-            <p className='text-black'>{selectedImage?.caption}</p>
 
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
+                >
+                  <FaChevronLeft />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
+                >
+                  <FaChevronRight />
+                </button>
+              </>
+            )}
+
+            {/* Image caption */}
+            {images[currentIndex].description && (
+              <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2">
+                {images[currentIndex].description}
+              </div>
+            )}
+
+            {/* Navigation dots */}
+            {images.length > 1 && (
+              <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`h-2 w-2 rounded-full ${currentIndex === index ? 'bg-white' : 'bg-white/50'}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-        ))}
-      </div>
-      
-    
+
+          {/* Thumbnails */}
+          {images.length > 1 && (
+            <div className="grid grid-cols-4 gap-2 mt-4">
+              {images.map((image, index) => (
+                <div 
+                  key={image.id}
+                  className={`relative h-20 cursor-pointer overflow-hidden rounded-lg ${currentIndex === index ? 'ring-2 ring-blue-500' : ''}`}
+                  onClick={() => setCurrentIndex(index)}
+                >
+                  <img
+                    src={image.property_image}
+                    alt={image.description || `Thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  {image.description && (
+                    <p className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
+                      {image.description}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="h-64 md:h-80 lg:h-96 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg">
+          <p className="text-gray-500 dark:text-gray-400">No images available</p>
+        </div>
+      )}
+
+      {/* Image Modal */}
       {showModal && selectedImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
           <div className="relative max-w-4xl w-full">
             <img
-              src={selectedImage.url}
-              alt={selectedImage.caption || 'Property image'}
+              src={selectedImage.property_image}
+              alt={selectedImage.description || 'Property image'}
               className="w-full max-h-[80vh] object-contain"
             />
-            <p className='text-black absolute top-2 left-2'>{selectedImage?.caption}</p>
+            {selectedImage.description && (
+              <div className="absolute top-4 left-4 bg-black/70 text-white p-2 rounded">
+                {selectedImage.description}
+              </div>
+            )}
             <button
               onClick={closeModal}
-              className="absolute top-2 right-2 bg-black/70 text-white p-2 rounded-full hover:bg-black"
+              className="absolute top-4 right-4 bg-black/70 text-white p-2 rounded-full hover:bg-black"
             >
               <FaTimes />
             </button>

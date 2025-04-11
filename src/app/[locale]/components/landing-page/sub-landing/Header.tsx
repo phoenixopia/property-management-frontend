@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
+
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user } = useAuth();
@@ -66,12 +67,19 @@ const Header = () => {
         <div className="flex text-black items-center justify-between h-16 md:h-20">
        
           <motion.div 
-            className="flex-shrink-0"
+            className="flex-shrink-0 items-center mt-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-xl font-semibold">Logo</p>
+        <Link href="/" className='cursor-pointer'>
+
+              <img
+                src="/pms_logo.png"
+                alt="Profile"
+                className="xl:w-25 xl:h-25 w-16 h-16 rounded-full object-cover"
+              />
+              </Link>
           </motion.div>
 
           <nav className="hidden md:flex ">

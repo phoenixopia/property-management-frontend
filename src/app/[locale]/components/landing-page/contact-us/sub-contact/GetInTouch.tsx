@@ -32,7 +32,7 @@ const GetInTouch = () => {
    
     {
       title: "Phone",
-      description: "+251939000000",
+      description: "+251968999955",
       icon: (
         <svg className="w-15 h-15 p-1 " viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                
@@ -43,7 +43,7 @@ const GetInTouch = () => {
     },
     {
       title: "Email",
-      description: "marketing@phoenixopia.com",
+      description: "info@phoenixopia.com",
       icon: (
         <svg className="w-15 h-15 p-1 " viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                
@@ -62,7 +62,7 @@ const GetInTouch = () => {
     },
     {
       title: "Address",
-      description: "2R92+G3, Addis Ababa",
+      description: "2R92+G3, Megenagna, Wereda 05, Bole subcity, Addis Ababa, Ethiopia",
       icon: (
         <svg className="w-15 h-15 p-1 " viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
             <path d="M35 16.875C35 9.8877 28.2812 4.21875 20 4.21875C11.7188 4.21875 5 9.8877 5 16.875C5 17.9648 5.46875 19.6523 6.59375 21.9023C7.6875 24.082 9.23958 26.4902 11.0208 28.9248C13.9896 32.9854 17.4271 36.9053 20 39.7002C22.5833 36.9053 26.0208 32.9854 28.9792 28.9248C30.7604 26.4902 32.3125 24.082 33.4062 21.9023C34.5312 19.6523 35 17.9648 35 16.875ZM40 16.875C40 24.5566 27.8125 38.2324 22.4688 43.875C21.1875 45.2197 18.8125 45.2197 17.5312 43.875C12.1875 38.2324 0 24.5566 0 16.875C0 7.55859 8.95833 0 20 0C31.0417 0 40 7.55859 40 16.875ZM23.3333 16.875C23.3333 16.1291 22.9821 15.4137 22.357 14.8863C21.7319 14.3588 20.8841 14.0625 20 14.0625C19.1159 14.0625 18.2681 14.3588 17.643 14.8863C17.0179 15.4137 16.6667 16.1291 16.6667 16.875C16.6667 17.6209 17.0179 18.3363 17.643 18.8637C18.2681 19.3912 19.1159 19.6875 20 19.6875C20.8841 19.6875 21.7319 19.3912 22.357 18.8637C22.9821 18.3363 23.3333 17.6209 23.3333 16.875ZM11.6667 16.875C11.6667 15.0102 12.5446 13.2218 14.1074 11.9032C15.6702 10.5845 17.7899 9.84375 20 9.84375C22.2101 9.84375 24.3298 10.5845 25.8926 11.9032C27.4554 13.2218 28.3333 15.0102 28.3333 16.875C28.3333 18.7398 27.4554 20.5282 25.8926 21.8468C24.3298 23.1655 22.2101 23.9062 20 23.9062C17.7899 23.9062 15.6702 23.1655 14.1074 21.8468C12.5446 20.5282 11.6667 18.7398 11.6667 16.875Z" fill="#285E67"/>
@@ -97,7 +97,7 @@ const GetInTouch = () => {
             whileInView={{ opacity: 1, y: 0 }}
        
             transition={{ duration: 0.6 }} className='flex w-full items-center justify-center text-black '>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+            <p>Our support team is available Monday to Friday, 9 AM to 6 PM (GMT). We're here to help you manage your properties with ease!</p>
            </motion.div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-12 gap-24'>

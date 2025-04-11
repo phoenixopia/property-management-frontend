@@ -1,8 +1,10 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from "next-intl";
 
 const GetInTouch = () => {
+        const t = useTranslations("full");
 
   const container = {
     hidden: { opacity: 0 },
@@ -31,7 +33,7 @@ const GetInTouch = () => {
   const featureCards = [
    
     {
-      title: "Phone",
+      title: t("phone"),
       description: "+251968999955",
       icon: (
         <svg className="w-15 h-15 p-1 " viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +44,7 @@ const GetInTouch = () => {
       )
     },
     {
-      title: "Email",
+      title: t("email"),
       description: "info@phoenixopia.com",
       icon: (
         <svg className="w-15 h-15 p-1 " viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
@@ -61,7 +63,7 @@ const GetInTouch = () => {
       )
     },
     {
-      title: "Address",
+      title: t("address"),
       description: "2R92+G3, Megenagna, Wereda 05, Bole subcity, Addis Ababa, Ethiopia",
       icon: (
         <svg className="w-15 h-15 p-1 " viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +91,7 @@ const GetInTouch = () => {
        
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Get In Touch</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{t("Get In Touch")}</h2>
           
           </motion.div>
 
@@ -97,7 +99,7 @@ const GetInTouch = () => {
             whileInView={{ opacity: 1, y: 0 }}
        
             transition={{ duration: 0.6 }} className='flex w-full items-center justify-center text-black '>
-            <p>Our support team is available Monday to Friday, 9 AM to 6 PM (GMT). We're here to help you manage your properties with ease!</p>
+            <p>{t("Our support team is available Monday to Friday, 9 AM to 6 PM (GMT); We're here to help you manage your properties with ease!")}</p>
            </motion.div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-12 gap-24'>

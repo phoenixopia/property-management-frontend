@@ -6,12 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-
-
+import Language from '../../language/Language';
+import { useTranslations } from "next-intl";
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
+  const t = useTranslations("full");
 
   const handleDashboardClick = () => {
     if (!user) {
@@ -85,6 +86,23 @@ const Header = () => {
           <nav className="hidden md:flex ">
             <ul className="flex gap-6 flex-grow justify-end items-center">
             <motion.li
+           
+           initial="hidden"
+           animate="visible"
+         
+           variants={{
+             hidden: { opacity: 0, y: -10 },
+             visible: {
+               opacity: 1,
+               y: 0,
+               transition: { delay:  0.1 }
+             }
+           }}
+           className="hover:text-[#285E67] transition duration-200"
+         >
+        <Language/>
+         </motion.li>
+            <motion.li
                  
                   initial="hidden"
                   animate="visible"
@@ -101,7 +119,7 @@ const Header = () => {
                   className="hover:text-[#285E67] transition duration-200"
                 >
                   <Link href="/">
-                    Home
+                    {t('home')}
                   </Link>
                 </motion.li>
 
@@ -140,9 +158,11 @@ const Header = () => {
                   className="hover:text-[#285E67] transition duration-200"
                 >
                   <Link href='/contact-us'>
-                     Contact Us
+                      {t('contact-us')}
                   </Link>
                 </motion.li>
+
+    
               <motion.li
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -157,7 +177,7 @@ const Header = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <FontAwesomeIcon icon={faGauge} className="text-sm" />
-                    <span>Dashboard</span>
+                    <span>{t('dashboard')}</span>
                   </motion.button>
                 ) : (
                   <motion.button 
@@ -168,7 +188,7 @@ const Header = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <FontAwesomeIcon icon={faUser} className="text-sm" />
-                    <span>Login</span>
+                    <span>{t('login')}</span>
                   </motion.button>
                 )}
               </motion.li>
@@ -243,10 +263,10 @@ const Header = () => {
                     className="block px-3 py-2 rounded-md text-base font-medium text-black hover:bg-gray-50"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Home
+                    {t('home')}
                   </Link>
                 </motion.div>
-                <motion.div
+                {/* <motion.div
              
              initial="hidden"
              animate="visible"
@@ -259,7 +279,7 @@ const Header = () => {
              >
                About
              </Link>
-           </motion.div>
+           </motion.div> */}
 
            <motion.div
              
@@ -272,8 +292,17 @@ const Header = () => {
                className="block px-3 py-2 rounded-md text-base font-medium text-black hover:bg-gray-50"
                onClick={() => setMobileMenuOpen(false)}
              >
-               Contact Us
+               {t('contact-us')}
              </Link>
+             <motion.div
+                  custom={3.5}
+                  initial="hidden"
+                  animate="visible"
+                  variants={menuItemVariants}
+                  className="text-sm text-gray-600 px-3 py-2 max-w-[12rem]"
+                >
+                 <Language />
+                </motion.div>   
            </motion.div>
               {user && user.groups && user.groups.length > 0 && (
                 <motion.div
@@ -300,11 +329,13 @@ const Header = () => {
                   whileTap={{ scale: 0.98 }}
                 >
                   <FontAwesomeIcon icon={user?.groups?.length ? faGauge : faUser} className="text-sm" />
-                  <span>{user?.groups?.length ? 'Dashboard' : 'Login'}</span>
+                  <span>{user?.groups?.length ? t('dashboard') : t('login')}</span>
                 </motion.button>
               </motion.div>
+              
             </div>
           </motion.div>
+          
         )}
       </AnimatePresence>
     </header>

@@ -84,7 +84,7 @@ export async function createMaintenanceRequest(requestData: any) {
           description: requestData.description
         })
       });
-      console.log(response,'response when it created')
+  
       if (!response.ok) {
         const errorData = await response.json();
       
@@ -150,7 +150,7 @@ export async function createMaintenanceRequest(requestData: any) {
 export async function resolveMaintenance(id:number) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
- console.log(id);
+
   try {
     const response = await fetch(`${endPoint}/resolve_maintenance_request`, {
       method: 'POST',
@@ -164,7 +164,7 @@ export async function resolveMaintenance(id:number) {
     });
     const result = await response.json();
 
-    console.log(response,'data after resolve')
+
 
     if (!response.ok) {
       throw new Error('Failed to update the maintenance status');

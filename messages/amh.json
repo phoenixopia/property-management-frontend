@@ -145,6 +145,55 @@
       "financial-details":"የፋይናንስ ዝርዝሮች",
       "date-details":"የቀን ዝርዝሮች",
       "property-images":"የንብረት ምስሎች",
+      "home":"መነሻ ገጽ",
+      "contact-us":"ያግኙን",
+      "dashboard":"ዳሽቦርድ",
+      "Instant maintenance request tracking":"የፈጣን የጥገና ጥያቄ ክትትል",
+      "Automated tenant communication":"አውቶማቲክ ተከራይ ግንኙነት",
+      "Digital lease management":"ዲጂታል የሊዝ አስተዳደር",
+      "Our all in one system streamlines every aspect of property management":"ይህ መተግበሪያ የንብረት አስተዳደርን በቀላሉ እና በትክክል ያደራጃል",
+      "Streamline Your Property Management":"የንብረት አስተዳደርዎን ያመቻቹ",
+      "Get started in just three simple steps":"በሶስት ቀላል ደረጃዎች ብቻ ይጀምሩ",
+      "Secure Owner Portal":"ደህንነቱ የተጠበቀ የባለቤት መግቢያ ያግኙ",
+      "Real-time financial reporting":"የገንዘብ ሪፖርት እና ትንታኔ",
+      "Portfolio Configuration":"ፖርትፎሊዮ ማዋቀር",
+      "Set up property groups, management teams, and customized reporting views":"የንብረት ቡድኖችን፣ የአስተዳደር ቡድኖችን እና ብጁ የሪፖርት ማድረጊያ እይታዎችን ያዋቅሩ",
+      "Property Onboarding":"ንብረት በመሳፈር ላይ",
+      "Add properties, tenants, and lease details to start comprehensive management":"አጠቃላይ አስተዳደርን ለመጀመር ንብረቶችን፣ ተከራዮችን እና የሊዝ ዝርዝሮችን ያክሉ",
+      "Already have an account":"መለያ አለህ",
+      "Sign in to your dashboard":"ወደ ዳሽቦርድዎ ይግቡ",
+      "Interested in working with Us":"ከኛ ጋር ለመስራት ፍላጎት አለኝ",
+      "Property Management":"የንብረት አስተዳደር",
+      "Users manage property listings within the system, Each property can include detailed information like location, type, and number of rental units The system tracks the status of units to help with leasing operations":"ተጠቃሚዎች በስርዓቱ ውስጥ የንብረት ዝርዝሮችን ያስተዳድራሉ። እያንዳንዱ ንብረት እንደ አካባቢ፣ ዓይነት እና የኪራይ ቤቶች ብዛት ያሉ ዝርዝር መረጃዎችን ሊያካትት ይችላል። ስርዓቱ የኪራይ ሥራዎችን ለማገዝ የአሃዶችን ሁኔታ ይከታተላል።",
+      "Tenant Management":"የተከራይ አስተዳደር",
+      "Rent Payment and Transactions":"የኪራይ ክፍያ እና ግብይቶች",
+      "The system integrates with multiple payment gateways (PayPal, Stripe, Flutterwave, and bank transfer) to facilitate secure rent collection, It automates the generation of rent invoices and tracks payment history and outstanding balances":"ደህንነቱ የተጠበቀ የኪራይ ሰብሳቢነትን ለማመቻቸት ስርዓቱ ከበርካታ የክፍያ መግቢያ መንገዶች (PayPal፣ Stripe፣ Flutterwave እና የባንክ ማስተላለፍ) ጋር ይዋሃዳል። የኪራይ ደረሰኞችን በራስ ሰር ያመነጫል እና የክፍያ ታሪክን እና ቀሪ ሂሳቦችን ይከታተላል።",
+      "Maintenance Request Management":"የጥገና ጥያቄ አስተዳደር",
+      "Tenants can submit maintenance requests via the platform, Property managers can view, assign, and update the status of these requests, This ensures timely resolution of issues and better communication between tenants and managers":"ተከራዮች የጥገና ጥያቄዎችን በመድረክ በኩል ማስገባት ይችላሉ። የንብረት አስተዳዳሪዎች የእነዚህን ጥያቄዎች ሁኔታ ማየት፣መመደብ እና ማዘመን ይችላሉ። ይህም ጉዳዮችን በወቅቱ ለመፍታት እና በተከራዮች እና በአስተዳዳሪዎች መካከል የተሻለ ግንኙነት እንዲኖር ያደርጋል።",
+      "Reports and Analytics":"ሪፖርቶች እና ትንታኔዎች",
+      "The system provides powerful reporting features that allow landlords and property managers to generate financial summaries, Reports include income statements, expense tracking, overdue rent, and maintenance history, offering insights for strategic decision-making":"ስርዓቱ ባለንብረቶች እና የንብረት አስተዳዳሪዎች የፋይናንስ ማጠቃለያዎችን እንዲያመነጩ የሚያስችል ኃይለኛ የሪፖርት አቀራረብ ባህሪያትን ያቀርባል ሪፖርቶች የገቢ መግለጫዎች፣ የወጪ ክትትል፣ ጊዜው ያለፈበት የቤት ኪራይ እና የጥገና ታሪክ፣ ለስልታዊ ውሳኔ አሰጣጥ ግንዛቤዎችን ያካትታሉ።",
+      "Document Management System":"የሰነድ አስተዳደር ስርዓት",
+      "Upload and manage lease agreements, ID documents, payment receipts, and maintenance records, Documents are stored securely and can be downloaded when needed":"የሊዝ ስምምነቶችን፣ የመታወቂያ ሰነዶችን፣ የክፍያ ደረሰኞችን እና የጥገና መዝገቦችን ይስቀሉ እና ያስተዳድሩ። ሰነዶች ደህንነቱ በተጠበቀ ሁኔታ ይከማቻሉ እና አስፈላጊ በሚሆንበት ጊዜ ሊወርዱ ይችላሉ።",
+      "This feature enables the registration and management of tenant profiles, including personal details and lease agreements, Lease tracking includes features such as renewal, termination, and historical recordkeeping for better tenant lifecycle management":"ይህ ባህሪ የግል ዝርዝሮችን እና የሊዝ ስምምነቶችን ጨምሮ የተከራይ መገለጫዎችን መመዝገብ እና ማስተዳደር ያስችላል። የሊዝ ክትትል ለተሻለ የተከራይ የህይወት ዑደት አስተዳደር እንደ እድሳት፣ ማቋረጥ እና የታሪክ መዛግብት ያሉ ባህሪያትን ያካትታል",
+"About The System Feature":"ስለ ስርዓቱ ባህሪ",
+"Access your dedicated property management dashboard with provider-issued credentials":"የእርስዎን የተወሰነ የንብረት አስተዳደር ዳሽቦርድ በአቅራቢው በተሰጡ ምስክርነቶች ይድረሱበት",
+"Get In Touch":"ተገናኝ",
+"Our support team is available Monday to Friday, 9 AM to 6 PM (GMT); We're here to help you manage your properties with ease!":"የድጋፍ ቡድናችን ከሰኞ እስከ አርብ ከጠዋቱ 3 AM እስከ 6 pm ይገኛል። ንብረቶችዎን በቀላሉ እንዲያስተዳድሩ ለማገዝ እዚህ መጥተናል!",
+"phone":"ስልክ",
+"Got a technical issue? Want to send feedback about a beta feature? Need details about our Business plan? Let us know":"የቴክኒክ ችግር አለብህ? ስለቤታ ባህሪ ግብረመልስ መላክ ይፈልጋሉ? ስለቢዝነስ እቅዳችን ዝርዝሮችን ይፈልጋሉ? አሳውቀን።",
+"subject":"ርዕሰ ጉዳይ",
+"Your message":"መልእክትህ",
+"send message":"መልእክት ላክ",
+
+
+
+
+
+      
+
+
+
+
 
       
      

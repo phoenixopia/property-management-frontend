@@ -39,17 +39,16 @@ export async function post_rent(data: RentData) {
     return result;
   } catch (error) {
 
-    console.log(error,'errent')
+  
     return { error: 'Failed to create rent' };
   }
 }
 
 async function handleApiResponse(response: Response) {
-    
-    console.log(response,'respsdadsas')
+ 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData,'eeeeeeeeeeeee')
+
 
     return {
         status: 404,
@@ -148,7 +147,6 @@ export async function search_properties(searchTerm: string) {
       if (filters.end_date_min) queryParams.append('end_date_min', filters.end_date_min);
       if (filters.end_date_max) queryParams.append('end_date_max', filters.end_date_max);
       if (filters.page) queryParams.append('page', filters.page);
-    console.log(queryParams.toString(),'paaaaaa')
   
       const response = await fetch(`${endPoint}/get_rents?${queryParams.toString()}`, {
         headers: {

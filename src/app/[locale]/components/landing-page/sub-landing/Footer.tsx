@@ -1,7 +1,10 @@
 import React from 'react'
 import Link from 'next/link';
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
+        const t = useTranslations("full");
+  
   return (
     <div className='flex w-full justify-normal md:justify-between flex-col md:flex-row  items-center gap-2'>
       <div className='flex items-center px-16 text-xs'>
@@ -15,11 +18,11 @@ const Footer = () => {
         
 
            <div className='flex pl-12 space-x-4'>
-            <Link href="/" className='cursor-pointer'>Home</Link>
+            <Link href="/" className='cursor-pointer'>{t("home")}</Link>
             <p>|</p>
             {/* <Link href="/about-us">About Us</Link>
             <p>|</p> */}
-            <Link href="contact-us">Contact Us</Link>
+            <Link href="contact-us">{t("contact-us")}</Link>
            </div>
       </div>
       <div className='flex items-center gap-2'>

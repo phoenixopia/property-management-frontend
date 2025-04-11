@@ -252,7 +252,7 @@ export const updateProperty = async (id: number, data: any) => {
 
 
 export const postPropertyPicture = async (formData: FormData) => {
-  console.log(formData,'f,')
+
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
   try {
@@ -263,7 +263,7 @@ export const postPropertyPicture = async (formData: FormData) => {
       },
       body: formData,
     });
-    console.log(response,'dsad')
+
     if (!response.ok) {
       throw new Error('Failed to upload image');
     }

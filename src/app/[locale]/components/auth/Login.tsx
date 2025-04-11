@@ -42,7 +42,7 @@ export default function Login() {
       
 
         if (authData.groups.length > 0 && authData.permissions.length > 0) {
-          console.log(authData.groups,'ttttttttttttt')
+
           if (authData.groups.includes("maintenance")) {
             router.push("/maintenance");
           } else {

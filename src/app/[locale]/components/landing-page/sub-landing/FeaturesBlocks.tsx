@@ -1,9 +1,12 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from "next-intl";
 
 const FeaturesBlocks = () => {
   // Animation variants
+    const t = useTranslations("full");
+  
   const container = {
     hidden: { opacity: 0 },
     visible: {
@@ -30,8 +33,8 @@ const FeaturesBlocks = () => {
 
   const featureCards = [
     {
-      title: "Secure Owner Portal",
-      description: "Access your dedicated property management dashboard with provider-issued credentials",
+      title: t("Secure Owner Portal"),
+      description:t("Access your dedicated property management dashboard with provider-issued credentials"),
       icon: (
         <svg className="w-16 h-16 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -44,8 +47,8 @@ const FeaturesBlocks = () => {
       )
     },
     {
-      title: "Portfolio Configuration",
-      description: "Set up property groups, management teams, and customized reporting views",
+      title: t("Portfolio Configuration"),
+      description: t("Set up property groups, management teams, and customized reporting views"),
       icon: (
         <svg className="w-16 h-16 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -62,8 +65,8 @@ const FeaturesBlocks = () => {
       )
     },
     {
-      title: "Property Onboarding",
-      description: "Add properties, tenants, and lease details to start comprehensive management",
+      title: t("Property Onboarding"),
+      description: t("Add properties, tenants, and lease details to start comprehensive management"),
       icon: (
         <svg className="w-16 h-16 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -93,8 +96,8 @@ const FeaturesBlocks = () => {
             viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Streamline Your Property Management</h2>
-            <p className="text-xl text-gray-600">Get started in just three simple steps</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{t("Streamline Your Property Management")}</h2>
+            <p className="text-xl text-gray-600">{t("Get started in just three simple steps")}</p>
           </motion.div>
 
           <motion.div 
@@ -130,9 +133,9 @@ const FeaturesBlocks = () => {
             transition={{ delay: 0.8 }}
           >
             <p className="text-gray-500 text-sm">
-              Already have an account?{' '}
+            {t("Already have an account")}?{' '}
               <a href="/login" className="text-[#285E67] hover:text-[#1e4a52] font-medium transition-colors">
-                Sign in to your dashboard
+                {t("Sign in to your dashboard")}
               </a>
             </p>
           </motion.div>

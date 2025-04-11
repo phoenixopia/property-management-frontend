@@ -3,8 +3,11 @@
 import React from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { sendEmail } from '@/actions/sendEmail';
+import { useTranslations } from "next-intl";
 
 const SendMail = () => {
+        const t = useTranslations("full");
+  
   const formRef = React.useRef<HTMLFormElement>(null);
   
   const mutation = useMutation({
@@ -27,10 +30,10 @@ const SendMail = () => {
       <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
         
         <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">
-          Contact Us
+          {t("contact-us")}
         </h2>
         <p className="mb-8 lg:mb-16 font-light text-center text-gray-800 sm:text-sm">
-          Got a technical issue? Want to send feedback about a beta feature? Need details about our Business plan? Let us know.
+          {t("Got a technical issue? Want to send feedback about a beta feature? Need details about our Business plan? Let us know")}.
         </p>
         
         {mutation.isSuccess && (
@@ -48,7 +51,7 @@ const SendMail = () => {
         <form ref={formRef} onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
-              Your email
+             {t('email')}
             </label>
             <input
               type="email"
@@ -62,7 +65,7 @@ const SendMail = () => {
           
           <div className="mb-4">
             <label htmlFor="subject" className="block mb-2 text-sm font-medium text-gray-900">
-              Subject
+             {t("subject")}
             </label>
             <input
               type="text"
@@ -76,7 +79,7 @@ const SendMail = () => {
           
           <div className="mb-4">
             <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900">
-              Your message
+              {t("Your message")}
             </label>
             <textarea
               id="message"
@@ -94,7 +97,7 @@ const SendMail = () => {
               disabled={mutation.isPending}
               className={`py-2 px-4 bg-[#285e67] text-white rounded-sm ${mutation.isPending ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#1e4a52]'}`}
             >
-              {mutation.isPending ? 'Sending...' : 'Send message'}
+              {mutation.isPending ? 'Sending...' : t("send message")}
             </button>
           </div>
         </form>

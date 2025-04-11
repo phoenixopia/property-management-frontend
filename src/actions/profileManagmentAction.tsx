@@ -52,9 +52,8 @@ export async function createUserProfilePic(formData: FormData) {
 
     const uploadData = new FormData();
     uploadData.append('profile_picture', imageFile);
-   console.log(user_id,'iddddddddddd')
 
-   console.log(uploadData,'uppppppppp')
+
     const response = await fetch(`${endPoint}/update_user/${user_id}`, {
       method: 'PATCH',
       headers: {
@@ -62,7 +61,7 @@ export async function createUserProfilePic(formData: FormData) {
       },
       body: uploadData,
     });
-  console.log(response,'rrrrrr')
+ 
     if (!response.ok) {
       throw new Error('Failed to upload profile picture');
     }

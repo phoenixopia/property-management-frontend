@@ -2,8 +2,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useTranslations } from "next-intl";
 
 const Top = () => {
+    const t = useTranslations("full");
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -64,30 +67,33 @@ const Top = () => {
             className='text-gray-900 text-3xl md:text-4xl font-extrabold'
             variants={itemVariants}
           >
-            Property Management
+            {t('Property Management')}
+            
           </motion.p>
           
           <motion.div
             className='text-gray-600 text-base md:text-lg'
             variants={itemVariants}
           >
-            Our all-in-one system streamlines every aspect of property management:
+            {t("Our all in one system streamlines every aspect of property management")}:
             <ul className='mt-4 space-y-2'>
               <motion.li className='flex items-start' variants={itemVariants}>
                 <span className='text-[#285E67] mr-2'>✓</span>
-                Instant maintenance request tracking
+                {t("Instant maintenance request tracking")}
+                
               </motion.li>
               <motion.li className='flex items-start' variants={itemVariants}>
                 <span className='text-[#285E67] mr-2'>✓</span>
-                Automated tenant communication
+                {t("Automated tenant communication")}
+                
               </motion.li>
               <motion.li className='flex items-start' variants={itemVariants}>
                 <span className='text-[#285E67] mr-2'>✓</span>
-                Digital lease management
+                {t("Digital lease management")}
               </motion.li>
               <motion.li className='flex items-start' variants={itemVariants}>
                 <span className='text-[#285E67] mr-2'>✓</span>
-                Real-time financial reporting
+                {t("Real-time financial reporting")}
               </motion.li>
             </ul>
           </motion.div>

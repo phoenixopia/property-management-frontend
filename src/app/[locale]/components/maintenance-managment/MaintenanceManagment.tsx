@@ -152,8 +152,7 @@ const MaintenanceManagment = () => {
     
         },
       });
-      console.log(fixMaintenance,'fixDaaaaaaaaaa')
-      console.log(maintenanceList,'fixed maintenance data')
+   
 
     return (
         <div className='flex flex-col justify-between p-4'>

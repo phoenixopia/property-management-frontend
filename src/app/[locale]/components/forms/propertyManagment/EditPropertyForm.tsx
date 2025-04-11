@@ -128,7 +128,7 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
     setpropertyGallaryForm(true);
   }
  const selectedImage =inputRef?.current;
- console.log(selectedImage,'gallary Image selected')
+
   const onSubmit: SubmitHandler<PropertyFormData> = (data) => {
 
     const payload: PropertyFormData = {
@@ -138,7 +138,7 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
     };
     updatePropertyMutation.mutate(payload);
   };
-console.log(property,"proper")
+
   return (
     <div className="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
       <div className='flex flex-row rounded-lg my-2 font-bold text-sm text-white'>

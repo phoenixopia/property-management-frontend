@@ -1,8 +1,10 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from "next-intl";
 
 const AboutTheSystem = () => {
+    const t = useTranslations("full");
 
   const container = {
     hidden: { opacity: 0 },
@@ -30,8 +32,8 @@ const AboutTheSystem = () => {
 
   const featureCards = [
     {
-      title: "Property Management",
-      description: "Users manage property listings within the system. Each property can include detailed information like location, type, and number of rental units. The system tracks the status of units to help with leasing operations.",
+      title: t("Property Management"),
+      description: t("Users manage property listings within the system, Each property can include detailed information like location, type, and number of rental units The system tracks the status of units to help with leasing operations"),
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -44,8 +46,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Tenant Management",
-      description: "This feature enables the registration and management of tenant profiles, including personal details and lease agreements. Lease tracking includes features such as renewal, termination, and historical recordkeeping for better tenant lifecycle management.",
+      title: t("Tenant Management"),
+      description: t("This feature enables the registration and management of tenant profiles, including personal details and lease agreements, Lease tracking includes features such as renewal, termination, and historical recordkeeping for better tenant lifecycle management"),
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -62,8 +64,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Rent Payment and Transactions",
-      description: "The system integrates with multiple payment gateways (PayPal, Stripe, Flutterwave, and bank transfer) to facilitate secure rent collection. It automates the generation of rent invoices and tracks payment history and outstanding balances.",
+      title: t("Rent Payment and Transactions"),
+      description: t("The system integrates with multiple payment gateways (PayPal, Stripe, Flutterwave, and bank transfer) to facilitate secure rent collection, It automates the generation of rent invoices and tracks payment history and outstanding balances"),
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -79,8 +81,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Maintenance Request Management",
-      description: "Tenants can submit maintenance requests via the platform. Property managers can view, assign, and update the status of these requests. This ensures timely resolution of issues and better communication between tenants and managers.",
+      title: t("Maintenance Request Management"),
+      description: t("Tenants can submit maintenance requests via the platform, Property managers can view, assign, and update the status of these requests, This ensures timely resolution of issues and better communication between tenants and managers"),
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -96,8 +98,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Reports and Analytics",
-      description: "The system provides powerful reporting features that allow landlords and property managers to generate financial summaries. Reports include income statements, expense tracking, overdue rent, and maintenance history, offering insights for strategic decision-making.",
+      title: t("Reports and Analytics"),
+      description: t("The system provides powerful reporting features that allow landlords and property managers to generate financial summaries, Reports include income statements, expense tracking, overdue rent, and maintenance history, offering insights for strategic decision-making"),
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -113,8 +115,8 @@ const AboutTheSystem = () => {
       )
     },
     {
-      title: "Document Management System",
-      description: "Upload and manage lease agreements, ID documents, payment receipts, and maintenance records. Documents are stored securely and can be downloaded when needed.",
+      title: t("Document Management System"),
+      description: t("Upload and manage lease agreements, ID documents, payment receipts, and maintenance records, Documents are stored securely and can be downloaded when needed"),
       icon: (
         <svg className="w-10 h-10 p-1 -mt-1 mb-2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <rect width="64" height="64" rx="32" className="fill-[#285E67]" />
@@ -144,7 +146,7 @@ const AboutTheSystem = () => {
             viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">About The System Feature</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{t("About The System Feature")}</h2>
           
           </motion.div>
 

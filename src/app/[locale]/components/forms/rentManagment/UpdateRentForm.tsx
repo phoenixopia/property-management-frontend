@@ -159,7 +159,7 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
-    console.log(rent,'rentshow')
+
   return (
     <div className="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
       <form onSubmit={handleSubmit(onSubmit)}>

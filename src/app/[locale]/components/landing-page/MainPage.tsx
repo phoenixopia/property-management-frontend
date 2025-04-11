@@ -5,10 +5,20 @@ import FeaturesBlocks from './sub-landing/FeaturesBlocks';
 import Footer from './sub-landing/Footer';
 import AboutTheSystem from './sub-landing/AboutTheSystem';
 import ContactFast from './sub-landing/ContactFast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useLocale } from "next-intl";  
+import { faUser, faBars, faTimes, faTry } from '@fortawesome/free-solid-svg-icons';
+import DemoPage from './demo/DempPage';
+
 const MainPage = () => {
+  
   return (
     <div className="flex flex-col min-h-screen bg-white overflow-x-hidden">
-     
+       
+           <div className='z-50 mt-[50vh] ml-[2vw] fixed size-12  items-center justify-center text-center rounded-full'>
+            <DemoPage/>
+           </div>
+       
       <Header />
       
       <div className="pt-16 md:pt-20"> 

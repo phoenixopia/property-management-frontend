@@ -9,6 +9,7 @@ import { Doughnut } from "react-chartjs-2";
 import LatestAddedTenants from './LatestAddedTenants';
 import RevenueBar from './RevenueBar';
 import LatestMaintenance from './LatestMaintenance';
+import TotalNumber from './TotalNumber';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
@@ -32,9 +33,15 @@ const StaticsData = () => {
   };
  
     return (
+      <div>
 
+       <div className="flex mb-2 flex-col md:flex-row items-center bg-gray-100  rounded-lg dark:bg-[#212327] dark:border-gray-700 p-2   min-h-[4rem]">
+
+          <TotalNumber/>
+  
+        </div>
     <div className=' grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-2  '>
-
+    
         
         <div className=" bg-gray-100  rounded-lg dark:bg-[#212327] dark:border-gray-700 p-2   h-[30rem]">
             <Doughnut data={data} options={{ maintainAspectRatio: false, responsive: true }} />
@@ -64,6 +71,7 @@ const StaticsData = () => {
 
     
  
+    </div>
 
 
 </div>

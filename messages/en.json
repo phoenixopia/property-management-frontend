@@ -9,7 +9,11 @@
         "user-managment":"User Managment",
         "sign-out":"Sign Out",
         "maintenance-title":"Maintenance",
-     "tenant-page":"Tenant Page"
+     "tenant-page":"Tenant Page",
+     "notifications": "Notifications",
+"no-notifications": "No new notifications",
+"view-all": "View all"
+   
 
        },
     "full": {
@@ -160,7 +164,7 @@
       "Real-time financial reporting":"Real-time financial reporting",
       "Portfolio Configuration":"Portfolio Configuration",
       "Set up property groups, management teams, and customized reporting views":"Set up property groups, management teams, and customized reporting views",
-      "Property Onboarding":"ንብረት በመሳፈር ላይ",
+      "Property Onboarding":"Property Onboarding",
       "Add properties, tenants, and lease details to start comprehensive management":"Add properties, tenants, and lease details to start comprehensive management",
       "Already have an account":"Already have an account",
       "Sign in to your dashboard":"Sign in to your dashboard",
@@ -186,9 +190,12 @@
 "subject":"Subject",
 "Your message":"Your message",
 "send message":"send message",
-
-
+"notifications": "Notifications",
+"no-notifications": "No new notifications",
+"view-all": "View all",
    
+
+
       
 
 

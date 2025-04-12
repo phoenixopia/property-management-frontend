@@ -103,14 +103,14 @@ const Top = () => {
           variants={imageVariants}
           className='order-first md:order-last'
         >
+     
           <Image
-            src="/finpa.png"
-            width={1500}
-            height={1500}
-            alt="Property management illustration"
-            className='w-full h-auto object-contain'
-            priority
-          />
+              src="https://res.cloudinary.com/dxuvdtoqa/image/upload/v1744444043/finPa_vjgq9j.png"
+              height={1500}
+              width={1500}
+              alt="My cloudinary image"
+              priority
+            />
         </motion.div>
       </div>
     </motion.div>

@@ -9,7 +9,10 @@
      "user-managment":"የተጠቃሚ አስተዳደር",
      "sign-out":"ዘግተህ ውጣ",
      "maintenance-title":"ጥገና ገጽ",
-     "tenant-page":"ተከራይ-አስተዳደር"
+     "tenant-page":"ተከራይ-አስተዳደር",
+     "notifications": "ማሳወቂያዎች",
+     "no-notifications": "ምንም ማሳወቂያዎች የሉም",
+     "view-all": "ሁሉንም ይመልከቱ"
 
     },
     "full": {
@@ -158,7 +161,7 @@
       "Real-time financial reporting":"የገንዘብ ሪፖርት እና ትንታኔ",
       "Portfolio Configuration":"ፖርትፎሊዮ ማዋቀር",
       "Set up property groups, management teams, and customized reporting views":"የንብረት ቡድኖችን፣ የአስተዳደር ቡድኖችን እና ብጁ የሪፖርት ማድረጊያ እይታዎችን ያዋቅሩ",
-      "Property Onboarding":"ንብረት በመሳፈር ላይ",
+      "Property Onboarding":"ንብረት ማስተዳደር ጅምር",
       "Add properties, tenants, and lease details to start comprehensive management":"አጠቃላይ አስተዳደርን ለመጀመር ንብረቶችን፣ ተከራዮችን እና የሊዝ ዝርዝሮችን ያክሉ",
       "Already have an account":"መለያ አለህ",
       "Sign in to your dashboard":"ወደ ዳሽቦርድዎ ይግቡ",
@@ -184,6 +187,9 @@
 "subject":"ርዕሰ ጉዳይ",
 "Your message":"መልእክትህ",
 "send message":"መልእክት ላክ",
+"notifications": "ማሳወቂያዎች",
+"no-notifications": "ምንም ማሳወቂያዎች የሉም",
+"view-all": "ሁሉንም ይመልከቱ",
 
 
 

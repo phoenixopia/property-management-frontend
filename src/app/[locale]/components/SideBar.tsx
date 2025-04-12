@@ -17,7 +17,11 @@ import {
   faPen, 
   faScrewdriverWrench, 
   faBuilding,faUsersRays,
-  faBuildingUser
+  faBuildingUser,
+  faBellConcierge,
+  faLinesLeaning,
+  faHandHoldingDollar,
+  faGears
 } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
@@ -47,7 +51,30 @@ const SideBar = () => {
   const pathname = usePathname();
   const { hasRole, hasPermission, user, refreshAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      title: "New maintenance request",
+      message: "Apartment 42 reported a leaky faucet",
+      time: "2 hours ago",
+      read: false
+    },
+    {
+      id: 2,
+      title: "Payment received",
+      message: "Tenant John Doe paid rent for May",
+      time: "1 day ago",
+      read: true
+    },
+    {
+      id: 3,
+      title: "System update",
+      message: "New features available in property management",
+      time: "3 days ago",
+      read: true
+    }
+  ]);
   // Navigation configuration
   const NAV_ITEMS: NavItem[] = [
     {
@@ -63,6 +90,14 @@ const SideBar = () => {
       icon: <FontAwesomeIcon icon={faUser} />,
       label: "user-managment",
       translationKey: "Dashboard",
+      requiredRoles: ["system-admin", "group 2"],
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
+    },
+    {
+      path: "/role-managment",
+      icon: <FontAwesomeIcon icon={faUsersGear} />,
+      label: "role-managment",
+      translationKey: "full",
       requiredRoles: ["system-admin", "group 2"],
       requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
     },
@@ -99,24 +134,32 @@ const SideBar = () => {
       requiredPermissions: ["pms.view_maintenancerequest"]
     },
     {
-      path: "#",
-      icon: <FontAwesomeIcon icon={faUsersGear} />,
+      path: "/notifications",
+      icon: <FontAwesomeIcon icon={faBellConcierge} />,
+      label: "notifications",
+      translationKey: "full",
+      requiredRoles: ["maintenance", "system-admin"],
+      requiredPermissions: ["pms.view_maintenancerequest"]
+    },
+    {
+      path: "/logs",
+      icon: <FontAwesomeIcon icon={faLinesLeaning} />,
       label: "logs",
       translationKey: "full",
       requiredRoles: ["system-admin", "group 2"],
       requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
     },
     {
-      path: "#",
-      icon: <FontAwesomeIcon icon={faUsersGear} />,
+      path: "/transactions-logs",
+      icon: <FontAwesomeIcon icon={faHandHoldingDollar} />,
       label: "transactions-logs",
       translationKey: "full",
       requiredRoles: ["system-admin", "group 2"],
       requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
     },
     {
-      path: "#",
-      icon: <FontAwesomeIcon icon={faUsersGear} />,
+      path: "/system-settings",
+      icon: <FontAwesomeIcon icon={faGears} />,
       label: "system-settings",
       translationKey: "full",
       requiredRoles: ["system-admin", "group 2"],
@@ -134,7 +177,13 @@ const SideBar = () => {
   
   const validRoutes = NAV_ITEMS.map(item => `/${locale}${item.path}`);
   const shouldShowSidebar = validRoutes.includes(pathname);
-
+  const toggleNotifications = () => {
+    setNotificationsOpen(!notificationsOpen);
+    // Mark all as read when opening
+    if (!notificationsOpen) {
+      setNotifications(notifs => notifs.map(n => ({ ...n, read: true })));
+    }
+  };
   useEffect(() => {
     if (!shouldShowSidebar) return;
     refreshAuth();
@@ -148,7 +197,17 @@ const SideBar = () => {
       setIsLoading(false);
     }
   }, [user, shouldShowSidebar]);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (notificationsOpen && !target.closest('.notification-container')) {
+        setNotificationsOpen(false);
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [notificationsOpen]);
   const checkAccess = (roles: string[], permissions: string[]) => {
     const roleCheck = roles.length === 0 || roles.some(role => hasRole(role));
     const permissionCheck = permissions.length === 0 || 
@@ -213,13 +272,65 @@ const SideBar = () => {
       >
         {/* User Profile Section */}
         <div className="flex flex-col items-center gap-2 py-6">
-          <div className="flex w-full justify-end px-4">
-            <FontAwesomeIcon 
-              icon={faBell} 
-              className="text-2xl text-black dark:text-white cursor-pointer"
+        <div className="flex w-full justify-end px-4 relative"> {/* Added relative here */}
+        <div className="notification-container">
+        <button 
+              onClick={toggleNotifications}
+              className="relative"
               aria-label="Notifications"
-            />
-          </div>
+            >
+              <FontAwesomeIcon 
+                icon={faBell} 
+                className="text-2xl text-black dark:text-white cursor-pointer"
+              />
+              {/* Notification badge */}
+              {notifications.some(n => !n.read) && (
+                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+              )}
+            </button>
+            {notificationsOpen && (
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700">
+                  <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="font-medium text-gray-800 dark:text-white">
+                      {t('notifications')}
+                    </h3>
+                  </div>
+                  <div className="max-h-96 overflow-y-auto">
+                    {notifications.length > 0 ? (
+                      notifications.map(notification => (
+                        <div 
+                          key={notification.id}
+                          className={`p-3 border-b border-gray-100 dark:border-gray-700 ${!notification.read ? 'bg-blue-50 dark:bg-gray-700' : ''}`}
+                        >
+                          <div className="flex justify-between items-start">
+                            <h4 className="font-medium text-gray-800 dark:text-white">
+                              {notification.title}
+                            </h4>
+                            <span className="text-xs text-gray-500">
+                              {notification.time}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                            {notification.message}
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+                        {t('no-notifications')}
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-2 text-center border-t border-gray-200 dark:border-gray-700">
+                    <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                      {t('view-all')}
+                    </button>
+                  </div>
+                </div>
+              )
+              }
+               </div>
+               </div>
          
           <div className="relative flex flex-col items-center w-full mx-4 px-7 py-2 border-1 border-gray-50 shadow-2xs dark:bg-[#292b30] dark:border-gray-800 gap-2">
             {profileData?.isPending ? (
@@ -270,8 +381,8 @@ const SideBar = () => {
           </div>
         )}
 
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto">
+      
+        <div className="flex-1 overflow-y-auto mb-8">
           <div className="h-full pl-3 py-4">
             <ul className="space-y-2 font-medium text-sm">
               {NAV_ITEMS.map((item) => (

@@ -37,3 +37,22 @@ export const getUnreadNotifications = async (page = 1) => {
     const responseJson = await response.json();
     return responseJson;
   };
+
+  export const readNotifications = async (id:any) => {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('_s_t')?.value;
+  
+    const response = await fetch(`${endPoint}/api/update_notification/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+          "is_read": true
+        })
+    });
+  
+    const responseJson = await response.json();
+    return responseJson;
+  };

@@ -75,7 +75,7 @@ const DemoPage = () => {
                                         <p>AdminPassword:- 12345</p>
                                     </div>
 
-                                    <div className='flex flex-col bg-gray-800 p-2 rounded-sm'>
+                                    <div className='flex flex-col text-white bg-gray-800 p-2 rounded-sm'>
 
                                     <p>MaintenanceEmail:- kebe@gmail.com</p>
                                     <p>MaintenancePassword:- 123456</p>

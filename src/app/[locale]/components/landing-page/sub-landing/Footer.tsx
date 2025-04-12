@@ -31,7 +31,7 @@ const Footer = () => {
          
         </p> <p>|</p>
 
-        <p>Powered by phoenixopia</p>
+        <Link href={"https://phoenixopia.com/"}>Powered by phoenixopia</Link>
       </div>
        
     </div>

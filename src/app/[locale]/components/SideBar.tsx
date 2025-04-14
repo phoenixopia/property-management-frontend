@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect, useTransition } from "react";
 import { getUserProfileInfo } from "@/actions/profileManagmentAction";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery,useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 import { 
   faGear, 
   faHouse, 
@@ -28,7 +29,16 @@ import { useTranslations } from 'next-intl';
 import EditProfileForm from "./forms/profileManagment/EditProfileForm";
 import { useAuth } from "@/hooks/useAuth";
 import { logOut } from "@/actions/auth";
-
+import { getUnreadNotifications } from "@/actions/notifications";
+function formatTimeAgo(isoDateString:any) {
+  try {
+    const date = parseISO(isoDateString);
+    return formatDistanceToNow(date, { addSuffix: true });
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return 'some time ago';
+  }
+}
 interface NavItem {
   path: string;
   icon: React.ReactNode;
@@ -39,11 +49,11 @@ interface NavItem {
 }
 
 const SideBar = () => {
-  // State management
+
   const [editUserOpen, setEditUserOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  // Hooks
+  const queryClient =useQueryClient();
   const locale = useLocale();  
   const t = useTranslations('Dashboard'); 
   const t2 = useTranslations('full'); 
@@ -52,29 +62,29 @@ const SideBar = () => {
   const { hasRole, hasPermission, user, refreshAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "New maintenance request",
-      message: "Apartment 42 reported a leaky faucet",
-      time: "2 hours ago",
-      read: false
-    },
-    {
-      id: 2,
-      title: "Payment received",
-      message: "Tenant John Doe paid rent for May",
-      time: "1 day ago",
-      read: true
-    },
-    {
-      id: 3,
-      title: "System update",
-      message: "New features available in property management",
-      time: "3 days ago",
-      read: true
-    }
-  ]);
+  // const [notifications, setNotifications] = useState([
+  //   {
+  //     id: 1,
+  //     title: "New maintenance request",
+  //     message: "Apartment 42 reported a leaky faucet",
+  //     time: "2 hours ago",
+  //     read: false
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Payment received",
+  //     message: "Tenant John Doe paid rent for May",
+  //     time: "1 day ago",
+  //     read: true
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "System update",
+  //     message: "New features available in property management",
+  //     time: "3 days ago",
+  //     read: true
+  //   }
+  // ]);
   // Navigation configuration
   const NAV_ITEMS: NavItem[] = [
     {
@@ -166,7 +176,7 @@ const SideBar = () => {
       requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
     },
     {
-      path: `/settings`,
+      path: "/settings",
       icon: <FontAwesomeIcon icon={faGear} />,
       label: "setting",
       translationKey: "Dashboard",
@@ -174,19 +184,28 @@ const SideBar = () => {
       requiredPermissions: []
     }
   ];
-  
+  const profileData = useQuery({ queryKey: ['profileData'], queryFn: getUserProfileInfo })
+  const shortNotificationsData = useQuery({ 
+    queryKey: ['shortNotificationData'], 
+    queryFn: getUnreadNotifications,
+    refetchInterval: 60000,
+    refetchIntervalInBackground: true,
+    gcTime: 5 * 60 * 1000, 
+    staleTime: 30000, 
+  })
   const validRoutes = NAV_ITEMS.map(item => `/${locale}${item.path}`);
   const shouldShowSidebar = validRoutes.includes(pathname);
   const toggleNotifications = () => {
     setNotificationsOpen(!notificationsOpen);
     // Mark all as read when opening
-    if (!notificationsOpen) {
-      setNotifications(notifs => notifs.map(n => ({ ...n, read: true })));
-    }
+    // if (!notificationsOpen) {
+    //   setNotifications(notifs => notifs.map(n => ({ ...n, read: true })));
+    // }
   };
   useEffect(() => {
     if (!shouldShowSidebar) return;
     refreshAuth();
+    
     const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
   }, [shouldShowSidebar]);
@@ -196,6 +215,8 @@ const SideBar = () => {
     if (user) {
       setIsLoading(false);
     }
+    queryClient.invalidateQueries({ queryKey: ['profileData'] });
+
   }, [user, shouldShowSidebar]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -230,8 +251,12 @@ const SideBar = () => {
       logOut();
     });
   };
+  useEffect(() => {
+ 
+    queryClient.invalidateQueries({ queryKey: ['profileData'] });
+
+  }, []);
   
-  const profileData = useQuery({ queryKey: ['profileData'], queryFn: getUserProfileInfo })
 
   const getIconClasses = (path: string) => 
     pathname === `/${locale}${path}`
@@ -240,6 +265,10 @@ const SideBar = () => {
 
   if (!shouldShowSidebar) return null;
 
+
+
+
+   console.log(shortNotificationsData,'shortnotficationData')
   return (
     <>
       <button
@@ -283,11 +312,12 @@ const SideBar = () => {
                 icon={faBell} 
                 className="text-2xl text-black dark:text-white cursor-pointer"
               />
-              {/* Notification badge */}
-              {notifications.some(n => !n.read) && (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-              )}
+             
+             {shortNotificationsData?.data?.count > 0 && (
+            <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+          )}
             </button>
+            
             {notificationsOpen && (
                 <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700">
                   <div className="p-3 border-b border-gray-200 dark:border-gray-700">
@@ -296,22 +326,22 @@ const SideBar = () => {
                     </h3>
                   </div>
                   <div className="max-h-96 overflow-y-auto">
-                    {notifications.length > 0 ? (
-                      notifications.map(notification => (
+                    {shortNotificationsData?.data?.data?.length > 0 ? (
+                      shortNotificationsData.data?.data?.map((notification:any) => (
                         <div 
                           key={notification.id}
-                          className={`p-3 border-b border-gray-100 dark:border-gray-700 ${!notification.read ? 'bg-blue-50 dark:bg-gray-700' : ''}`}
+                          className={`p-3 border-b border-gray-100 dark:border-gray-700`}
                         >
                           <div className="flex justify-between items-start">
                             <h4 className="font-medium text-gray-800 dark:text-white">
-                              {notification.title}
+                              {notification?.notification_type}
                             </h4>
                             <span className="text-xs text-gray-500">
-                              {notification.time}
+                              {formatTimeAgo(notification?.created_at)}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                            {notification.message}
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-3">
+                            {notification?.message}
                           </p>
                         </div>
                       ))
@@ -321,11 +351,17 @@ const SideBar = () => {
                       </div>
                     )}
                   </div>
-                  <div className="p-2 text-center border-t border-gray-200 dark:border-gray-700">
-                    <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                      {t('view-all')}
-                    </button>
-                  </div>
+                
+                  {shortNotificationsData?.data?.count > 10 && (
+                        <div className="p-2 text-center border-t border-gray-200 dark:border-gray-700">
+                        <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                          {t('view-all')}
+                        </button>
+                      </div>
+                    )}
+        
+                 
+                
                 </div>
               )
               }

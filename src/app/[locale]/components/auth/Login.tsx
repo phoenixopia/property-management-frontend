@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation,useQueryClient } from "@tanstack/react-query";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
@@ -20,7 +20,7 @@ export default function Login() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const t = useTranslations("full");
-
+  const queryClient =useQueryClient();
   const {
     register,
     handleSubmit,
@@ -49,6 +49,8 @@ export default function Login() {
             router.push("/dashboard");
           }
            toast.success("Successfully signed in!");
+
+           queryClient.invalidateQueries({ queryKey: ['profileData'] });
 
         } else {
           toast.error("Access denied: No permissions assigned.");

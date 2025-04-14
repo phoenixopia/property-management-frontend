@@ -22,17 +22,20 @@ export const getAllNotifications = async (page = 1) => {
   return responseJson;
 };
 
-export const getUnreadNotifications = async (page = 1) => {
+
+
+export const getUnreadNotifications = async () => {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('_s_t')?.value;
   
-    const response = await fetch(`${endPoint}/api/get_unread_notifications?id=-1&page_size=10`, {
+    const response = await fetch(`${endPoint}/get_unread_notifications?page_size=10`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${accessToken}`
         }
     });
+ 
   
     const responseJson = await response.json();
     return responseJson;

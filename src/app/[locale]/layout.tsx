@@ -27,6 +27,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: '/pms_logo.png',
+  },
   title: "PMS",
   description: "Property management system",
 };

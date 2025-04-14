@@ -363,7 +363,7 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
             )}
           </div>
 
-          {/* Status */}
+    
           <div className="col-span-2">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('status')} *
@@ -374,9 +374,7 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
             >
               <option value="">Select status</option>
               <option value="active">Active</option>
-              <option value="pending">Pending</option>
-              <option value="terminated">Terminated</option>
-              <option value="completed">Completed</option>
+            
             </select>
             {errors.status && (
               <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>

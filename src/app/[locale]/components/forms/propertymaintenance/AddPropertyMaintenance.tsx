@@ -8,7 +8,7 @@ import {
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation,useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { createMaintenanceRequest } from '@/actions/maintenanceManagmentAction';
 
@@ -42,7 +42,7 @@ type PropertyMaintenanceProps = {
 const AddPropertyMaintenance = ({ property, onSuccess }: PropertyMaintenanceProps) => {
   const locale = useLocale();  
   const t = useTranslations('full');
-
+  const queryClient =useQueryClient();
   const {
     register,
     handleSubmit,
@@ -62,6 +62,7 @@ const AddPropertyMaintenance = ({ property, onSuccess }: PropertyMaintenanceProp
       if (result.success) {
         toast.success('maintenance-request-created');
         reset();
+        queryClient.invalidateQueries({queryKey:["properties"]});
         if (onSuccess) onSuccess();
       } else {
         toast.error(result?.message);

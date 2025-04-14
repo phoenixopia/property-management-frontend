@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect, useTransition } from "react";
 import { getUserProfileInfo } from "@/actions/profileManagmentAction";
-import { useQuery,useQueryClient } from "@tanstack/react-query";
+import { useQuery,useQueryClient,useMutation } from "@tanstack/react-query";
 import Link from "next/link";
+import { readNotifications } from "@/actions/notifications";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import ViewNotificationData from "./notifications/sub-notifications/ViewNotificationData";
 import { 
   faGear, 
   faHouse, 
@@ -57,6 +59,9 @@ const SideBar = () => {
   const locale = useLocale();  
   const t = useTranslations('Dashboard'); 
   const t2 = useTranslations('full'); 
+  const [currentNotificationView, setCurrentNotificationView] = useState(false);
+  const [currentNotificationData, setCurrentNotificationData] = useState<null>(null);
+    
 
   const pathname = usePathname();
   const { hasRole, hasPermission, user, refreshAuth } = useAuth();
@@ -202,6 +207,17 @@ const SideBar = () => {
     //   setNotifications(notifs => notifs.map(n => ({ ...n, read: true })));
     // }
   };
+  
+  const seenMutation = useMutation({
+    mutationFn: (id: number) => readNotifications(id),
+    onSuccess: () => {
+
+        
+        queryClient.invalidateQueries({ queryKey: ['getAllNotifications'] });
+        queryClient.invalidateQueries({ queryKey: ['shortNotificationData'] });
+
+    }
+});
   useEffect(() => {
     if (!shouldShowSidebar) return;
     refreshAuth();
@@ -245,7 +261,12 @@ const SideBar = () => {
         : "text-black dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 hover:ml-2"
     ].join(" ");
   };
-  
+  const viewNotiData = (notification: any) => {
+    setCurrentNotificationView(true);
+    setCurrentNotificationData(notification);
+    seenMutation.mutate(notification?.id)
+};
+
   const handleLogout = () => {
     startTransition(() => {
       logOut();
@@ -328,14 +349,14 @@ const SideBar = () => {
                   <div className="max-h-96 overflow-y-auto">
                     {shortNotificationsData?.data?.data?.length > 0 ? (
                       shortNotificationsData.data?.data?.map((notification:any) => (
-                        <div 
+                        <div onClick={() => viewNotiData(notification)}
                           key={notification.id}
-                          className={`p-3 border-b border-gray-100 dark:border-gray-700`}
+                          className={`p-3 cursor-pointer border-b bg-gray-100 border-gray-100 dark:border-gray-700`}
                         >
                           <div className="flex justify-between items-start">
-                            <h4 className="font-medium text-gray-800 dark:text-white">
+                            {/* <h4 className="font-medium text-gray-800 dark:text-white">
                               {notification?.notification_type}
-                            </h4>
+                            </h4> */}
                             <span className="text-xs text-gray-500">
                               {formatTimeAgo(notification?.created_at)}
                             </span>
@@ -464,8 +485,23 @@ const SideBar = () => {
           </div>
         </div>
       </aside>
+      {currentNotificationView && currentNotificationData && (
+                <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-120">
+                    <div className="relative max-h-[80%] text-gray-800 bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-2xl overflow-x-hidden overflow-y-auto">
+                        <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
+                            <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
+                                {t("view-notification")}
+                            </h3>
+                            <button onClick={() => setCurrentNotificationView(false)}>
+                                ✖
+                            </button>
+                        </div>
+                        <ViewNotificationData notificationData={currentNotificationData} />
+                    </div>
+                </div>
+            )}
 
-      {/* Edit Profile Modal */}
+
       {editUserOpen && (
         <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
           <div className='relative bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl'>

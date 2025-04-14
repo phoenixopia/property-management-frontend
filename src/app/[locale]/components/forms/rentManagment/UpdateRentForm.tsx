@@ -371,7 +371,7 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
             )}
           </div>
 
-          {/* Status */}
+{/*       
           <div className="col-span-2">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('status')} *
@@ -389,7 +389,7 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
             {errors.status && (
               <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
             )}
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-end">

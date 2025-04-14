@@ -12,7 +12,8 @@
      "tenant-page":"Tenant Page",
      "notifications": "Notifications",
 "no-notifications": "No new notifications",
-"view-all": "View all"
+"view-all": "View all",
+"view-notification":"View Notification"
    
 
        },
@@ -199,6 +200,7 @@
 "created_at":"Created At",
 "Total Number Of Properties":"Total Number Of Properties",
 "Total Number Of Tenants":"Total Number Of Tenants",
+"view-notification":"View Notification",
 
 
 

@@ -13,7 +13,8 @@ import { debounce } from 'lodash';
 import toast from 'react-hot-toast';
 import ViewUserData from '../forms/userManagment/ViewUserData';
 import { withAuth } from '@/hooks/withAuth';
-import { getAllNotifications } from '@/actions/notifications';
+import { getAllNotifications, readNotifications } from '@/actions/notifications';
+import ViewNotificationData from './sub-notifications/ViewNotificationData';
 function formatTimeAgo(isoDateString:any) {
     try {
       const date = parseISO(isoDateString);
@@ -46,7 +47,11 @@ const Notifications = () => {
     const locale = useLocale();  
     const t = useTranslations('full'); 
     const [currentUserView, setCurrentUserView] = useState(false);
+    const [currentNotificationView, setCurrentNotificationView] = useState(false);
+
     const [currentUserData, setCurrentUserData] = useState<User | null>(null);
+    const [currentNotificationData, setCurrentNotificationData] = useState<User | null>(null);
+
 
     const debouncedSearch = useCallback(
         debounce((query: string) => {
@@ -100,6 +105,18 @@ const Notifications = () => {
         },
         onError: () => {
             toast.error("Error activating the user!");
+        }
+    });
+
+
+    const seenMutation = useMutation({
+        mutationFn: (id: number) => readNotifications(id),
+        onSuccess: () => {
+ 
+            
+            queryClient.invalidateQueries({ queryKey: ['getAllNotifications'] });
+            queryClient.invalidateQueries({ queryKey: ['shortNotificationData'] });
+
         }
     });
 
@@ -158,9 +175,10 @@ const Notifications = () => {
         exportMutation.mutate();
       };
 
-    const viewUserData = (user: User) => {
-        setCurrentUserView(true);
-        setCurrentUserData(user);
+    const viewNotiData = (notification: any) => {
+        setCurrentNotificationView(true);
+        setCurrentNotificationData(notification);
+        seenMutation.mutate(notification?.id)
     };
 
     console.log(notificationData,'data of the notification after the fetch')
@@ -204,7 +222,7 @@ const Notifications = () => {
                                         <td className='px-6 py-4'>{notification?.is_read==true?"YES":"NO"}</td>
                                         <td className='px-6 py-4'>{formatTimeAgo(notification?.created_at)}</td>
                                         <td className='px-6 py-4'>
-                                        <button >
+                                        <button onClick={() => viewNotiData(notification)}>
                                                     <FontAwesomeIcon icon={faEye} className='text-dark dark:text-gray-200 text-sm cursor-pointer' />
                                                 </button>
                                         
@@ -249,18 +267,18 @@ const Notifications = () => {
                 </div>
             </div>
 
-            {currentUserView && currentUserData && (
+            {currentNotificationView && currentNotificationData && (
                 <div className="fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-120">
                     <div className="relative max-h-[80%] bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-2xl overflow-x-hidden overflow-y-auto">
                         <div className="flex items-center justify-between p-4 border-b dark:border-gray-600 border-gray-200">
                             <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
-                                {t("view-user")}
+                                {t("view-notification")}
                             </h3>
-                            <button onClick={() => setCurrentUserView(false)}>
+                            <button onClick={() => setCurrentNotificationView(false)}>
                                 ✖
                             </button>
                         </div>
-                        <ViewUserData userData={currentUserData} />
+                        <ViewNotificationData notificationData={currentNotificationData} />
                     </div>
                 </div>
             )}

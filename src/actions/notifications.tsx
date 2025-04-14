@@ -45,7 +45,7 @@ export const getUnreadNotifications = async () => {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('_s_t')?.value;
   
-    const response = await fetch(`${endPoint}/api/update_notification/${id}`, {
+    const response = await fetch(`${endPoint}/update_notification/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -12,7 +12,9 @@
      "tenant-page":"ተከራይ-አስተዳደር",
      "notifications": "ማሳወቂያዎች",
      "no-notifications": "ምንም ማሳወቂያዎች የሉም",
-     "view-all": "ሁሉንም ይመልከቱ"
+     "view-all": "ሁሉንም ይመልከቱ",
+     
+"view-notification":"እይታ ማሳወቂያ"
 
     },
     "full": {
@@ -196,6 +198,8 @@
 "created_at":"የተፈጠረው",
 "Total Number Of Properties":"አጠቃላይ የንብረት ብዛት",
 "Total Number Of Tenants":"ጠቅላላ የተከራዮች ብዛት",
+"view-notification":"እይታ ማሳወቂያ",
+
 
 
 

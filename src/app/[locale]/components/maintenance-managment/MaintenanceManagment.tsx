@@ -317,11 +317,11 @@ const MaintenanceManagment = () => {
                         </div>
                       
                          <div className='flex w-full justify-evenly'>
-                            <button     disabled={fixMaintenance.isPending} onClick={() => fixMaintenance.mutate(parseInt(fixedMaintenanceData?.id))} className='bg-[#51a2ff] px-4 text-white py-2 rounded-sm'>
-                                {fixMaintenance?.isPending ? 'Processing...' : "Fixed"}
+                            <button     disabled={fixMaintenance.isPending} onClick={() => fixMaintenance.mutate(parseInt(fixedMaintenanceData?.id))} className='bg-[#51a2ff] cursor-pointer px-4 text-white py-2 rounded-sm'>
+                                {fixMaintenance?.isPending ? 'Processing...' : "Fix"}
                                    
                             </button>
-                            <button className='bg-red-900 px-4 py-2 text-white rounded-sm' onClick={() => setFixedMaintenanceView(false)}>
+                            <button className='bg-red-900 cursor-pointer px-4 py-2 text-white rounded-sm' onClick={() => setFixedMaintenanceView(false)}>
                                      Cancel
                             </button>
                             </div>

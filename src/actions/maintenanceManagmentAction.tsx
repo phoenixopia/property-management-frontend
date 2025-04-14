@@ -122,7 +122,7 @@ export async function createMaintenanceRequest(requestData: any) {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('_s_t')?.value;
   
-    let url = `${endPoint}/get_maintenance_requests?page=${page}`;
+    let url = `${endPoint}/get_maintenance_requests?ordering=-id&page=${page}`;
   
     // Include startDate and/or endDate conditionally
     if (startDate) {

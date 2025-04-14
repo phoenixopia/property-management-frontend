@@ -10,7 +10,7 @@ export const getAllNotifications = async (page = 1) => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
 
-  const response = await fetch(`${endPoint}/get_notifications?id=-1`, {
+  const response = await fetch(`${endPoint}/get_notifications?ordering=-id&page=${page}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const getUnreadNotifications = async () => {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('_s_t')?.value;
   
-    const response = await fetch(`${endPoint}/get_unread_notifications?page_size=10`, {
+    const response = await fetch(`${endPoint}/get_unread_notifications?ordering=-id&page_size=10`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

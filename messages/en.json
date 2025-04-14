@@ -193,7 +193,11 @@
 "notifications": "Notifications",
 "no-notifications": "No new notifications",
 "view-all": "View all",
-   
+   "notification_type":"Notification Type",
+   "message":"Message",
+"is_read":"Is Read",
+"created_at":"Created At",
+
 
 
       

@@ -46,15 +46,15 @@ const ViewRoleForm = ({ roleId, currentName, currentPermissions }: EditRoleFormP
 
         <div className="grid col-span-2 grid-cols-3 gap-4 max-h-[12rem] overflow-y-auto py-4">
             {currentPermissions.map((perm) => (
-              <div key={perm} className="flex items-center w-full">
+         
           
                 <span
                
-                  className="ms-2 rounded-lg font-medium text-gray-900 dark:text-gray-300 py-1 text-sm"
+                  className="flex truncate overflow-auto  rounded-lg font-medium text-gray-900 dark:text-gray-300 text-sm"
                 >
                   {perm}
                 </span>
-              </div>
+          
             ))}
           </div>
 

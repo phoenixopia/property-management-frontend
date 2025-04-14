@@ -12,6 +12,7 @@ const ContactFast = () => {
 
            <div className='flex flex-col pl-12 space-x-4 '>
             <p className='text-[#333535] text-sm font-bold'>+251968999900</p>
+            <p className='text-[#333535] text-sm font-bold'>+251968999955</p>
             <p className='text-[#333535] text-sm font-bold'>info@phoenixopia.com</p>
            </div>
       </div>

@@ -27,7 +27,7 @@ const Footer = () => {
       </div>
       <div className='flex items-center gap-2'>
       <p>
-       Copyright © {new Date().getFullYear()} pms
+       Copyright © {new Date().getFullYear()} Astedader PMS
          
         </p> <p>|</p>
 

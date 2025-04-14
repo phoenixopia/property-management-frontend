@@ -190,6 +190,13 @@
 "notifications": "ማሳወቂያዎች",
 "no-notifications": "ምንም ማሳወቂያዎች የሉም",
 "view-all": "ሁሉንም ይመልከቱ",
+"notification_type":"የማሳወቂያ አይነት",
+"message":"መልእክት",
+"is_read":"የተነበበ ነው",
+"created_at":"የተፈጠረው",
+
+
+
 
 
 

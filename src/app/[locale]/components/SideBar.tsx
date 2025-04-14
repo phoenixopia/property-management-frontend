@@ -149,7 +149,7 @@ const SideBar = () => {
       label: "notifications",
       translationKey: "full",
       requiredRoles: ["maintenance", "system-admin"],
-      requiredPermissions: ["pms.view_maintenancerequest"]
+      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
     },
     {
       path: "/logs",

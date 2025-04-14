@@ -148,7 +148,7 @@ export async function search_properties(searchTerm: string) {
       if (filters.end_date_max) queryParams.append('end_date_max', filters.end_date_max);
       if (filters.page) queryParams.append('page', filters.page);
   
-      const response = await fetch(`${endPoint}/get_rents?${queryParams.toString()}`, {
+      const response = await fetch(`${endPoint}/get_rents?ordering=-id&${queryParams.toString()}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         }

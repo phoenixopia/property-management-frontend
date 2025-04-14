@@ -55,7 +55,7 @@ export async function fetchProperties(
   const page = params.page ? Number(params.page) : 1;
   const page_size = params.page_size ? Number(params.page_size) : 10;
 
-  const url = new URL(`${endPoint}/get_properties`);
+  const url = new URL(`${endPoint}/get_properties?ordering=-id`);
   url.searchParams.append('min', min.toString());
   url.searchParams.append('max', max.toString());
   if (search) url.searchParams.append('search', search);
@@ -88,7 +88,7 @@ export async function createProperty(propertyData: any) {
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
-  const endpoint = 'https://sasconerp.com/pms/api/post_property';
+  const endpoint = `${endPoint}/post_property`;
 
   try {
     const response = await fetch(endpoint, {
@@ -146,7 +146,7 @@ export async function fetchOwners() {
   const accessToken = cookieStore.get('_s_t')?.value;
 
   try {
-    const response = await fetch('https://sasconerp.com/pms/api/get_owners', {
+    const response = await fetch(`${endPoint}/get_owners`, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`
@@ -172,7 +172,7 @@ export async function fetchManagers() {
   const accessToken = cookieStore.get('_s_t')?.value;
 
   try {
-    const response = await fetch('https://sasconerp.com/pms/api/get_managers', {
+    const response = await fetch(`${endPoint}/get_managers`, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`

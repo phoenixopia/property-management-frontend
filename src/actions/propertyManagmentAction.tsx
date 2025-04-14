@@ -210,14 +210,42 @@ export async function deleteProperty(id:number) {
  
 
     if (!response.ok) {
-      throw new Error('Failed to update the role');
+      throw new Error('Failed to delete the property');
     }
 
     const result = await response.json();
     return result;
   } catch (error) {
     console.error('Error updating role:', error);
-    throw new Error('An error occurred while updating the role.');
+    throw new Error('An error occurred while deleting the property.');
+  }
+  
+}
+
+export async function deletePropertyImage(id:number) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+ 
+  try {
+    const response = await fetch(`${endPoint}/delete_property_picture/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    });
+
+ 
+
+    if (!response.ok) {
+      throw new Error('Failed to delete the image');
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error updating the property image:', error);
+    throw new Error('An error occurred while deleting the image.');
   }
   
 }

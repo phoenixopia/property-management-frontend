@@ -398,7 +398,7 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
       {propertyGallaryForm && 
         <div className='flex flex-col text-sm font-semibold'>
           <p className='py-2'>Manage Property Images</p>
-          <PropertyImageCarousel property={property} />
+          <PropertyImageCarousel property={property} onsucess={onSuccess} />
           <div className='py-6 space-y-4'>
             <div className='flex text-center justify-center'>
               <p>Add property picture</p>

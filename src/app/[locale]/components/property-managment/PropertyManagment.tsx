@@ -67,7 +67,7 @@ const PropertyManagement = () => {
     setFilters(prev => ({
       ...prev,
       [name]: value,
-      page: '1' // Reset to first page when filters change
+      page: '1' 
     }));
   };
   const deleteMutation = useMutation({

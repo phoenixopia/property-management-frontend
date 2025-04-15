@@ -328,17 +328,27 @@ export async function getUserProfile(accessToken: string) {
 }
 
 
-export const getAllPropertiesForUsers = async (page = 1) => {
+export const getAllPropertiesForUsers = async (page = 1, minRent?: string, maxRent?: string) => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
 
-  const response = await fetch(`${endPoint}/get_available_properties?ordering=-id&page=${page}`, {
+  let url = `${endPoint}/get_available_properties?ordering=-id&page=${page}`;
+  
+  if (minRent) {
+      url += `&min=${minRent}`;
+  }
+  
+  if (maxRent) {
+      url += `&max=${maxRent}`;
+  }
+
+  const response = await fetch(url, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+          "Content-Type": "application/json",
       }
   });
-   
+  
   const responseJson = await response.json();
 
   return responseJson;

@@ -1,195 +1,277 @@
 "use client"
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { faUserPlus, faFileExport, faPen, faTrash, faEye, faMagnifyingGlass, faBan, faBath,faBed } from '@fortawesome/free-solid-svg-icons';
-import { useLocale } from "next-intl";  
+import { useQuery } from '@tanstack/react-query';
+import { faBath, faBed, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useTranslations } from 'next-intl'; 
-import { activateUser, getAllUsers, deactivateUser, exportAllUsers } from '@/actions/userManagmentAction';
-import { debounce } from 'lodash';
-import toast from 'react-hot-toast';
-import { withAuth } from '@/hooks/withAuth';
-import { getAllNotifications, readNotifications } from '@/actions/notifications';
-import { getAllLogs } from '@/actions/logs';
 import { getAllPropertiesForUsers } from '@/actions/propertyManagmentAction';
+import { motion, AnimatePresence } from 'framer-motion';
 
-type User = {
+type Property = {
     id: string;
-    first_name: string;
-    role: string;
-    email: string;
-    last_name: string;
-    groups: string[];
-    user_permissions: string[];
-    is_active: boolean;
+    rent: number;
+    bed_rooms: number;
+    bath_rooms: number;
+    property_pictures: Array<{ property_image: string }>;
 };
 
 const ListProperties = () => {
-    const [confirmUserDeactivate, setConfirmUserDeactivate] = useState<{ id: number, name: string } | null>(null);
-    const [confirmActivateUser, setConfirmActivateUser] = useState<{ id: number, name: string } | null>(null);
-    const queryClient = useQueryClient();
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const [addUser, setUser] = useState(false);
-    const [editUser, setEditUser] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const locale = useLocale();  
-    const t = useTranslations('full'); 
-    const [currentUserView, setCurrentUserView] = useState(false);
-    const [currentNotificationView, setCurrentNotificationView] = useState(false);
+    const t = useTranslations('full');
+    const [minRent, setMinRent] = useState<string>("");
+    const [maxRent, setMaxRent] = useState<string>("");
+    const [showFilters, setShowFilters] = useState(false);
+    const [appliedFilters, setAppliedFilters] = useState({
+        minRent: "",
+        maxRent: ""
+    });
 
-    const [currentUserData, setCurrentUserData] = useState<User | null>(null);
-    const [currentpropertiesData, setCurrentpropertiesData] = useState<User | null>(null);
+    const { data: propertiesData, isPending, isError, isSuccess } = useQuery({
+        queryKey: ["getAllProperties", currentPage, appliedFilters],
+        queryFn: () => getAllPropertiesForUsers(
+            currentPage, 
+            appliedFilters.minRent, 
+            appliedFilters.maxRent
+        ),
+    });
 
-
-    const debouncedSearch = useCallback(
-        debounce((query: string) => {
-            setSearchQuery(query);
-            setCurrentPage(1);
-        }, 500),
-        []
-    );
-
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        debouncedSearch(e.target.value);
-    };
-
-    
-          const { data: propertiesData, isPending, isError, isSuccess } = useQuery({
-                queryKey: ["getAllProperties", currentPage],
-                queryFn: () => getAllPropertiesForUsers(currentPage),
-            });
-    console.log(propertiesData,'propertiesData')
-   
     const propertiesList = propertiesData?.data || [];
     const total_pages = propertiesData?.total_pages || 0;
     const previous = propertiesData?.previous || false;
     const next = propertiesData?.next || false;
     const count = propertiesData?.count || 0;
 
-    const openAddUserModal = () => setUser(true);
-    const openEditUserModal = (user: User) => {
-        setSelectedUser(user);
-        setEditUser(true);
+    const handleFilterSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setAppliedFilters({
+            minRent,
+            maxRent
+        });
+        setCurrentPage(1);
     };
-  
 
+    const clearFilters = () => {
+        setMinRent("");
+        setMaxRent("");
+        setAppliedFilters({
+            minRent: "",
+            maxRent: ""
+        });
+        setCurrentPage(1);
+    };
 
+    // Animation variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
 
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 }
+    };
 
-
-  
- 
-
-
+    const filterVariants = {
+        hidden: { opacity: 0, height: 0 },
+        visible: { opacity: 1, height: 'auto' }
+    };
 
     return (
-        <div className='flex flex-col justify-between p-4'>
+        <div className='flex flex-col justify-between max-w-7xl mx-auto'>
+            <div className='flex justify-start mb-4'>
+                <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowFilters(!showFilters)}
+                    className='px-4 py-2 text-sm  bg-[#285E67] cursor-pointer text-white rounded-md flex items-center gap-2 shadow-md'
+                >
+                    <FontAwesomeIcon icon={faFilter} />
+                    {t('filters')}
+                </motion.button>
+            </div>
+
+            <AnimatePresence>
+                {showFilters && (
+                    <motion.div 
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        variants={filterVariants}
+                        transition={{ duration: 0.3 }}
+                        className='bg-white p-4 rounded-md shadow-sm mb-4 dark:bg-gray-700 overflow-hidden'
+                    >
+                        <form onSubmit={handleFilterSubmit} className='flex flex-col sm:flex-row gap-4 items-end'>
+                            <div className='w-full sm:w-auto'>
+                                <label className='block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1'>
+                                    {t('min-rent')}
+                                </label>
+                                <motion.input
+                                    whileFocus={{ scale: 1.02 }}
+                                    type='number'
+                                    value={minRent}
+                                    onChange={(e) => setMinRent(e.target.value)}
+                                    placeholder="min."
+                                    className='p-2 text-sm text-gray-800 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[#285E67]'
+                                />
+                            </div>
+                            <div className='w-full sm:w-auto'>
+                                <label className='block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1'>
+                                    {t('max-rent')}
+                                </label>
+                                <motion.input
+                                    whileFocus={{ scale: 1.02 }}
+                                    type='number'
+                                    value={maxRent}
+                                    onChange={(e) => setMaxRent(e.target.value)}
+                                    placeholder="max."
+                                    className='p-2 border text-sm  text-gray-800 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[#285E67]'
+                                />
+                            </div>
+                            <div className='flex gap-2 w-full sm:w-auto'>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    type='submit'
+                                    className='px-4 text-sm  py-2 bg-[#285E67] text-white rounded-md shadow-md'
+                                >
+                                    {t('apply-filters')}
+                                </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    type='button'
+                                    onClick={clearFilters}
+                                    className='px-4 py-2 text-sm  bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 shadow-md'
+                                >
+                                    {t('clear')}
+                                </motion.button>
+                            </div>
+                        </form>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className='py-5'>
-                <div className='relative overflow-x-auto max-h-[600px] overflow-y-auto'>
                 {isPending ? (
-                                <div>
-                                    <p className='px-6 py-4 text-center text-gray-800'>Loading...</p>
-                                </div>
-                            ) : isError ? (
-                                <div>
-                                    <p className='px-6 py-4 text-center'>Failed to load properties!</p>
-                                </div>
-                            ) : propertiesList?.length === 0 && isSuccess ? (
-                                <div>
-                                    <p  className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                                        {t('nothing-to-show')}
-                                    </p>
-                                </div>
-                                
-                            ) : 
-                            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-4 gap-4 py-4'>
-                        
-                                          
-                                     
-                               { propertiesList?.map((property: any) => (
-                                 
-
-                                <div key={property?.id} className='flex flex-col shadow-sm cursor-pointer '>
-                                <img    src={`${property?.property_pictures[0]?.property_image ?property?.property_pictures[0]?.property_image:"https://res.cloudinary.com/dxuvdtoqa/image/upload/v1744721661/null_kxkl0v.jpg"}`}
-                                                alt='alts'
-                                    className=" w-[100%] h-[16rem]"
-                                />
-                                                                           <p className='absolute p-2 bg-black/80 text-white'>{property?.rent?property?.rent + "Br":"-"}</p>
-
-                                <div className='flex flex-row justify-between text-sm text-gray-600 p-3'>
-                                <div className='flex flex-row gap-2 '>
-                                    <p className='truncate max-w-[3rem]'>
-                                        <FontAwesomeIcon icon={faBed} className='  cursor-pointer' /> {property?.bed_rooms?property?.bed_rooms:"-"}
-                                    </p>
-                                    <p>|</p>
-                                    <p className='truncate max-w-[3rem]' >
-                                        <FontAwesomeIcon icon={faBath} className='  cursor-pointer' /> {property?.bath_rooms?property?.bath_rooms:"-"}
-                                    </p>
-                                    </div>
-                                    
-
-                                    <p className='turn truncate max-w-[10rem]'>
-                                    Addis Ababa, GurdShola
-                                    </p>
-                                </div>
-
-                                
-                                
-                                
-                                </div>
-                                    
-                                           
-                             ))} 
-                                 </div>
-                               
-                               }
-                </div>
-
-                <div className='flex w-full justify-between my-2 p-4 flex-col xl:flex-row items-center gap-3 xl:gap-0 shadow-sm dark:bg-[#333538]'>
-                    <div>
-                        <p className='text-gray-600 dark:text-gray-200'>Showing {propertiesList.length} of {count} entries</p>
+                    <div className='flex justify-center items-center h-64'>
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            className='w-10 h-10 border-4 border-[#285E67] border-t-transparent rounded-full'
+                        />
                     </div>
+                ) : isError ? (
+                    <div className='px-6 py-4 text-center text-red-500'>
+                        {t('failed-to-load-properties')}
+                    </div>
+                ) : propertiesList?.length === 0 && isSuccess ? (
+                    <div className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                        {t('nothing-to-show')}
+                    </div>
+                ) : (
+                    <motion.div 
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="show"
+                        className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 py-4'
+                    >
+                        <AnimatePresence>
+                            {propertiesList?.map((property: Property) => (
+                                <motion.div 
+                                    key={property?.id}
+                                    variants={itemVariants}
+                                    whileHover={{ y: -5 }}
+                                    className='flex flex-col shadow-lg cursor-pointer rounded-md overflow-hidden border dark:border-gray-600 transition-all duration-300 hover:shadow-xl'
+                                >
+                                    <div className='relative'>
+                                    <motion.p 
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ delay: 0.2 }}
+                                            className='absolute p-2 bg-black/80 text-white rounded-br-md'
+                                        >
+                                            {property?.rent ? property?.rent + " Br" : "-"}
+                                        </motion.p>
+                                        <img
+                                            src={`${property?.property_pictures[0]?.property_image ? property?.property_pictures[0]?.property_image : "https://res.cloudinary.com/dxuvdtoqa/image/upload/v1744721661/null_kxkl0v.jpg"}`}
+                                            alt='property'
+                                            className="w-full h-[16rem]"
+                                        />
+                                      
+                                    </div>
+                                    <div className='flex flex-row justify-between text-sm text-gray-600 dark:text-gray-300 p-3 bg-white dark:bg-gray-700'>
+                                        <div className='flex flex-row gap-2'>
+                                            <p className='truncate max-w-[3rem]'>
+                                                <FontAwesomeIcon icon={faBed} className='mr-1' /> 
+                                                {property?.bed_rooms ? property?.bed_rooms : "-"}
+                                            </p>
+                                            <p>|</p>
+                                            <p className='truncate max-w-[3rem]'>
+                                                <FontAwesomeIcon icon={faBath} className='mr-1' /> 
+                                                {property?.bath_rooms ? property?.bath_rooms : "-"}
+                                            </p>
+                                        </div>
+                                        <p className='truncate max-w-[10rem]'>
+                                            Addis Ababa, GurdShola
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+                )}
 
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className='flex w-full justify-between my-2 p-4 flex-col xl:flex-row items-center gap-3 xl:gap-0 shadow-sm dark:bg-[#333538] rounded-md'
+                >
+                    <div>
+                        <p className='text-gray-600 dark:text-gray-200'>
+                            {t('showing-entries', { shown: propertiesList.length, total: count })}
+                        </p>
+                    </div>
                     <div className='flex items-center justify-center gap-x-2'>
-                        <button 
-                            className={`p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-b-md ${
+                        <motion.button 
+                            whileHover={{ scale: !previous ? 1 : 1.05 }}
+                            whileTap={{ scale: !previous ? 1 : 0.95 }}
+                            className={`p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-md ${
                                 !previous && "opacity-50 cursor-not-allowed"
                             }`}
                             disabled={!previous}
                             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                         >
                             {t("previous")}
-                        </button>
-                        <p className='p-1 px-4 bg-gray-200 dark:bg-gray-500 dark:text-gray-200 text-gray-800 rounded-md'>
+                        </motion.button>
+                        <motion.p 
+                            whileHover={{ scale: 1.1 }}
+                            className='p-1 px-4 bg-gray-200 dark:bg-gray-500 dark:text-gray-200 text-gray-800 rounded-md'
+                        >
                             {currentPage}
-                        </p>
-                        <button
-                            className={`p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-b-md ${
+                        </motion.p>
+                        <motion.button
+                            whileHover={{ scale: !next ? 1 : 1.05 }}
+                            whileTap={{ scale: !next ? 1 : 0.95 }}
+                            className={`p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-md ${
                                 !next && "opacity-50 cursor-not-allowed"
                             }`}
                             disabled={!next}
                             onClick={() => setCurrentPage((prev) => prev + 1)}
                         >
                             {t("next")}
-                        </button>
+                        </motion.button>
                     </div>
-                </div>
+                </motion.div>
             </div>
-
- 
-    
-
-      
-
-         
-
-     
         </div>
     );
 };
 
-export default ListProperties
-
+export default ListProperties;

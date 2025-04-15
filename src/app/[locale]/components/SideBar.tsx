@@ -165,17 +165,9 @@ const SideBar = () => {
       requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
     },
     {
-      path: "/transactions-logs",
+      path: "/payments",
       icon: <FontAwesomeIcon icon={faHandHoldingDollar} />,
-      label: "transactions-logs",
-      translationKey: "full",
-      requiredRoles: ["system-admin", "group 2"],
-      requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
-    },
-    {
-      path: "/system-settings",
-      icon: <FontAwesomeIcon icon={faGears} />,
-      label: "system-settings",
+      label: "payments",
       translationKey: "full",
       requiredRoles: ["system-admin", "group 2"],
       requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
@@ -322,8 +314,15 @@ const SideBar = () => {
       >
         {/* User Profile Section */}
         <div className="flex flex-col items-center gap-2 py-6">
-        <div className="flex w-full justify-end px-4 relative"> {/* Added relative here */}
-        <div className="notification-container">
+        <div className="flex w-full justify-between px-4 relative"> 
+          <Link href="/">
+          <img
+                src="/pms_logo.png"
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+          </Link>
+        <div >
         <button 
               onClick={toggleNotifications}
               className="relative"

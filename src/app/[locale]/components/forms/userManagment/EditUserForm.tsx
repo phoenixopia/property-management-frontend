@@ -1,5 +1,6 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+
+import React, { useState, useEffect, Key } from 'react'
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -11,11 +12,17 @@ import { fetchGroups } from '@/actions/roleAndPermissions';
 import { updateUser } from '@/actions/userManagmentAction';
 import toast from 'react-hot-toast';
 
-// Define Zod schema for form validation
 const userSchema = z.object({
   first_name: z.string().min(1, "First name is required"),
   last_name: z.string().optional(),
+  middle_name: z.string().optional(),
   email: z.string().email("Invalid email address"),
+  phone_number: z.string()
+    .min(13, "phone_number number must be 13 characters including +")
+    .max(13, "phone_number number must be 13 characters including +")
+    .refine((val) => val.startsWith('+2519') || val.startsWith('+2517'), {
+      message: "phone_number number must start with +2519 or +2517"
+    }),
   groups: z.array(z.string()).optional(),
   user_permissions: z.array(z.string()).optional()
 });
@@ -27,7 +34,9 @@ interface EditUserFormProps {
   initialData: {
     first_name?: string;
     last_name?: string;
+    middle_name?: string;
     email: string;
+    phone_number?: string;
     groups?: string[];
     user_permissions?: string[];
   };
@@ -35,6 +44,7 @@ interface EditUserFormProps {
 }
 
 const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSuccess }) => {
+  console.log(initialData,'dsadsad')
   const t = useTranslations("full");
   const queryClient = useQueryClient();
   
@@ -60,7 +70,10 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSucc
   } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      user_permissions: initialData.user_permissions || []
+      user_permissions: initialData.user_permissions || [],
+      phone_number: initialData?.phone_number || "",
+      middle_name:initialData?.middle_name || "" 
+
     }
   });
 
@@ -75,7 +88,9 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSucc
           return foundGroup?.id || '';
         }).filter(Boolean) || [],
         // Ensure user_permissions is always an array
-        user_permissions: initialData.user_permissions || []
+        user_permissions: initialData.user_permissions || [],
+        phone_number: initialData?.phone_number || "",
+        middle_name:initialData?.middle_name || "" 
       });
     }
   }, [groups, groupsLoading, initialData, reset]);
@@ -107,6 +122,9 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSucc
       queryClient.invalidateQueries({ queryKey: ['getAllUserData'] });
       onSuccess?.();
       toast.success(t("successfully-updated-user"))
+    },
+    onError: () => {
+      toast.error(t("something-went-wrong"));
     }
   });
 
@@ -165,6 +183,15 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSucc
               placeholder={t("enter-last-name")}
             />
           </div>
+
+          <div className="col-span-2">
+            <input 
+              type="text" 
+              {...register('middle_name')}
+              className="bg-gray-100 text-gray-600 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              placeholder={t("enter-middle-name") + " (Optional)"}
+            />
+          </div>
           
           <div className="col-span-2">
             <input 
@@ -179,9 +206,21 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSucc
           </div>
 
           <div className="col-span-2">
-          <span className='text-gray-600 dark:text-white' >
-                {t("select-role")}
-              </span>
+            <input 
+              type="tel" 
+              {...register('phone_number')}
+              className={`bg-gray-100 text-gray-600 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white ${errors.phone_number ? 'border-red-500' : ''}`}
+              placeholder={t("enter-phone-number") + " (+2519... or +2517...)"}
+            />
+            {errors.phone_number && (
+              <p className="mt-1 text-sm text-red-600">{errors.phone_number.message}</p>
+            )}
+          </div>
+
+          <div className="col-span-2">
+            <span className='text-gray-600 dark:text-white' >
+              {t("select-role")}
+            </span>
             <select
               value={selectedGroups}
               onChange={(e) => {
@@ -191,7 +230,6 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSucc
               className="flex p-3 text-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600 border-gray-300 rounded-lg w-full"
               multiple
             >
-            
               {groups.map((group: any) => (
                 <option 
                   key={group.id} 
@@ -213,12 +251,12 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSucc
           <hr className="w-full col-span-2 bg-gray-50 text-gray-200 dark:text-gray-500 border-1 dark:bg-gray-700"/>
           
           <div className="grid col-span-2 grid-cols-3 gap-4 max-h-[18rem] overflow-y-auto">
-            {permissions.map((permission: any) => {
+            {permissions.map((permission: any,id:any) => {
               const isFromGroup = groupPermissions.includes(permission.id);
               const isSelected = selectedPermissions.includes(permission.id) || isFromGroup;
               
               return (
-                <div key={permission.id} className="flex items-center w-full">
+                <div key={id} className="flex items-center w-full">
                   <input
                     id={`perm-${permission.id}`}
                     type="checkbox"
@@ -246,13 +284,13 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId, initialData, onSucc
           className="cursor-pointer text-white inline-flex items-center bg-blue-400 hover:bg-blue-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {updateUserMutation.isPending ? (
-             <>
-             <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-               <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
-               <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
-             </svg>
-             processing...
-           </>
+            <>
+              <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
+              </svg>
+              processing...
+            </>
           ) : (
             <>
               <svg className="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

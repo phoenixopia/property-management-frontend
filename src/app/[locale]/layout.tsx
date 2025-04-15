@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/pms_logo.png',
   },
-  title: "PMS",
+  title: "ASTEDADER PMS",
   description: "Property management system",
 };
 

@@ -153,7 +153,8 @@ const UserManagement = () => {
     };
 
 
-
+console.log(usersList,'userList')
+console.log(selectedUser,"selectedUser")
     return (
         <div className='flex flex-col justify-between p-4'>
             <div className='flex items-center flex-col xl:flex-row justify-between w-full gap-5 xl:gap-0'>
@@ -210,7 +211,7 @@ const UserManagement = () => {
                                     </td>
                                 </tr>
                             ) : (
-                                usersList?.map((user: User) => (
+                                usersList?.map((user: any) => (
                                     <tr key={user.id} className='bg-white capitalize text-gray-500 dark:text-gray-200 border-b dark:bg-[#333538] dark:border-gray-700 border-gray-200'>
                                         <td className='px-6 py-4'>{user?.first_name || '-'}</td>
                                         <td className='px-6 py-4'>{user?.groups[0] || '-'}</td>
@@ -304,13 +305,7 @@ const UserManagement = () => {
                         </div>
                         <EditUserForm 
                             userId={selectedUser.id}
-                            initialData={{
-                                first_name: selectedUser.first_name,
-                                last_name: selectedUser.last_name,
-                                email: selectedUser.email,
-                                groups: selectedUser.groups,
-                                user_permissions: selectedUser.user_permissions
-                            }}
+                            initialData={selectedUser}
                             onSuccess={closeEditUserPage}
                         />
                     </div>

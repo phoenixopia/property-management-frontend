@@ -33,5 +33,11 @@ export const userFormSchema = z.object({
   middle_name: z.string().optional(),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  phone_number: z.string()
+    .min(13, "Phone number must be 13 characters including +")
+    .max(13, "Phone number must be 13 characters including +")
+    .refine((val) => val.startsWith('+2519') || val.startsWith('+2517'), {
+      message: "Phone number must start with +2519 or +2517"
+    }),
   groups: z.array(z.string()).min(1, "At least one group must be selected"),
 });

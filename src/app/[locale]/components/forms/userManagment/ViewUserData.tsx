@@ -16,7 +16,7 @@ interface Permission {
 
 const ViewUserData = ({ userData }: any) => {
 
-
+ console.log(userData,'dads')
  
   return (
     <div className='flex flex-col p-4 gap-4 '>
@@ -79,8 +79,8 @@ const ViewUserData = ({ userData }: any) => {
         <hr className="w-full col-span-2 bg-gray-50 text-gray-200 dark:text-gray-500 border-1 dark:bg-gray-700" />
 
         <div className="grid col-span-2 grid-cols-3 gap-4 max-h-[12rem] overflow-y-auto py-4">
-            {userData?.user_permissions.map((perm:any) => (
-              <div key={perm} className="flex items-center w-full">
+            {userData?.user_permissions.map((perm:any ,key:any) => (
+              <div key={key} className="flex items-center w-full">
           
                 <span
                

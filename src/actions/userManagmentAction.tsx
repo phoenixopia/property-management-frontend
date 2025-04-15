@@ -63,6 +63,7 @@ export async function createUserWithGroups(
     middle_name?: string;
     password: string;
     email: string;
+    phone_number:string;
   },
   selectedGroups: string[]
 ) {

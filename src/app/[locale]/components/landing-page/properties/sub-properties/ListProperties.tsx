@@ -7,7 +7,7 @@ import { faBath, faBed, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useTranslations } from 'next-intl'; 
 import { getAllPropertiesForUsers } from '@/actions/propertyManagmentAction';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import PropertyDetailModal from './PropertyDetailModal';
 type Property = {
     id: string;
     rent: number;
@@ -26,6 +26,7 @@ const ListProperties = () => {
         minRent: "",
         maxRent: ""
     });
+    const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
     const { data: propertiesData, isPending, isError, isSuccess } = useQuery({
         queryKey: ["getAllProperties", currentPage, appliedFilters],
@@ -61,6 +62,14 @@ const ListProperties = () => {
         setCurrentPage(1);
     };
 
+    const handlePropertyClick = (property: Property) => {
+        setSelectedProperty(property);
+    };
+
+    const closeModal = () => {
+        setSelectedProperty(null);
+    };
+
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -81,6 +90,7 @@ const ListProperties = () => {
         hidden: { opacity: 0, height: 0 },
         visible: { opacity: 1, height: 'auto' }
     };
+    console.log(propertiesList,'li')
 
     return (
         <div className='flex flex-col justify-between max-w-7xl mx-auto'>
@@ -89,7 +99,7 @@ const ListProperties = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setShowFilters(!showFilters)}
-                    className='px-4 py-2 text-sm  bg-[#285E67] cursor-pointer text-white rounded-md flex items-center gap-2 shadow-md'
+                    className='px-4 py-2 text-sm bg-[#285E67] cursor-pointer text-white rounded-md flex items-center gap-2 shadow-md'
                 >
                     <FontAwesomeIcon icon={faFilter} />
                     {t('filters')}
@@ -103,7 +113,7 @@ const ListProperties = () => {
                         animate="visible"
                         exit="hidden"
                         variants={filterVariants}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.5 }}
                         className='bg-white p-4 rounded-md shadow-sm mb-4 dark:bg-gray-700 overflow-hidden'
                     >
                         <form onSubmit={handleFilterSubmit} className='flex flex-col sm:flex-row gap-4 items-end'>
@@ -130,7 +140,7 @@ const ListProperties = () => {
                                     value={maxRent}
                                     onChange={(e) => setMaxRent(e.target.value)}
                                     placeholder="max."
-                                    className='p-2 border text-sm  text-gray-800 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[#285E67]'
+                                    className='p-2 border text-sm text-gray-800 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[#285E67]'
                                 />
                             </div>
                             <div className='flex gap-2 w-full sm:w-auto'>
@@ -138,7 +148,7 @@ const ListProperties = () => {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     type='submit'
-                                    className='px-4 text-sm  py-2 bg-[#285E67] text-white rounded-md shadow-md'
+                                    className='px-4 text-sm py-2 bg-[#285E67] text-white rounded-md shadow-md'
                                 >
                                     {t('apply-filters')}
                                 </motion.button>
@@ -147,7 +157,7 @@ const ListProperties = () => {
                                     whileTap={{ scale: 0.95 }}
                                     type='button'
                                     onClick={clearFilters}
-                                    className='px-4 py-2 text-sm  bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 shadow-md'
+                                    className='px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 shadow-md'
                                 >
                                     {t('clear')}
                                 </motion.button>
@@ -182,15 +192,16 @@ const ListProperties = () => {
                         className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 py-4'
                     >
                         <AnimatePresence>
-                            {propertiesList?.map((property: Property) => (
+                            {propertiesList?.map((property: any) => (
                                 <motion.div 
                                     key={property?.id}
                                     variants={itemVariants}
                                     whileHover={{ y: -5 }}
                                     className='flex flex-col shadow-lg cursor-pointer rounded-md overflow-hidden border dark:border-gray-600 transition-all duration-300 hover:shadow-xl'
+                                    onClick={() => handlePropertyClick(property)}
                                 >
                                     <div className='relative'>
-                                    <motion.p 
+                                        <motion.p 
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             transition={{ delay: 0.2 }}
@@ -201,9 +212,8 @@ const ListProperties = () => {
                                         <img
                                             src={`${property?.property_pictures[0]?.property_image ? property?.property_pictures[0]?.property_image : "https://res.cloudinary.com/dxuvdtoqa/image/upload/v1744721661/null_kxkl0v.jpg"}`}
                                             alt='property'
-                                            className="w-full h-[16rem]"
+                                            className="w-full h-[16rem] object-cover"
                                         />
-                                      
                                     </div>
                                     <div className='flex flex-row justify-between text-sm text-gray-600 dark:text-gray-300 p-3 bg-white dark:bg-gray-700'>
                                         <div className='flex flex-row gap-2'>
@@ -218,7 +228,7 @@ const ListProperties = () => {
                                             </p>
                                         </div>
                                         <p className='truncate max-w-[10rem]'>
-                                            Addis Ababa, GurdShola
+                                            {property?.city?property?.city:"-"},{property?.address?property?.address:"-"}
                                         </p>
                                     </div>
                                 </motion.div>
@@ -270,8 +280,18 @@ const ListProperties = () => {
                     </div>
                 </motion.div>
             </div>
+
+            <AnimatePresence>
+                {selectedProperty && (
+                    <PropertyDetailModal 
+                        property={selectedProperty} 
+                        onClose={closeModal} 
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };
+
 
 export default ListProperties;

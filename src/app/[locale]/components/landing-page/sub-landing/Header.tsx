@@ -193,7 +193,7 @@ const Header = () => {
                   <motion.button 
                     type="button" 
                     onClick={handleDashboardClick}
-                    className="flex items-center gap-2 rounded-lg bg-[#285E67] px-4 py-2 text-white hover:bg-[#1e4a52] transition duration-200"
+                    className="flex items-center gap-2  cursor-pointer  rounded-lg bg-[#285E67] px-4 py-2 text-white hover:bg-[#1e4a52] transition duration-200"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -352,7 +352,7 @@ const Header = () => {
                 <motion.button
                   type="button"
                   onClick={user?.groups?.length ? handleDashboardClick : handleLoginClick}
-                  className="w-full flex items-center cursor-pointer justify-center gap-2 rounded-lg bg-[#285E67] px-4 py-2 text-white mt-2"
+                  className="w-full  flex items-center cursor-pointer justify-center gap-2 rounded-lg bg-[#285E67] px-4 py-2 text-white mt-2"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >

@@ -78,7 +78,7 @@ const Header = () => {
               <img
                 src="/pms_logo.png"
                 alt="Profile"
-                className="xl:w-25 xl:h-25 w-16 h-16 rounded-full object-cover"
+                className="xl:w-18 xl:h-18 w-16 h-16 rounded-full object-cover"
               />
               </Link>
           </motion.div>
@@ -142,6 +142,26 @@ const Header = () => {
               About Us
            </Link> */}
          </motion.li>
+         <motion.li
+           
+           initial="hidden"
+           animate="visible"
+         
+           variants={{
+             hidden: { opacity: 0, y: -10 },
+             visible: {
+               opacity: 1,
+               y: 0,
+               transition: { delay:  0.1 }
+             }
+           }}
+           className="hover:text-[#285E67] transition duration-200"
+         >
+           <Link href='/properties'>
+           Properties
+           </Link>
+         </motion.li>
+                
                 <motion.li
            
                   initial="hidden"
@@ -161,6 +181,7 @@ const Header = () => {
                       {t('contact-us')}
                   </Link>
                 </motion.li>
+           
 
     
               <motion.li
@@ -287,6 +308,13 @@ const Header = () => {
              animate="visible"
              variants={menuItemVariants}
            >
+              <Link 
+               href="/properties"
+               className="block px-3 py-2 rounded-md text-base font-medium text-black hover:bg-gray-50"
+               onClick={() => setMobileMenuOpen(false)}
+             >
+               Properties
+             </Link>
              <Link 
                href="/contact-us"
                className="block px-3 py-2 rounded-md text-base font-medium text-black hover:bg-gray-50"

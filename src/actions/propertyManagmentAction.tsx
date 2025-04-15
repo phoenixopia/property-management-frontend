@@ -327,3 +327,19 @@ export async function getUserProfile(accessToken: string) {
   }
 }
 
+
+export const getAllPropertiesForUsers = async (page = 1) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+
+  const response = await fetch(`${endPoint}/get_available_properties?ordering=-id&page=${page}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+  });
+   
+  const responseJson = await response.json();
+
+  return responseJson;
+};

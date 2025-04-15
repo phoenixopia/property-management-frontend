@@ -204,7 +204,7 @@ const Logs = () => {
                                 </tr>
                             ) : isError ? (
                                 <tr>
-                                    <td colSpan={4} className='px-6 py-4 text-center'>Failed to load notifications!</td>
+                                    <td colSpan={4} className='px-6 py-4 text-center'>Failed to load Logs!</td>
                                 </tr>
                             ) : logsList?.length === 0 && isSuccess ? (
                                 <tr>

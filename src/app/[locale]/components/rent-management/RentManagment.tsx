@@ -10,6 +10,7 @@ import { deleteRent, fetchRents, terminateRent } from '@/actions/rentManagmentAc
 import AddRentForm from '../forms/rentManagment/AddRentForm';
 import { withAuth } from '@/hooks/withAuth';
 import UpdateRentForm from '../forms/rentManagment/UpdateRentForm';
+import CreatePaymentForm from '../forms/payment/CreatePaymentForm';
 
 type Rent = {
   id: number;
@@ -303,23 +304,23 @@ const RentManagement = () => {
                           />
                         </button>
               
-                    {rent.status ==="active" &&   <FontAwesomeIcon 
+              {rent.status ==="active" &&   <FontAwesomeIcon 
                 icon={faCircleStop} 
                 onClick={() => {
                   setSelectedRent(rent);
                   setViewMode('delete');
                 }} 
-                className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
+                className='text-red-900 dark:text-red-900 text-sm cursor-pointer' 
               />}
               
 
-<FontAwesomeIcon 
+            <FontAwesomeIcon 
                 icon={faMoneyBill} 
                 onClick={() => {
                   setSelectedRent(rent);
                   setViewMode('payment');
                 }} 
-                className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
+                className='text-green-800 dark:text-green-800 text-sm cursor-pointer' 
               />
                       <FontAwesomeIcon 
                 icon={faEye} 
@@ -414,9 +415,51 @@ const RentManagement = () => {
         </div>
       </div>
       </div>
-
-      
       }
+
+
+
+{(selectedRent && viewMode === 'payment') && (
+  <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="flex min-h-screen items-center justify-center p-4 text-center sm:block sm:p-0">
+   
+      <div 
+        className="fixed inset-0 bg-gray-800/90 transition-opacity" 
+        aria-hidden="true"
+        onClick={() => setSelectedRent(null)}
+      ></div>
+      
+      <div className="inline-block w-full max-w-4xl transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
+        
+        <div className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
+          <h3 className="text-xl font-semibold leading-6 text-gray-900">
+            Pay Rent
+          </h3>
+          <button
+            type="button"
+            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
+            onClick={() => setSelectedRent(null)}
+          >
+            <span className="sr-only">Close</span>
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div className="max-h-[80vh] overflow-y-auto p-6">
+          <CreatePaymentForm 
+            rentId={selectedRent.id} 
+            onSuccess={() => setSelectedRent(null)}
+          />
+        </div>
+    
+      </div>
+    </div>
+  </div>
+)}
+
+
       {selectedRent && (viewMode==="view" || viewMode==="edit") &&(
   <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
     <div className={`relative ${viewMode === 'view' ? 'max-w-2xl' : 'max-w-xl'} max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full`}>

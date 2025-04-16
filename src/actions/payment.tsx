@@ -1,4 +1,5 @@
 "use server"
+import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 let endPoint ="https://sasconerp.com/pms/api"
@@ -15,6 +16,12 @@ interface RentData {
   deposit_amount: number;
   status: string;
 }
+const paymentSchema = z.object({
+  rent_id: z.number(),
+  cycle_ids: z.array(z.number()),
+  payment_method: z.string(),
+  transaction_id: z.string(),
+});
 interface RentFilters {
     search?: string;
     status?: string;
@@ -23,6 +30,72 @@ interface RentFilters {
     end_date_min?: string;
     end_date_max?: string;
     page?: string;
+  }
+
+// Define schema for approval payload
+const approvePaymentSchema = z.object({
+  payment_id: z.number().positive()
+});
+
+export const approvePayment = async (paymentId: number) => {
+  const cookieStore =await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+  
+  try {
+
+    const validatedData = approvePaymentSchema.parse({ payment_id: paymentId });
+    
+    const response = await fetch('https://sasconerp.com/pms/api/approve_payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(validatedData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Payment approval failed with status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    return { success: true, data: result };
+  } catch (error) {
+    console.error('Error approving payment:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
+};
+
+  export async function fetchPayments(filters: any) {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('_s_t')?.value;
+    
+    try {
+   
+      const queryParams = new URLSearchParams();
+      
+      
+      if (filters.status) queryParams.append('search', filters.status);
+      if (filters.start_date_min) queryParams.append('start_date_min', filters.start_date_min);
+      if (filters.start_date_max) queryParams.append('start_date_max', filters.start_date_max);
+      if (filters.end_date_min) queryParams.append('end_date_min', filters.end_date_min);
+      if (filters.end_date_max) queryParams.append('end_date_max', filters.end_date_max);
+      if (filters.page) queryParams.append('page', filters.page);
+  
+      const response = await fetch(`${endPoint}/get_payments?ordering=-id&${queryParams.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      
+      return await handleApiResponse(response);
+    } catch (error) {
+        throw new Error('Failed to fetch rent. Please try again later.');
+    }
   }
   
 export const getAllPayments = async (page = 1) => {
@@ -39,6 +112,51 @@ export const getAllPayments = async (page = 1) => {
 
   const responseJson = await response.json();
   return responseJson;
+};
+
+
+
+
+
+export const fetchRentCycles = async (rentId: number, page: string = '1') => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+  try {
+    const response = await fetch(`https://sasconerp.com/pms/api/get_rent_cycles/${rentId}?page=${page}`,{
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+      }
+     });
+    if (!response.ok) throw new Error('Failed to fetch rent cycles');
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching rent cycles:', error);
+    throw error;
+  }
+};
+
+export const submitPayment = async (data: z.infer<typeof paymentSchema>) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+  try {
+    const validatedData = paymentSchema.parse(data);
+    const response = await fetch('https://sasconerp.com/pms/api/make_payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+          "Authorization": `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(validatedData),
+    });
+
+    if (!response.ok) throw new Error('Payment submission failed');
+    return await response.json();
+  } catch (error) {
+    console.error('Error submitting payment:', error);
+    throw error;
+  }
 };
 
 

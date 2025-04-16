@@ -215,6 +215,25 @@
 "confirm":"አረጋገጥ",
 "cancel":"መሰረዝ",
 "processing":"በማቀነባበር ላይ...",
+"payment-success": "ክፍያ በተሳካ ሁኔታ ገብቷል",
+  "payment-error": "ክፍያ ማስገባት አልተሳካም",
+  "select-at-least-one-cycle": "እባክዎ ለመክፈል ቢያንስ አንድ ዑደት ይምረጡ",
+  "error-loading-cycles": "የኪራይ ዑደቶችን መጫን ላይ ስህተት",
+  "select-cycles-to-pay": "ለመክፈል ዑደቶችን ይምረጡ",
+  "select": "ይምረጡ",
+  "cycle": "ዑደት",
+  "paid": "የተከፈለ",
+  "unpaid": "ያልተከፈለ",
+  "payment-method": "የመክፈያ ዘዴ",
+  "transaction-id": "የግብይት መታወቂያ",
+  "submit-payment": "ክፍያ አስገባ",
+  "payment-details":"የክፍያ ዝርዝሮች",
+  "failed":"አልተሳካም",
+  "confirm-approve-title": "ማጽደቅን ያረጋግጡ",
+  "confirm-approve-message": "እርግጠኛ ነዎት ይህን ክፍያ ማጽደቅ ይፈልጋሉ?",
+  "confirm-approve": "አጽድቅ",
+  "approve-payment": "ክፍያን ማጽደቅ",
+
 
 
 

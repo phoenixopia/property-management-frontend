@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { faPen, faTrash, faEye, faPlus, faFilter,faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash, faEye, faPlus, faFilter,faMoneyBill,faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import toast from 'react-hot-toast';
@@ -10,40 +10,44 @@ import { deleteRent, fetchRents } from '@/actions/rentManagmentAction';
 import AddRentForm from '../forms/rentManagment/AddRentForm';
 import { withAuth } from '@/hooks/withAuth';
 import UpdateRentForm from '../forms/rentManagment/UpdateRentForm';
+import { fetchPayments,approvePayment } from '@/actions/payment';
 
-type Rent = {
+type Payment = {
   id: number;
-  property_id: {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-  };
-  user_id: {
-    id: number;
-    email: string;
-    first_name: string;
-    last_name: string;
-  };
-  rent_type: string;
-  start_date: string;
-  end_date: string;
-  payment_cycle: string;
-  rent_amount: number;
-  deposit_amount: number;
-  status: string;
+  amount: number;
   created_at: string;
+  due_date: string;
+  status: string;
+  payment_method: string;
+  transaction_id: string;
+  rent_id: {
+    id: number;
+    property_id: {
+      id: number;
+      name: string;
+    };
+    user_id: {
+      id: number;
+      first_name: string;
+      last_name: string;
+      email: string;
+    };
+  };
 };
+
 type ViewMode = 'edit' | 'view';
 
 const Payment = () => {
   const queryClient = useQueryClient();
   const [addRentModal, setRentModal] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<{ id: number, name: string } | null>(null);
-  const [selectedRent, setSelectedRent] = useState<Rent | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [filterComponent, setFilterComponent] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('edit');
+  const [viewMode, setViewMode] = useState<ViewMode>('view');
+  const [approveConfirmation, setApproveConfirmation] = useState<{
+    show: boolean;
+    paymentId: number | null;
+  }>({ show: false, paymentId: null });
   const [filters, setFilters] = useState({
     search: '',
     status: '',
@@ -58,8 +62,8 @@ const Payment = () => {
   const t = useTranslations('full');
 
   const { data, isPending, error, isSuccess } = useQuery({
-    queryKey: ['rents', filters],
-    queryFn: () => fetchRents({
+    queryKey: ['payments', filters],
+    queryFn: () => fetchPayments({
       search: filters.search,
       status: filters.status,
       start_date_min: filters.start_date_min,
@@ -79,16 +83,20 @@ const Payment = () => {
     }));
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => deleteRent(id),
-    onSuccess: () => {
-      toast.success(t('rent-delete-success'));
-      setConfirmDelete(null);
-      queryClient.invalidateQueries({ queryKey: ['rents'] });
+  const approvePaymentMutation = useMutation({
+    mutationFn: (paymentId: number) => approvePayment(paymentId),
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success("Payment approved successfully");
+        queryClient.invalidateQueries({ queryKey: ['payments'] });
+        setApproveConfirmation({ show: false, paymentId: null });
+      } else {
+        toast.error("Failed to approve payment");
+      }
     },
-    onError: () => {
-      toast.error(t('rent-delete-error'));
-    },
+    onError: (error) => {
+      toast.error("Failed to approve payment");
+    }
   });
 
   const handlePageChange = (newPage: number) => {
@@ -114,22 +122,19 @@ const Payment = () => {
     });
   };
 
+  console.log(data,'payment Datas')
   return (
     <div className='flex flex-col justify-between p-4'>
-      <div className='flex items-center justify-between w-full gap-5 xl:gap-0'>
+      {/* <div className='flex items-center justify-between w-full gap-5 xl:gap-0'>
         <div onClick={openFilterComp} className='flex p-5 cursor-pointer bg-gray-100 dark:bg-gray-300 rounded-full size-5 items-center justify-center'>
           <FontAwesomeIcon icon={faFilter} className='text-dark dark:text-gray-800 text-sm' />
         </div>
-
       </div>
     
       {filterComponent && (
         <div className='relative w-full overflow-x-auto border-gray-200 dark:bg-[#27282b] bg-[#f3f4f6] dark:border-[#27282b] border-1 p-4 rounded-sm overflow-y-auto py-3 my-3'>
           <div className='flex flex-col md:flex-row gap-4 w-[100%]'>
             <div className='flex gap-2 justify-evenly md:gap-2 flex-col 2xl:flex-row w-full min-w-full'>
-    
-
-         
               <div className='flex flex-col items-center rounded-lg p-4'>
                 <p className='font-semibold text-gray-700 pt-2 dark:text-gray-100 text-sm'>{t('payment-status')}</p>
                 <select
@@ -139,11 +144,9 @@ const Payment = () => {
                   className="dark:bg-[#27282b] max-w-[14rem] bg-[#f3f4f6] w-full mt-2 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="">{t('all-statuses')}</option>
-                  <option value="active">{t('active')}</option>
-                  <option value="expired">{t('expired')}</option>
-                  <option value="terminated">{t('terminated')}</option>
+                  <option value="pending">{t('pending')}</option>
                   <option value="completed">{t('completed')}</option>
-
+                  <option value="failed">{t('failed')}</option>
                 </select>
               </div>
 
@@ -158,7 +161,7 @@ const Payment = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       <div className='py-5'>
         <div className='relative overflow-x-auto shadow-md rounded-sm max-h-[400px] overflow-y-auto'>
@@ -170,6 +173,7 @@ const Payment = () => {
                 <th className='px-6 py-3'>{t('tenant')}</th>
                 <th className='px-6 py-3'>{t('date')}</th>
                 <th className='px-6 py-3'>{t('amount')}</th>
+                <th className='px-6 py-3'>{t('payment-method')}</th>
                 <th className='px-6 py-3'>{t('status')}</th>      
                 <th className='px-6 py-3'>{t('action')}</th>                
               </tr>
@@ -189,52 +193,52 @@ const Payment = () => {
                     {t('nothing-to-show')}
                   </td>
                 </tr>
-              ) : data?.data?.map((rent: Rent) => (
+              ) : data?.data?.map((payment: Payment) => (
                 <tr 
-                  key={rent.id} 
+                  key={payment.id} 
                   className='bg-white capitalize text-gray-500 dark:text-gray-200 border-b dark:bg-[#333538] dark:border-gray-700 border-gray-200'
                 >
-                  <td className='px-6 py-4'>{rent.id}</td>
+                  <td className='px-6 py-4'>{payment.id}</td>
                   <td className='px-6 py-4'>
-                    <div className='flex flex-col'>
-                      <span className='font-medium'>{rent.property_id.name}</span>
-                      <span className='text-xs text-gray-400'>{rent.property_id.address}, {rent.property_id.city}</span>
-                    </div>
+                    {payment.rent_id?.property_id?.name || 'N/A'}
                   </td>
                   <td className='px-6 py-4'>
-                    {rent.user_id.first_name} {rent.user_id.last_name}
-                    <div className='text-xs text-gray-400'>{rent.user_id.email}</div>
+                    {payment.rent_id?.user_id?.first_name || 'N/A'} {payment.rent_id?.user_id?.last_name || ''}
+                    <div className='text-xs text-gray-400'>{payment.rent_id?.user_id?.email || ''}</div>
                   </td>
-                  <td className='px-6 py-4'>{new Date(rent.start_date).toLocaleDateString()}</td>
-                  <td className='px-6 py-4'>{rent.rent_amount.toLocaleString()}</td>
+                  <td className='px-6 py-4'>{new Date(payment.created_at).toLocaleDateString()}</td>
+                  <td className='px-6 py-4'>{payment.amount.toLocaleString()}</td>
+                  <td className='px-6 py-4'>{payment.payment_method}</td>
                   <td className='px-6 py-4'>
                     <span className={`px-2 py-1 rounded-full text-xs ${
-                      rent.status === 'active' ? 'bg-green-100 text-green-800' :
-                      rent.status === 'expired' ? 'bg-yellow-100 text-yellow-800' :
+                      payment.status === 'payment complete' ? 'bg-green-100 text-green-800' :
+                      payment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                       'bg-red-100 text-red-800'
                     }`}>
-                      {t(rent.status)}
+                      {payment.status}
                     </span>
                   </td>
                   <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
+                    <FontAwesomeIcon 
+                      icon={faEye} 
+                      onClick={() => {
+                        setSelectedPayment(payment);
+                        setViewMode('view');
+                      }} 
+                      className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
+                    />
+                  {(payment?.status === "pending") && (
                 <FontAwesomeIcon 
-                icon={faEye} 
-                onClick={() => {
-                  setSelectedRent(rent);
-                  setViewMode('view');
-                }} 
-                className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-              />
-
-          <FontAwesomeIcon 
-                icon={faMoneyBill} 
-                onClick={() => {
-                  setSelectedRent(rent);
-                  setViewMode('view');
-                }} 
-                className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-              />
-
+                  icon={faCircleCheck} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setApproveConfirmation({ show: true, paymentId: payment.id });
+                  }} 
+                  className="text-green-500 dark:text-green-400 text-sm cursor-pointer hover:text-green-700" 
+                  title={t('approve-payment')}
+                />
+              )}
+                  
                   </td>
                 </tr>
               ))}
@@ -278,152 +282,62 @@ const Payment = () => {
           </div>
         )}
       </div>
-      {selectedRent && (
-  <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
-    <div className={`relative ${viewMode === 'view' ? 'max-w-2xl' : 'max-w-xl'} max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full`}>
-      <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
-          {viewMode === 'edit' ? t("update-rent") : t("rent-details")}
-        </h3>
-        <button 
-          onClick={() => setSelectedRent(null)} 
-          type="button" 
-          className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-        >
-          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-          </svg>
-          <span className="sr-only">Close modal</span>
-        </button>
-      </div>
-      
-      {viewMode === 'edit' ? (
-        <UpdateRentForm 
-          onSuccess={() => {
-            setSelectedRent(null);
-            queryClient.invalidateQueries({ queryKey: ['rents'] });
-          }} 
-          rent={selectedRent} 
-        />
-      ) : (
-        <div className="p-4 md:p-5 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Property Details */}
-            <div className="col-span-2">
-              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
-                {t('property-details')}
-              </h4>
-              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('name')}: </span>
-                  {selectedRent.property_id.name}
-                </p>
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('address')}: </span>
-                  {selectedRent.property_id.address}, {selectedRent.property_id.city}, {selectedRent.property_id.state}
-                </p>
-              </div>
-            </div>
 
-            {/* Tenant Details */}
-            <div>
-              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
-                {t('tenant-details')}
-              </h4>
-              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('name')}: </span>
-                  {selectedRent.user_id.first_name} {selectedRent.user_id.last_name}
-                </p>
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('email')}: </span>
-                  {selectedRent.user_id.email}
-                </p>
-              </div>
-            </div>
-
-            {/* Rent Details */}
-            <div>
-              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
-                {t('rent-details')}
-              </h4>
-              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('rent-type')}: </span>
-                  {selectedRent.rent_type}
-                </p>
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('payment-cycle')}: </span>
-                  {selectedRent.payment_cycle}
-                </p>
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('status')}: </span>
-                  <span className={`px-2 py-1 rounded-full text-xs ${
-                    selectedRent.status === 'active' ? 'bg-green-100 text-green-800' :
-                    selectedRent.status === 'expired' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {selectedRent.status}
-                  </span>
-                </p>
-              </div>
-            </div>
-
-            {/* Financial Details */}
-            <div>
-              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
-                {t('financial-details')}
-              </h4>
-              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('rent-amount')}: </span>
-                  {selectedRent.rent_amount.toLocaleString()} 
-                </p>
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('deposit-amount')}: </span>
-                  {selectedRent.deposit_amount.toLocaleString()} 
-                </p>
-              </div>
-            </div>
-
-            {/* Date Details */}
-            <div>
-              <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
-                {t('date-details')}
-              </h4>
-              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('start-date')}: </span>
-                  {new Date(selectedRent.start_date).toLocaleDateString()}
-                </p>
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('end-date')}: </span>
-                  {new Date(selectedRent.end_date).toLocaleDateString()}
-                </p>
-                <p className="text-gray-700 dark:text-gray-200">
-                  <span className="font-medium">{t('created-at')}: </span>
-                  {new Date(selectedRent.created_at).toLocaleDateString()}
-                </p>
+      {approveConfirmation.show && (
+          <div className="fixed inset-0 bg-gray-800/90 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-700 rounded-lg p-6 max-w-md w-full">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                {t('confirm-approve-title')}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                {t('confirm-approve-message')}
+              </p>
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => !approvePaymentMutation.isPending && setApproveConfirmation({ show: false, paymentId: null })}
+                  disabled={approvePaymentMutation.isPending}
+                  className={`px-4 py-2 border cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 ${
+                    approvePaymentMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {t('cancel')}
+                </button>
+                <button
+                  onClick={() => {
+                    if (approveConfirmation.paymentId && !approvePaymentMutation.isPending) {
+                      approvePaymentMutation.mutate(approveConfirmation.paymentId);
+                    }
+                  }}
+                  disabled={approvePaymentMutation.isPending}
+                  className={`px-4 py-2 cursor-pointer bg-green-600 text-white rounded-md hover:bg-green-700 ${
+                    approvePaymentMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {approvePaymentMutation.isPending ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {t('processing')}
+                    </span>
+                  ) : (
+                    t('confirm-approve')
+                  )}
+                </button>
               </div>
             </div>
           </div>
-
-       
-        </div>
-      )}
-    </div>
-  </div>
-)}
-
-      {addRentModal && (
+        )}
+      {selectedPayment && (
         <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
-          <div className='relative max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full max-w-xl'>
+          <div className={`relative max-w-2xl max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full`}>
             <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
               <h3 className="text-lg font-semibold text-gray-600 dark:text-white">
-                {t("add-rent")}
+                {t("payment-details")}
               </h3>
               <button 
-                onClick={closeAddRentModal} 
+                onClick={() => setSelectedPayment(null)} 
                 type="button" 
                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
               >
@@ -433,51 +347,91 @@ const Payment = () => {
                 <span className="sr-only">Close modal</span>
               </button>
             </div>
-            <AddRentForm onSuccess={closeAddRentModal} />
+            
+            <div className="p-4 md:p-5 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+         
+                <div className="col-span-2">
+                  <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                    {t('payment-details')}
+                  </h4>
+                  <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">{t('transaction-id')}: </span>
+                      {selectedPayment.transaction_id}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">{t('amount')}: </span>
+                      {selectedPayment.amount.toLocaleString()}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">{t('payment-method')}: </span>
+                      {selectedPayment.payment_method}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">{t('status')}: </span>
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        selectedPayment.status === 'completed' ? 'bg-green-100 text-green-800' :
+                        selectedPayment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {selectedPayment.status}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                {selectedPayment.rent_id?.user_id && (
+                  <div>
+                    <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                      {t('tenant-details')}
+                    </h4>
+                    <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                      <p className="text-gray-700 dark:text-gray-200">
+                        <span className="font-medium">{t('name')}: </span>
+                        {selectedPayment.rent_id.user_id.first_name} {selectedPayment.rent_id.user_id.last_name}
+                      </p>
+                      <p className="text-gray-700 dark:text-gray-200">
+                        <span className="font-medium">{t('email')}: </span>
+                        {selectedPayment.rent_id.user_id.email}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {selectedPayment.rent_id?.property_id && (
+                  <div>
+                    <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                      {t('property-details')}
+                    </h4>
+                    <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                      <p className="text-gray-700 dark:text-gray-200">
+                        <span className="font-medium">{t('property')}: </span>
+                        {selectedPayment.rent_id.property_id.name}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+            
+                <div>
+                  <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                    {t('date-details')}
+                  </h4>
+                  <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">{t('created-at')}: </span>
+                      {new Date(selectedPayment.created_at).toLocaleDateString()}
+                    </p>
+              
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {confirmDelete && (
-        <div className='fixed inset-0 bg-gray-800/90 flex justify-center items-center z-50'>
-          <div className='bg-white shadow-xl p-3 rounded-lg w-full max-w-sm py-4'>
-            <svg className="text-gray-600 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"></path>
-            </svg>
-            <div className="flex items-center justify-center mb-4 text-center text-gray-600 gap-1">
-              <p>{t('confirm-delete')}</p> 
-              <p className="bg-gray-200 rounded-lg p-2 text-sm">{confirmDelete?.name}?</p>
-            </div>
-            
-            <div className="flex justify-center items-center space-x-4">
-              {deleteMutation?.isPending ? (
-                <button
-                  onClick={() => deleteMutation.mutate(confirmDelete.id)}
-                  className='px-4 py-2 cursor-pointer bg-red-500 text-white rounded hover:bg-red-600'
-                  disabled={deleteMutation.isPending}
-                >
-                  {t('processing')}
-                </button>
-              ) : (
-                <button
-                  onClick={() => deleteMutation.mutate(confirmDelete.id)}
-                  className='px-4 py-2 cursor-pointer bg-red-500 text-white rounded hover:bg-red-600'
-                  disabled={deleteMutation.isPending}
-                >
-                  {t('confirm')}
-                </button>
-              )}
-              
-              <button
-                onClick={() => setConfirmDelete(null)}
-                className='px-4 cursor-pointer py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
-              >
-                {t('cancel')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

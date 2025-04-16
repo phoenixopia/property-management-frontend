@@ -44,7 +44,7 @@ const MainProperties = () => {
                </p>
           </div>
           <div className='capitalize text-gray-700 bg-gray-200 p-4 font-bold' >
-            <p >{t("available properties")}</p>
+            <p >{t("available-properties")}</p>
           </div>
         <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-700" />
 

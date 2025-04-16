@@ -218,8 +218,25 @@
 "confirm":"Confirm",
 "cancel":"Cancel",
 "processing":"Processing...",
-
-
+"payment-success": "Payment submitted successfully",
+  "payment-error": "Failed to submit payment",
+  "select-at-least-one-cycle": "Please select at least one cycle to pay",
+  "error-loading-cycles": "Error loading rent cycles",
+  "select-cycles-to-pay": "Select cycles to pay",
+  "select": "Select",
+  "cycle": "Cycle",
+  "paid": "Paid",
+  "unpaid": "Unpaid",
+  "payment-method": "Payment Method",
+  "transaction-id": "Transaction ID",
+  "submit-payment": "Submit Payment",
+  "payment-details":"Payment Details",
+    "failed":"Failed",
+    "confirm-approve-title": "Confirm Approval",
+    "confirm-approve-message": "Are you sure you want to approve this payment?",
+    "confirm-approve": "Approve",
+    "approve-payment": "Approve Payment",
+    
 
 
 

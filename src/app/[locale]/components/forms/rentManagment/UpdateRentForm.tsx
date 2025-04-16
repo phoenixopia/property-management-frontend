@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +9,6 @@ import toast from 'react-hot-toast';
 import { update_rent, search_tenants, search_properties } from "@/actions/rentManagmentAction";
 import { debounce } from 'lodash';
 import { format } from "date-fns";
-
 
 const rentSchema = z.object({
   user_id: z.coerce.number().min(1, "Tenant is required"),
@@ -27,20 +26,18 @@ type RentFormData = z.infer<typeof rentSchema>;
 
 type UpdateRentFormProps = {
   onSuccess: () => void;
-  rent:any;
+  rent: any;
 };
- 
+
 const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
   const t = useTranslations("full");
   const queryClient = useQueryClient();
   
-  // Property search state
-  const [propertySearchTerm, setPropertySearchTerm] = useState(rent.property_id.name);
+  const [propertySearchTerm, setPropertySearchTerm] = useState(rent.property_id?.name || "");
   const [showPropertyDropdown, setShowPropertyDropdown] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState<any>(rent.property_id);
   
-  // Tenant search state
-  const [tenantSearchTerm, setTenantSearchTerm] = useState(rent.user_id.email);
+  const [tenantSearchTerm, setTenantSearchTerm] = useState(rent.user_id?.email || "");
   const [showTenantDropdown, setShowTenantDropdown] = useState(false);
   const [selectedTenant, setSelectedTenant] = useState<any>(rent.user_id);
 
@@ -48,55 +45,55 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     setValue,
-    watch,
   } = useForm<RentFormData>({
     resolver: zodResolver(rentSchema),
-    defaultValues:rent ?{
-
+    defaultValues: {
       ...rent,
-      start_date: rent?.end_date ? format(new Date(rent?.end_date),"yyyy-MM-dd"):undefined,
-      end_date: rent?.end_date ? format(new Date(rent?.end_date),"yyyy-MM-dd"):undefined,
-      user_id:rent?.user_id?.id ? rent?.user_id?.id:undefined,
-      property_id:rent?.property_id?.id?rent.property_id?.id:undefined
-
-      
-
-
-
-    }: {
-      user_id: rent.user_id.id,
-      property_id: rent.property_id.id,
-      rent_type: rent.rent_type,
-      start_date: rent.start_date,
-      end_date: rent.end_date,
-      payment_cycle: rent.payment_cycle,
-      rent_amount: rent.rent_amount,
-      deposit_amount: rent.deposit_amount,
-      status: rent.status,
+      start_date: rent?.start_date ? format(new Date(rent.start_date), "yyyy-MM-dd") : undefined,
+      end_date: rent?.end_date ? format(new Date(rent.end_date), "yyyy-MM-dd") : undefined,
+      user_id: rent?.user_id?.id || undefined,
+      property_id: rent?.property_id?.id || undefined
     }
   });
 
-  // Search properties with debounce
+  const debouncedPropertySearch = useMemo(
+    () => debounce((term: string) => {
+      if (term.length > 2) {
+        setPropertySearchTerm(term);
+      }
+    }, 300),
+    []
+  );
+
+  const debouncedTenantSearch = useMemo(
+    () => debounce((term: string) => {
+      if (term.length > 2) {
+        setTenantSearchTerm(term);
+      }
+    }, 300),
+    []
+  );
+
   const propertiesData = useQuery({
     queryKey: ['properties', propertySearchTerm],
     queryFn: () => search_properties(propertySearchTerm),
-    enabled: propertySearchTerm.length > 2, // Only search when user has typed at least 3 characters
+    enabled: propertySearchTerm.length > 2,
+    staleTime: 5000, 
   });
 
-  // Search tenants with debounce
   const tenantsData = useQuery({
     queryKey: ['tenants', tenantSearchTerm],
     queryFn: () => search_tenants(tenantSearchTerm),
-    enabled: tenantSearchTerm.length > 2, // Only search when user has typed at least 3 characters
+    enabled: tenantSearchTerm.length > 2,
+    staleTime: 5000,
   });
 
-  // Mutation for updating rent
+  
   const updateRentMutation = useMutation({
     mutationFn: (data: RentFormData) => update_rent(data, rent.id),
     onSuccess: (response) => {
-      if(response?.error){
+      if (response?.error) {
         toast.error(response?.error || "Updating rent failed!");
       } else {
         toast.success("Rent updated successfully");
@@ -113,41 +110,41 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
     updateRentMutation.mutate(data);
   };
 
-  // Debounced search functions
-  const debouncedPropertySearch = debounce((term: string) => {
+  const handlePropertySearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+
+    setShowPropertyDropdown(term.length > 0);
+
     setPropertySearchTerm(term);
-  }, 300);
+ 
+    debouncedPropertySearch(term);
+  }, [debouncedPropertySearch]);
 
-  const debouncedTenantSearch = debounce((term: string) => {
+  const handleTenantSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    
+    setShowTenantDropdown(term.length > 0);
     setTenantSearchTerm(term);
-  }, 300);
+  
+    debouncedTenantSearch(term);
+  }, [debouncedTenantSearch]);
 
-  const handlePropertySearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedPropertySearch(e.target.value);
-    setShowPropertyDropdown(true);
-  };
-
-  const handleTenantSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedTenantSearch(e.target.value);
-    setShowTenantDropdown(true);
-  };
-
-  const handlePropertySelect = (property: any) => {
+  const handlePropertySelect = useCallback((property: any) => {
     setSelectedProperty(property);
     setValue("property_id", property.id);
     setValue("rent_amount", property.rent || 0);
     setShowPropertyDropdown(false);
     setPropertySearchTerm(property.name);
-  };
+  }, [setValue]);
 
-  const handleTenantSelect = (tenant: any) => {
+  const handleTenantSelect = useCallback((tenant: any) => {
     setSelectedTenant(tenant);
     setValue("user_id", tenant.id);
     setShowTenantDropdown(false);
     setTenantSearchTerm(tenant.email);
-  };
+  }, [setValue]);
 
-  // Close dropdowns when clicking outside
+
   useEffect(() => {
     const handleClickOutside = () => {
       setShowPropertyDropdown(false);
@@ -157,15 +154,78 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
+      debouncedPropertySearch.cancel();
+      debouncedTenantSearch.cancel();
     };
-  }, []);
+  }, [debouncedPropertySearch, debouncedTenantSearch]);
+
+  const renderPropertyDropdown = useMemo(() => {
+    if (!showPropertyDropdown) return null;
+
+    return (
+      <div 
+        className="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg dark:bg-gray-700 max-h-60 overflow-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {propertiesData.isLoading ? (
+          <div className="px-4 py-2 text-gray-700 dark:text-gray-200">Searching...</div>
+        ) : propertiesData.isError ? (
+          <div className="px-4 py-2 text-red-600 dark:text-red-400">Error loading properties</div>
+        ) : !propertiesData.data?.data?.length ? (
+          <div className="px-4 py-2 text-gray-700 dark:text-gray-200">
+            {propertySearchTerm.length > 2 ? "No properties found" : "Type at least 3 characters to search"}
+          </div>
+        ) : (
+          propertiesData.data.data.map((property: any) => (
+            <div
+              key={property.id}
+              className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+              onClick={() => handlePropertySelect(property)}
+            >
+              {property.name}
+            </div>
+          ))
+        )}
+      </div>
+    );
+  }, [showPropertyDropdown, propertiesData, propertySearchTerm, handlePropertySelect]);
+
+  const renderTenantDropdown = useMemo(() => {
+    if (!showTenantDropdown) return null;
+
+    return (
+      <div 
+        className="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg dark:bg-gray-700 max-h-60 overflow-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {tenantsData.isLoading ? (
+          <div className="px-4 py-2 text-gray-700 dark:text-gray-200">Searching...</div>
+        ) : tenantsData.isError ? (
+          <div className="px-4 py-2 text-red-600 dark:text-red-400">Error loading tenants</div>
+        ) : !tenantsData.data?.data?.length ? (
+          <div className="px-4 py-2 text-gray-700 dark:text-gray-200">
+            {tenantSearchTerm.length > 2 ? "No tenants found" : "Type at least 3 characters to search"}
+          </div>
+        ) : (
+          tenantsData.data.data.map((tenant: any) => (
+            <div
+              key={tenant.id}
+              className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+              onClick={() => handleTenantSelect(tenant)}
+            >
+              {tenant.email}
+            </div>
+          ))
+        )}
+      </div>
+    );
+  }, [showTenantDropdown, tenantsData, tenantSearchTerm, handleTenantSelect]);
 
   return (
     <div className="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4 mb-4 grid-cols-1 md:grid-cols-2">
-          
-          {/* Tenant Selection - Searchable */}
+       
           <div className="col-span-2 md:col-span-1 relative">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('tenant')} *
@@ -189,34 +249,9 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
               <p className="mt-1 text-sm text-red-600">{errors.user_id.message}</p>
             )}
             
-            {/* Tenant dropdown */}
-            {showTenantDropdown && (
-              <div 
-                className="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg dark:bg-gray-700 max-h-60 overflow-auto"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {tenantsData.isLoading ? (
-                  <div className="px-4 py-2 text-gray-700 dark:text-gray-200">Searching...</div>
-                ) : tenantsData.isError ? (
-                  <div className="px-4 py-2 text-red-600 dark:text-red-400">Error loading tenants</div>
-                ) : tenantsData.data?.data?.length === 0 ? (
-                  <div className="px-4 py-2 text-gray-700 dark:text-gray-200">No tenants found</div>
-                ) : (
-                  tenantsData.data?.data?.map((tenant: any) => (
-                    <div
-                      key={tenant.id}
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
-                      onClick={() => handleTenantSelect(tenant)}
-                    >
-                      {tenant.email}
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
+            {renderTenantDropdown}
           </div>
 
-          {/* Property Selection - Searchable */}
           <div className="col-span-2 md:col-span-1 relative">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('property')} *
@@ -240,34 +275,9 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
               <p className="mt-1 text-sm text-red-600">{errors.property_id.message}</p>
             )}
             
-            {/* Property dropdown */}
-            {showPropertyDropdown && (
-              <div 
-                className="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg dark:bg-gray-700 max-h-60 overflow-auto"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {propertiesData.isLoading ? (
-                  <div className="px-4 py-2 text-gray-700 dark:text-gray-200">Searching...</div>
-                ) : propertiesData.isError ? (
-                  <div className="px-4 py-2 text-red-600 dark:text-red-400">Error loading properties</div>
-                ) : propertiesData.data?.data?.length === 0 ? (
-                  <div className="px-4 py-2 text-gray-700 dark:text-gray-200">No properties found</div>
-                ) : (
-                  propertiesData.data?.data?.map((property: any) => (
-                    <div
-                      key={property.id}
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
-                      onClick={() => handlePropertySelect(property)}
-                    >
-                      {property.name}
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
+            {renderPropertyDropdown}
           </div>
 
-      
           <div className="col-span-2 md:col-span-1">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('rent-type')} *
@@ -287,7 +297,6 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
             )}
           </div>
 
-          {/* Payment Cycle */}
           <div className="col-span-2 md:col-span-1">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('payment-cycle')} *
@@ -307,7 +316,6 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
             )}
           </div>
 
-          {/* Start Date */}
           <div className="col-span-2 md:col-span-1">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('start-date')} *
@@ -322,7 +330,6 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
             )}
           </div>
 
-          {/* End Date */}
           <div className="col-span-2 md:col-span-1">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('end-date')} *
@@ -337,7 +344,6 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
             )}
           </div>
 
-          {/* Rent Amount */}
           <div className="col-span-2 md:col-span-1">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('rent-amount')} *
@@ -354,7 +360,6 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
             )}
           </div>
 
-          {/* Deposit Amount */}
           <div className="col-span-2 md:col-span-1">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {t('deposit-amount')} *
@@ -370,26 +375,6 @@ const UpdateRentForm = ({ onSuccess, rent }: UpdateRentFormProps) => {
               <p className="mt-1 text-sm text-red-600">{errors.deposit_amount.message}</p>
             )}
           </div>
-
-{/*       
-          <div className="col-span-2">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              {t('status')} *
-            </label>
-            <select
-              {...register("status")}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="">Select status</option>
-              <option value="active">Active</option>
-              <option value="pending">Pending</option>
-              <option value="terminated">Terminated</option>
-              <option value="completed">Completed</option>
-            </select>
-            {errors.status && (
-              <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
-            )}
-          </div> */}
         </div>
 
         <div className="flex justify-end">

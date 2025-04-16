@@ -78,10 +78,16 @@ const AddPropertyForm = ({ onSuccess }: { onSuccess: () => void }) => {
       owner_id: data.owner_id || null,
       manager_id: data.manager_id || null,
     }),
-    onSuccess: () => {
-      toast.success("Successfully created");
-      queryClient.invalidateQueries({ queryKey: ['properties'] });
-      onSuccess();
+    onSuccess: (response) => {
+      if(response?.success==false){
+        toast.error(response?.message || "Creating property failed!");
+      }else{
+        console.log(response,'sssssssssssssssssssssssssss')
+        toast.success("Successfully created");
+        queryClient.invalidateQueries({ queryKey: ['properties'] });
+        onSuccess();
+      }
+    
     },
     onError: () => {
       toast.error("Creating property failed!");

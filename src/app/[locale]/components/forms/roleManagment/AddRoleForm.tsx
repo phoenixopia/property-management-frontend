@@ -109,8 +109,8 @@ const AddRoleForm = () => {
           <hr className="w-full col-span-2 bg-gray-50 border-1 dark:bg-gray-500" />
 
           <div className="grid col-span-2 grid-cols-3 gap-4 max-h-[12rem] overflow-y-auto">
-            {permissionList?.map((perm: any) => (
-              <div key={perm.id} className="flex items-center w-full">
+            {permissionList?.map((perm: any,id:any) => (
+              <div key={id} className="flex items-center w-full">
                 <input
                   type="checkbox"
                   id={perm.id}

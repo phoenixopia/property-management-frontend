@@ -113,17 +113,18 @@ export async function createProperty(propertyData: any) {
         manager_id: propertyData.manager_id || null
       })
     });
- 
+    console.log(response,'responsedsadasdsadasd')
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('API Error:', errorData);
       return { 
         success: false, 
-        message: errorData.message || 'Failed to create property' 
+        message: errorData.error || 'Failed to create property' 
       };
     }
 
     const data = await response.json();
+
+    console.log(data,'dddddddddddddddddddd')
     revalidatePath('/property-management');
     
     return { 

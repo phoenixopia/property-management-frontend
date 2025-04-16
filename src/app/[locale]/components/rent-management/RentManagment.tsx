@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { faPen, faTrash, faEye, faPlus, faFilter,faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash, faEye, faPlus, faFilter,faMoneyBill,faCircleStop } from '@fortawesome/free-solid-svg-icons';
 import { useLocale } from "next-intl";  
 import { useTranslations } from 'next-intl'; 
 import toast from 'react-hot-toast';
-import { deleteRent, fetchRents } from '@/actions/rentManagmentAction';
+import { deleteRent, fetchRents, terminateRent } from '@/actions/rentManagmentAction';
 import AddRentForm from '../forms/rentManagment/AddRentForm';
 import { withAuth } from '@/hooks/withAuth';
 import UpdateRentForm from '../forms/rentManagment/UpdateRentForm';
@@ -35,7 +35,7 @@ type Rent = {
   status: string;
   created_at: string;
 };
-type ViewMode = 'edit' | 'view';
+type ViewMode = 'edit' | 'view' | 'payment' |"delete";
 
 const RentManagement = () => {
   const queryClient = useQueryClient();
@@ -91,6 +91,21 @@ const RentManagement = () => {
     },
   });
 
+    const terminateMutation = useMutation({
+      mutationFn: (id: any) => terminateRent(id),
+      onSuccess: (response) => {
+          
+          if(response.success){
+            queryClient.invalidateQueries({ queryKey: ['rents'] });
+            toast.success(response?.message || 'successfuly terminated the rent!')
+            setSelectedRent(null);
+          }
+        
+        
+  
+      }
+  });
+
   const handlePageChange = (newPage: number) => {
     setFilters(prev => ({
       ...prev,
@@ -113,7 +128,7 @@ const RentManagement = () => {
       page: '1'
     });
   };
-
+ console.log(data,'data of the rents')
   return (
     <div className='flex flex-col justify-between p-4'>
       <div className='flex items-center justify-between w-full gap-5 xl:gap-0'>
@@ -287,22 +302,27 @@ const RentManagement = () => {
                             className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
                           />
                         </button>
-                    {/* <FontAwesomeIcon 
-                      icon={faTrash} 
-                      onClick={() => setConfirmDelete({ id: rent.id, name: rent.property_id.name })} 
-                      className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-                    /> */}
-                <FontAwesomeIcon 
-                icon={faEye} 
+              
+                    {rent.status ==="active" &&   <FontAwesomeIcon 
+                icon={faCircleStop} 
                 onClick={() => {
                   setSelectedRent(rent);
-                  setViewMode('view');
+                  setViewMode('delete');
                 }} 
                 className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-              />
+              />}
+              
 
 <FontAwesomeIcon 
                 icon={faMoneyBill} 
+                onClick={() => {
+                  setSelectedRent(rent);
+                  setViewMode('payment');
+                }} 
+                className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
+              />
+                      <FontAwesomeIcon 
+                icon={faEye} 
                 onClick={() => {
                   setSelectedRent(rent);
                   setViewMode('view');
@@ -353,7 +373,51 @@ const RentManagement = () => {
           </div>
         )}
       </div>
-      {selectedRent && (
+      {(selectedRent && viewMode==='delete' ) &&
+  <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
+
+        <div className='fixed inset-0 bg-gray-800/90 flex justify-center items-center z-50'>
+        <div className='bg-white shadow-xl p-3 rounded-lg w-full max-w-sm py-4'>
+          
+          <div className="flex items-center justify-center mb-2 text-center text-gray-600 gap-1">
+            <p>Terminate Rent</p> 
+          </div>
+
+          <p className='text-xs text-gray-600 text-center p-4'>Are you sure you want to end the lease?</p>
+          
+          <div className="flex justify-center items-center space-x-4">
+            {terminateMutation?.isPending ? (
+              <button
+                onClick={() => terminateMutation.mutate(selectedRent?.id)}
+                className='px-4 py-2 cursor-pointer bg-red-500 text-white rounded hover:bg-red-600'
+                disabled={deleteMutation.isPending}
+              >
+                {t('processing')}
+              </button>
+            ) : (
+              <button
+                onClick={() => terminateMutation.mutate(selectedRent?.id)}
+                className='px-4 py-2 cursor-pointer bg-red-500 text-white rounded hover:bg-red-600'
+                disabled={terminateMutation.isPending}
+              >
+                {t('confirm')}
+              </button>
+            )}
+            
+            <button
+              onClick={() => setSelectedRent(null)}
+              className='px-4 cursor-pointer py-2 bg-gray-500 text-white rounded hover:bg-gray-600'
+            >
+              {t('cancel')}
+            </button>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      
+      }
+      {selectedRent && (viewMode==="view" || viewMode==="edit") &&(
   <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>
     <div className={`relative ${viewMode === 'view' ? 'max-w-2xl' : 'max-w-xl'} max-h-[80%] overflow-auto bg-white dark:bg-gray-700 shadow-xl p-3 rounded-lg w-full`}>
       <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
@@ -371,17 +435,21 @@ const RentManagement = () => {
           <span className="sr-only">Close modal</span>
         </button>
       </div>
-      
-      {viewMode === 'edit' ? (
-        <UpdateRentForm 
+
+   
+   {(selectedRent && viewMode ==='edit') &&  <>
+    <UpdateRentForm 
           onSuccess={() => {
             setSelectedRent(null);
             queryClient.invalidateQueries({ queryKey: ['rents'] });
           }} 
           rent={selectedRent} 
         />
-      ) : (
-        <div className="p-4 md:p-5 space-y-4">
+   </>}
+
+
+   {(selectedRent && viewMode ==="view") &&<>
+    <div className="p-4 md:p-5 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Property Details */}
             <div className="col-span-2">
@@ -485,10 +553,15 @@ const RentManagement = () => {
 
        
         </div>
-      )}
+   </>}
+   
+      
+    
     </div>
   </div>
 )}
+
+
 
       {addRentModal && (
         <div className='fixed inset-0 bg-gray-800/90 h-screen flex justify-center items-center z-80'>

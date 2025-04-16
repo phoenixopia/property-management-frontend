@@ -15,13 +15,39 @@ interface RentData {
   deposit_amount: number;
   status: string;
 }
+interface RentFilters {
+    search?: string;
+    status?: string;
+    start_date_min?: string;
+    start_date_max?: string;
+    end_date_min?: string;
+    end_date_max?: string;
+    page?: string;
+  }
+  
+export const getAllPayments = async (page = 1) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('_s_t')?.value;
+
+  const response = await fetch(`${endPoint}/get_payments?page=${page}`, {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+      }
+  });
+
+  const responseJson = await response.json();
+  return responseJson;
+};
+
 
 export async function post_rent(data: RentData) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('_s_t')?.value;
-  console.log(data,'data of rent');
+  console.log(data,'resss')
   
-  // try {
+  try {
     const response = await fetch(`${endPoint}/post_rent`, {
       method: "POST",
       headers: {
@@ -34,15 +60,16 @@ export async function post_rent(data: RentData) {
         end_date: data.end_date.toISOString().split('T')[0]
       })
     });
-      console.log(response,'response after the rent added')
-    const result =  await response.json();
-    console.log(result,'result of rent');
+    const result = await response.json();
+    console.log(result,'resss')
+
+ 
     return result;
-  // } catch (error) {
+  } catch (error) {
 
   
-  //   return { error: 'Failed to create rent' };
-  // }
+    return { error: 'Failed to create rent' };
+  }
 }
 
 async function handleApiResponse(response: Response) {
@@ -123,44 +150,8 @@ export async function search_properties(searchTerm: string) {
     }
   }
 
-  interface RentFilters {
-    search?: string;
-    status?: string;
-    start_date_min?: string;
-    start_date_max?: string;
-    end_date_min?: string;
-    end_date_max?: string;
-    page?: string;
-  }
-  
-  export async function fetchRents(filters: RentFilters) {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get('_s_t')?.value;
-    
-    try {
-      // Construct query parameters
-      const queryParams = new URLSearchParams();
-      
-      
-      if (filters.status) queryParams.append('search', filters.status);
-      if (filters.start_date_min) queryParams.append('start_date_min', filters.start_date_min);
-      if (filters.start_date_max) queryParams.append('start_date_max', filters.start_date_max);
-      if (filters.end_date_min) queryParams.append('end_date_min', filters.end_date_min);
-      if (filters.end_date_max) queryParams.append('end_date_max', filters.end_date_max);
-      if (filters.page) queryParams.append('page', filters.page);
-  
-      const response = await fetch(`${endPoint}/get_rents?ordering=-id&${queryParams.toString()}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-      
-      return await handleApiResponse(response);
-    } catch (error) {
-        throw new Error('Failed to fetch rent. Please try again later.');
-    }
-  }
-  
+ 
+
   export async function deleteRent(id: number) {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('_s_t')?.value;
@@ -198,40 +189,3 @@ export async function search_properties(searchTerm: string) {
 
 }
   
-
-
-  export const terminateRent = async (id:any) => {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get('_s_t')?.value;
-  console.log(id,'iddd')
-    const response = await fetch(`${endPoint}/delete_rent/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
-        }
-    });
-
-
-
-
-    if (!response.ok) {
-      const errorData = await response.json();
-    
-      return { 
-        success: false, 
-        message: errorData?.error || 'Failed to terminate the rent' 
-      };
-    }
-
-
-    const responseJson = await response.json();
-   
-    
-    return { 
-      success: true, 
-      message: 'Rent Successfuly terminated',
-      responseJson 
-    };
-
-  };

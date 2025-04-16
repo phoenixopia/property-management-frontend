@@ -101,6 +101,7 @@ const AddRentForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const createRentMutation = useMutation({
     mutationFn: (data: RentFormData) => post_rent(data),
     onSuccess: (response) => {
+      console.log(response,'rrrrrrrrrrrrrr')
       if(response?.error){
         toast.error(response?.error || "Creating rent failed!");
       } else {

@@ -133,7 +133,7 @@ const AddUserForm = () => {
               {...form.register("phone_number")}
               type="tel"
               className="bg-gray-100 text-gray-600 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder={t("enter-phone_number-number") + " (+2519... or +2517...)"}
+              placeholder={t("enter-phone-number") + " (+2519... or +2517...)"}
             />
             {form.formState.errors.phone_number && (
               <p className="text-red-500 text-xs mt-1">

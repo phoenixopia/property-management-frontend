@@ -142,7 +142,7 @@ export default function ResetPassword({ token }: ResetProps) {
           <div className="flex items-center w-full justify-center">
             <button
               type="submit"
-              className="flex p-[0.7rem] w-full items-center justify-center  bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+              className="flex p-[0.7rem] cursor-pointer w-full items-center justify-center  bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
               disabled={resetMutation.isPending}
             >
               {resetMutation.isPending ? (

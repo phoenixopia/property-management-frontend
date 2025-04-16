@@ -37,7 +37,7 @@ type Rent = {
 };
 type ViewMode = 'edit' | 'view';
 
-const RentManagement = () => {
+const Payment = () => {
   const queryClient = useQueryClient();
   const [addRentModal, setRentModal] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<{ id: number, name: string } | null>(null);
@@ -121,76 +121,17 @@ const RentManagement = () => {
           <FontAwesomeIcon icon={faFilter} className='text-dark dark:text-gray-800 text-sm' />
         </div>
 
-        <div className='flex justify-end gap-2'>
-          <button onClick={openAddRentModal} className='flex cursor-pointer flex-row text-sm capitalize items-center justify-center rounded-md bg-gray-900 dark:bg-gray-600 py-3 px-5 gap-2 text-white'>
-            <FontAwesomeIcon icon={faPlus} />
-            {t('add-rent')}
-          </button>
-        </div>
       </div>
     
       {filterComponent && (
         <div className='relative w-full overflow-x-auto border-gray-200 dark:bg-[#27282b] bg-[#f3f4f6] dark:border-[#27282b] border-1 p-4 rounded-sm overflow-y-auto py-3 my-3'>
           <div className='flex flex-col md:flex-row gap-4 w-[100%]'>
             <div className='flex gap-2 justify-evenly md:gap-2 flex-col 2xl:flex-row w-full min-w-full'>
-              <div className='flex flex-col items-center rounded-lg p-4'>
-                <p className='font-semibold text-gray-700 pt-2 dark:text-gray-100 text-sm'>{t('rent-start-date-range')}</p>
-                <div className='flex flex-col items-center justify-center py-2 sm:flex-row gap-2 w-full'>
-                  <div className="flex gap-2 items-center">
-                    <label htmlFor="start_date_min" className="text-sm text-gray-700 dark:text-gray-100 truncate">{t('from')}</label>
-                    <input
-                      type="date"
-                      id="start_date_min"
-                      name="start_date_min"
-                      value={filters.start_date_min}
-                      onChange={handleFilterChange}
-                      className="border text-gray-700 dark:text-gray-100 text-sm border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <label htmlFor="start_date_max" className="text-sm text-gray-700 dark:text-gray-100 truncate">{t('up-to')}</label>
-                    <input
-                      type="date"
-                      id="start_date_max"
-                      name="start_date_max"
-                      value={filters.start_date_max}
-                      onChange={handleFilterChange}
-                      className="border text-gray-700 dark:text-gray-100 text-sm border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-              </div>
+    
 
+         
               <div className='flex flex-col items-center rounded-lg p-4'>
-                <p className='font-semibold text-gray-700 pt-2 dark:text-gray-100 text-sm'>{t('rent-end-date-range')}</p>
-                <div className='flex flex-col items-center justify-center py-2 sm:flex-row gap-2 w-full'>
-                  <div className="flex gap-2 items-center">
-                    <label htmlFor="end_date_min" className="text-sm text-gray-700 dark:text-gray-100 truncate">{t('from')}</label>
-                    <input
-                      type="date"
-                      id="end_date_min"
-                      name="end_date_min"
-                      value={filters.end_date_min}
-                      onChange={handleFilterChange}
-                      className="border text-gray-700 dark:text-gray-100 text-sm border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <label htmlFor="end_date_max" className="text-sm text-gray-700 dark:text-gray-100 truncate">{t('up-to')}</label>
-                    <input
-                      type="date"
-                      id="end_date_max"
-                      name="end_date_max"
-                      value={filters.end_date_max}
-                      onChange={handleFilterChange}
-                      className="border text-gray-700 dark:text-gray-100 text-sm border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className='flex flex-col items-center rounded-lg p-4'>
-                <p className='font-semibold text-gray-700 pt-2 dark:text-gray-100 text-sm'>{t('rent-status')}</p>
+                <p className='font-semibold text-gray-700 pt-2 dark:text-gray-100 text-sm'>{t('payment-status')}</p>
                 <select
                   name="status"
                   value={filters.status}
@@ -227,9 +168,8 @@ const RentManagement = () => {
                 <th className='px-6 py-3'>{t('id')}</th>
                 <th className='px-6 py-3'>{t('property')}</th>
                 <th className='px-6 py-3'>{t('tenant')}</th>
-                <th className='px-6 py-3'>{t('start-date')}</th>
-                <th className='px-6 py-3'>{t('end-date')}</th>
-                <th className='px-6 py-3'>{t('rent-amount')}</th>
+                <th className='px-6 py-3'>{t('date')}</th>
+                <th className='px-6 py-3'>{t('amount')}</th>
                 <th className='px-6 py-3'>{t('status')}</th>      
                 <th className='px-6 py-3'>{t('action')}</th>                
               </tr>
@@ -266,7 +206,6 @@ const RentManagement = () => {
                     <div className='text-xs text-gray-400'>{rent.user_id.email}</div>
                   </td>
                   <td className='px-6 py-4'>{new Date(rent.start_date).toLocaleDateString()}</td>
-                  <td className='px-6 py-4'>{new Date(rent.end_date).toLocaleDateString()}</td>
                   <td className='px-6 py-4'>{rent.rent_amount.toLocaleString()}</td>
                   <td className='px-6 py-4'>
                     <span className={`px-2 py-1 rounded-full text-xs ${
@@ -278,20 +217,6 @@ const RentManagement = () => {
                     </span>
                   </td>
                   <td className='flex flex-row px-6 py-4 space-x-4 items-center'>
-                  <button onClick={() => {
-                          setSelectedRent(rent);
-                          setViewMode('edit');
-                        }}>
-                          <FontAwesomeIcon 
-                            icon={faPen} 
-                            className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-                          />
-                        </button>
-                    {/* <FontAwesomeIcon 
-                      icon={faTrash} 
-                      onClick={() => setConfirmDelete({ id: rent.id, name: rent.property_id.name })} 
-                      className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
-                    /> */}
                 <FontAwesomeIcon 
                 icon={faEye} 
                 onClick={() => {
@@ -301,7 +226,7 @@ const RentManagement = () => {
                 className='text-dark dark:text-gray-200 text-sm cursor-pointer' 
               />
 
-<FontAwesomeIcon 
+          <FontAwesomeIcon 
                 icon={faMoneyBill} 
                 onClick={() => {
                   setSelectedRent(rent);
@@ -557,4 +482,4 @@ const RentManagement = () => {
   );
 };
 
-export default withAuth(RentManagement, ["system-admin"], ["auth.view_permission", "ednant"]);
+export default withAuth(Payment, ["system-admin"], ["auth.view_permission", "ednant"]);

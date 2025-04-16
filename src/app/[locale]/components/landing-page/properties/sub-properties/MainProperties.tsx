@@ -21,6 +21,7 @@ import ListProperties from './ListProperties';
 
 
 const MainProperties = () => {
+       const t = useTranslations("full");
      
   return (
     <section className="relative">
@@ -33,17 +34,17 @@ const MainProperties = () => {
           <div className='flex justify-end flex-row gap-2'>   
             
                <Link href="/" className='text-sm text-cyan-950'>
-                <FontAwesomeIcon icon={faHouse} className=' text-sm cursor-pointer' /> Home
+                <FontAwesomeIcon icon={faHouse} className=' text-sm cursor-pointer' /> {t('home')}
                </Link>
 
                <p className='text-sm text-gray-700'>{'>'}</p>
 
                <p className='text-sm text-gray-700'>
-                  Properties
+                  {t('properties')}
                </p>
           </div>
           <div className='capitalize text-gray-700 bg-gray-200 p-4 font-bold' >
-            <p >available properties</p>
+            <p >{t("available properties")}</p>
           </div>
         <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-700" />
 

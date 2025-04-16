@@ -157,7 +157,7 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="flex p-[0.7rem] w-full items-center justify-center bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+            className="flex p-[0.7rem] w-full cursor-pointer items-center justify-center bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
             disabled={loginMutation.isPending}
           >
             {loginMutation.isPending ? (

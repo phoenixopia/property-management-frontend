@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl'; 
+import Payment from '@/app/[locale]/components/payments/Payment';
 
 
 
@@ -18,7 +19,7 @@ const Page = () => {
       </div>
 
       <div className="pt-16 p-6 flex-grow overflow-auto">
-  payment Page
+        <Payment/>
       </div>
     </div>
   );

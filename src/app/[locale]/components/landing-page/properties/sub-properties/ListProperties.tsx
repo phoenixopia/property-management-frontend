@@ -178,7 +178,7 @@ const ListProperties = () => {
                     </div>
                 ) : isError ? (
                     <div className='px-6 py-4 text-center text-red-500'>
-                        {t('failed-to-load-properties')}
+                        {t("something went wrong please try again later")}!
                     </div>
                 ) : propertiesList?.length === 0 && isSuccess ? (
                     <div className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
@@ -197,7 +197,7 @@ const ListProperties = () => {
                                     key={property?.id}
                                     variants={itemVariants}
                                     whileHover={{ y: -5 }}
-                                    className='flex flex-col shadow-lg cursor-pointer rounded-md overflow-hidden border dark:border-gray-600 transition-all duration-300 hover:shadow-xl'
+                                    className='flex flex-col shadow-lg cursor-pointer rounded-md overflow-hidden border  transition-all duration-300 hover:shadow-xl'
                                     onClick={() => handlePropertyClick(property)}
                                 >
                                     <div className='relative'>
@@ -241,7 +241,7 @@ const ListProperties = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className='flex w-full justify-between my-2 p-4 flex-col xl:flex-row items-center gap-3 xl:gap-0 shadow-sm dark:bg-[#333538] rounded-md'
+                    className='flex w-full justify-between my-2 p-4 flex-col xl:flex-row items-center gap-3 xl:gap-0 shadow-sm rounded-md'
                 >
                     <div>
                         <p className='text-gray-600 dark:text-gray-200'>

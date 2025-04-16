@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import {
   Chart as ChartJS,
@@ -10,7 +11,6 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,34 +20,67 @@ ChartJS.register(
   Legend
 );
 
-
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'undpaid',
-      data: [26,87,97,94,23,545],
-      backgroundColor: '#946c6c',
-      
-    },
-    {
-      label: 'paid',
-      data:[89,45,23,211,21],
-      backgroundColor: '#01567d',
-    },
-    {
-        label: 'total',
-        data:[89,45,23,211,21],
-        backgroundColor: '#426cf5',
-      },
-  ],
-};
-
-const RevenueBar= ()=> {
-  return <Bar  data={data} options={{ maintainAspectRatio: false, responsive: true }}/>;
+interface RevenueBarProps {
+  revenueData: Record<string, {
+    total: number;
+    paid: number;
+    unpaid: number;
+  }>;
 }
 
-export default RevenueBar
+const RevenueBar = ({ revenueData }: RevenueBarProps) => {
+  const months = Object.keys(revenueData);
+  
+  const data = {
+    labels: months,
+    datasets: [
+      {
+        label: 'Unpaid',
+        data: months.map(month => revenueData[month].unpaid),
+        backgroundColor: '#946c6c',
+      },
+      {
+        label: 'Paid',
+        data: months.map(month => revenueData[month].paid),
+        backgroundColor: '#01567d',
+      },
+      {
+        label: 'Total',
+        data: months.map(month => revenueData[month].total),
+        backgroundColor: '#426cf5',
+      },
+    ],
+  };
+
+  return (
+    <Bar 
+      data={data} 
+      options={{ 
+        maintainAspectRatio: false, 
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#6b7280',
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            grid: {
+              color: '#e5e7eb'
+            }
+          }
+        }
+      }} 
+    />
+  );
+}
+
+export default RevenueBar;

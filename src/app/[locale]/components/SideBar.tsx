@@ -282,6 +282,8 @@ const SideBar = () => {
 
 
    console.log(shortNotificationsData,'shortnotficationData')
+   console.log(notificationsOpen,'sdada')
+
   return (
     <>
       <button
@@ -339,7 +341,7 @@ const SideBar = () => {
             </button>
             
             {notificationsOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700">
+                <div className="notification-container absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700">
                   <div className="p-3 border-b border-gray-200 dark:border-gray-700">
                     <h3 className="font-medium text-gray-800 dark:text-white">
                       {t('notifications')}
@@ -374,9 +376,9 @@ const SideBar = () => {
                 
                   {shortNotificationsData?.data?.count > 10 && (
                         <div className="p-2 text-center border-t border-gray-200 dark:border-gray-700">
-                        <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                        <Link href={"/notifications"}  className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
                           {t('view-all')}
-                        </button>
+                        </Link>
                       </div>
                     )}
         

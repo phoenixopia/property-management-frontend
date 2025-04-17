@@ -234,7 +234,7 @@ export async function search_properties(searchTerm: string) {
       });
       
       const result = await handleApiResponse(response);
-      revalidatePath('/rents');
+      revalidatePath('/tenant/rents');
       return result;
     } catch (error) {
       return { error: 'Failed to delete rent' };

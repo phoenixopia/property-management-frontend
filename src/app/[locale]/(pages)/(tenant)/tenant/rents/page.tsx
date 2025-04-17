@@ -1,8 +1,7 @@
 import React from 'react';
-import Dashboard from '../../../components/dashboard/Dashboard';
+
 import { useTranslations } from 'next-intl'; 
 
-import RentManagment from '@/app/[locale]/components/rent-management/RentManagment';
 import TenantRents from '@/app/[locale]/components/tenant-rents/TenantRents';
 
 const page = () => {

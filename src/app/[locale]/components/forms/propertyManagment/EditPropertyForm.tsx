@@ -167,6 +167,7 @@ const EditPropertyForm = ({ property, onSuccess }: any) => {
               <option value="land">land</option>
               <option value="house">house</option>
               <option value="apartment">apartment</option>
+              <option value="room">room</option>
             </select>
             {errors.property_type && (
               <p className="mt-1 text-sm text-red-600">{errors.property_type.message}</p>

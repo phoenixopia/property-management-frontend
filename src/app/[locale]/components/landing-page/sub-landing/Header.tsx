@@ -25,7 +25,7 @@ const Header = () => {
     } else if (user.groups?.includes('property-manager')) {
       router.push('/dashboard');
     } else if (user.groups?.includes('tenant')) {
-      router.push('/rents');
+      router.push('/tenant/rents');
     } else {
       router.push('/dashboard');
     }

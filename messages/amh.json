@@ -15,13 +15,15 @@
      "view-all": "ሁሉንም ይመልከቱ",
      "logs":"መዝገቦች",
      "view-notification":"እይታ ማሳወቂያ",
-"rents-managment":"ኪራይ-አስተዳደር"
+"rents-managment":"ኪራይ-አስተዳደር",
+"property-managment":"ንብረት አስተዳደር"
+
 
 
     },
     "full": {
      "rents-managment":"ኪራይ-አስተዳደር",
-
+"property-managment":"ንብረት አስተዳደር",
       "add-user": "ተጠቃሚ አክል",
       "export-csv": "ፋይል አውጣ",
       "search-user":"ተጠቃሚ ፈልግ",

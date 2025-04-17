@@ -46,7 +46,7 @@ export default function Login() {
           if (authData.groups.includes("maintenance")) {
             router.push("/maintenance");
           }else if(authData.groups.includes("tenant")){
-            router.push("/rents");
+            router.push("/tenant/rents");
           } else {
             router.push("/dashboard");
           }

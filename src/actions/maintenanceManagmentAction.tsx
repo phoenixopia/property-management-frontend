@@ -35,7 +35,35 @@ type PropertyResponse = {
 
 const endPoint = "https://sasconerp.com/pms/api";
 
-
+  export async function getUserProfileInfo() {
+      const cookieStore = await cookies();
+      const accessToken = cookieStore.get('_s_t')?.value;
+      if (!accessToken) {
+       
+        return null;
+      }
+    
+    try {
+      const response = await fetch(`${endPoint}/get_user_profile`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_token: accessToken
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch user profile');
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      throw error;
+    }
+  }
 export async function getUserProfile(accessToken: string) {
   try {
     const response = await fetch(`${endPoint}/get_user_profile`, {
@@ -111,6 +139,46 @@ export async function createMaintenanceRequest(requestData: any) {
       };
     }
   }
+
+
+
+
+  export const getSingleUserMaintenance = async (
+    page = 1,
+    search = "",
+    startDate = "",
+    endDate = ""
+  ) => {
+
+
+    
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('_s_t')?.value;
+ const profileData = await getUserProfileInfo();
+          const user_id = profileData?.user_id;
+  
+    let url = `${endPoint}/get_user_maintenance_requests/${user_id}?ordering=-id&page=${page}`;
+  
+    if (startDate) {
+      url += `&start_date=${startDate}`;
+    }
+    if (endDate) {
+      url += `&end_date=${endDate}`;
+    }
+  
+   
+  
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  
+    const responseJson = await response.json();
+    return responseJson;
+  };
 
 
   export const getAllMaintenance = async (

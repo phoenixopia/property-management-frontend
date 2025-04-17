@@ -117,11 +117,27 @@ const SideBar = () => {
       requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
     },
     {
-      path: "/rents",
+      path: "/tenant/rents",
       icon: <FontAwesomeIcon icon={faBuildingUser} />,
       label: "rents-managment",
       translationKey: "full",
-      requiredRoles: ["tenant", "group 2"],
+      requiredRoles: ["tenant"],
+      requiredPermissions: ["pms.view_rent" ]
+    },
+    {
+      path: "/tenant/notifications",
+      icon: <FontAwesomeIcon icon={faBellConcierge} />,
+      label: "notifications",
+      translationKey: "full",
+      requiredRoles: ["tenant"],
+      requiredPermissions: ["pms.view_rent" ]
+    },
+    {
+      path: "/tenant/maintenance",
+      icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
+      label: "maintenance-requests",
+      translationKey: "full",
+      requiredRoles: ["tenant"],
       requiredPermissions: ["pms.view_rent" ]
     },
     {

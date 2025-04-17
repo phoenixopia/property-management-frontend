@@ -15,11 +15,13 @@
 "view-all": "View all",
 "view-notification":"View Notification",
 "logs":"Logs",
-"rents-managment":"Rents Management"
+"rents-managment":"Rents Management",
+"property-managment":"Property Managment"
    
 
        },
     "full": {
+"property-managment":"Property Managment",
 "rents-managment":"Rents Management",
 
       "add-user": "Add User",

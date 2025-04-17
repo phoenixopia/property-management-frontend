@@ -150,6 +150,7 @@ export const submitPayment = async (data: z.infer<typeof paymentSchema>) => {
       },
       body: JSON.stringify(validatedData),
     });
+    console.log(response,'responssssssss')
 
     if (!response.ok) throw new Error('Payment submission failed');
     return await response.json();

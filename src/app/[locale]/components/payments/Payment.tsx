@@ -20,6 +20,7 @@ type Payment = {
   status: string;
   payment_method: string;
   transaction_id: string;
+  rent_cycles:any;
   rent_id: {
     id: number;
     property_id: {
@@ -122,7 +123,7 @@ const Payment = () => {
     });
   };
 
-  console.log(data,'payment Datas')
+  console.log(selectedPayment,'payment seleceted Datas')
   return (
     <div className='flex flex-col justify-between p-4'>
       {/* <div className='flex items-center justify-between w-full gap-5 xl:gap-0'>
@@ -414,18 +415,49 @@ const Payment = () => {
                 )}
 
             
-                <div>
+
+        <div className='flex flex-col'>
+           <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                  <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
+                
+                    {t('payed-rent-date-details')}
+                  </h4>
+                  <p></p>
+                  {/* {selectedPayment?.rent_cycles[0].cycle_start} */}
+                  {selectedPayment?.rent_cycles?.map((pay:any,id:any)=>(
+                          <div key={id} className="text-gray-700 dark:text-gray-200 space-y-1 py-4">
+                 
+
+                           <p className='font-bold'>Rent_cycles {id+1}</p>
+                           <div >
+                            {new Date(pay?.cycle_start).toLocaleDateString()} to   {new Date(pay?.cycle_end).toLocaleDateString()}
+                          </div>
+
+                            </div>
+                     
+                  ))}
+
+
+
+
+                  </div>
+                 
+                  <div>
                   <h4 className="text-md font-semibold text-gray-600 dark:text-white mb-2">
                     {t('date-details')}
                   </h4>
                   <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
+                  
                     <p className="text-gray-700 dark:text-gray-200">
                       <span className="font-medium">{t('created-at')}: </span>
                       {new Date(selectedPayment.created_at).toLocaleDateString()}
                     </p>
+
               
                   </div>
                 </div>
+                </div>
+            
               </div>
             </div>
           </div>

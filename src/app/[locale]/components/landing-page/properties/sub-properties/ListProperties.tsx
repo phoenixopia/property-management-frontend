@@ -114,11 +114,11 @@ const ListProperties = () => {
                         exit="hidden"
                         variants={filterVariants}
                         transition={{ duration: 0.5 }}
-                        className='bg-white p-4 rounded-md shadow-sm mb-4 dark:bg-gray-700 overflow-hidden'
+                        className=' bg-gray-200 p-4 rounded-md shadow-sm mb-4  overflow-hidden'
                     >
                         <form onSubmit={handleFilterSubmit} className='flex flex-col sm:flex-row gap-4 items-end'>
                             <div className='w-full sm:w-auto'>
-                                <label className='block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1'>
+                                <label className='block text-sm font-medium text-gray-700 mb-1'>
                                     {t('min-rent')}
                                 </label>
                                 <motion.input
@@ -127,11 +127,11 @@ const ListProperties = () => {
                                     value={minRent}
                                     onChange={(e) => setMinRent(e.target.value)}
                                     placeholder="min."
-                                    className='p-2 text-sm text-gray-800 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[#285E67]'
+                                    className='p-2 text-sm text-gray-700 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-[#285E67]'
                                 />
                             </div>
                             <div className='w-full sm:w-auto'>
-                                <label className='block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1'>
+                                <label className='block text-sm font-medium text-gray-700  mb-1'>
                                     {t('max-rent')}
                                 </label>
                                 <motion.input
@@ -140,7 +140,7 @@ const ListProperties = () => {
                                     value={maxRent}
                                     onChange={(e) => setMaxRent(e.target.value)}
                                     placeholder="max."
-                                    className='p-2 border text-sm text-gray-800 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[#285E67]'
+                                    className='p-2  text-sm text-gray-700 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-[#285E67]'
                                 />
                             </div>
                             <div className='flex gap-2 w-full sm:w-auto'>
@@ -241,10 +241,10 @@ const ListProperties = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className='flex w-full justify-between my-2 p-4 flex-col xl:flex-row items-center gap-3 xl:gap-0 shadow-sm rounded-md'
+                    className='flex w-full  bg-gray-200  justify-between my-2 p-4 flex-col xl:flex-row items-center gap-3 xl:gap-0 shadow-sm rounded-md'
                 >
                     <div>
-                        <p className='text-gray-600 dark:text-gray-200'>
+                        <p className='text-gray-700'>
                             {t('showing-entries', { shown: propertiesList.length, total: count })}
                         </p>
                     </div>
@@ -252,7 +252,7 @@ const ListProperties = () => {
                         <motion.button 
                             whileHover={{ scale: !previous ? 1 : 1.05 }}
                             whileTap={{ scale: !previous ? 1 : 0.95 }}
-                            className={`p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-md ${
+                            className={`p-2 cursor-pointer text-gray-700 rounded-md ${
                                 !previous && "opacity-50 cursor-not-allowed"
                             }`}
                             disabled={!previous}
@@ -262,14 +262,14 @@ const ListProperties = () => {
                         </motion.button>
                         <motion.p 
                             whileHover={{ scale: 1.1 }}
-                            className='p-1 px-4 bg-gray-200 dark:bg-gray-500 dark:text-gray-200 text-gray-800 rounded-md'
+                            className='p-1 px-4 bg-gray-200 dark:bg-gray-500 text-gray-700 rounded-md'
                         >
                             {currentPage}
                         </motion.p>
                         <motion.button
                             whileHover={{ scale: !next ? 1 : 1.05 }}
                             whileTap={{ scale: !next ? 1 : 0.95 }}
-                            className={`p-2 cursor-pointer text-gray-600 dark:text-gray-200 rounded-md ${
+                            className={`p-2 cursor-pointer text-gray-700 rounded-md ${
                                 !next && "opacity-50 cursor-not-allowed"
                             }`}
                             disabled={!next}

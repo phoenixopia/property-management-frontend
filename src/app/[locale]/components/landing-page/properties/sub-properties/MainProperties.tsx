@@ -46,13 +46,14 @@ const MainProperties = () => {
           <div className='capitalize text-gray-700 bg-gray-200 p-4 font-bold' >
             <p >{t("available-properties")}</p>
           </div>
-        <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-700" />
+        <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-400" />
 
 {/*           
           <p className='text text-sm text-black'>Browse a wide selection of flats, condominiums, and apartments for rent in Addis Ababa and beyond. Whether you're looking for a cozy studio or a spacious family unit, our nationwide listings connect you with trusted real estate agents dedicated to finding your ideal rental. Start your search today!</p> */}
 
           </div>
           {/* mainList */}
+          
           <ListProperties/>
     
      

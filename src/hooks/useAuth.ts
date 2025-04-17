@@ -13,8 +13,8 @@ export function useAuth() {
 
     fetchUser();
   }, [authChanged]); // 🔄 Re-fetch when auth state changes
-
   const refreshAuth = () => setAuthChanged((prev) => !prev); 
+  console.log(user,';uyserr');
 
   const hasPermission = (permission: string) => user?.permissions.includes(permission) ?? false;
   const hasRole = (role: string) => user?.groups.includes(role) ?? false;

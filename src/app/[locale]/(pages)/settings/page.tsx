@@ -3,6 +3,7 @@ import React from 'react'
 import ThemeToggle from '@/app/[locale]/components/theme/theme-toggle'
 import Language from '@/app/[locale]/components/language/Language'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { withAuth } from '@/hooks/withAuth';
 
 import { faLanguage,faCircleHalfStroke} from '@fortawesome/free-solid-svg-icons'
 import { useLocale } from "next-intl";  
@@ -54,4 +55,6 @@ const page = () => {
   )
 }
 
-export default page
+
+export default withAuth(page, ["maintenance", "system-admin","tenant"],["pms.view_maintenancerequest","pms.view_rent"]);
+

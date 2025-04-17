@@ -117,6 +117,14 @@ const SideBar = () => {
       requiredPermissions: ["auth.view_permission", "admin.change_logentry"]
     },
     {
+      path: "/rents",
+      icon: <FontAwesomeIcon icon={faBuildingUser} />,
+      label: "rents-managment",
+      translationKey: "full",
+      requiredRoles: ["tenant", "group 2"],
+      requiredPermissions: ["pms.view_rent" ]
+    },
+    {
       path: "/property-management",
       icon: <FontAwesomeIcon icon={faBuilding} />,
       label: "property-management",

@@ -14,10 +14,14 @@
      "no-notifications": "ምንም ማሳወቂያዎች የሉም",
      "view-all": "ሁሉንም ይመልከቱ",
      "logs":"መዝገቦች",
-     "view-notification":"እይታ ማሳወቂያ"
+     "view-notification":"እይታ ማሳወቂያ",
+"rents-managment":"ኪራይ-አስተዳደር"
+
 
     },
     "full": {
+     "rents-managment":"ኪራይ-አስተዳደር",
+
       "add-user": "ተጠቃሚ አክል",
       "export-csv": "ፋይል አውጣ",
       "search-user":"ተጠቃሚ ፈልግ",
@@ -234,6 +238,7 @@
   "confirm-approve": "አጽድቅ",
   "approve-payment": "ክፍያን ማጽደቅ",
   "latest-added-users":"የቅርብ ጊዜ የተጨመሩ ተጠቃሚዎች",
+  
 
 
 

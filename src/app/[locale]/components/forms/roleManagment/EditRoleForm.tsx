@@ -138,8 +138,8 @@ const EditRoleForm = ({ roleId, currentName, currentPermissions }: EditRoleFormP
           {permLoading && 
             <div>Loading permissions ...</div>}
           <div className="grid col-span-2 grid-cols-3 gap-4 max-h-[12rem] overflow-y-auto">
-            {permissions.map((perm) => (
-              <div key={perm.id} className="flex items-center w-full">
+            {permissions.map((perm,id:any) => (
+              <div key={id} className="flex items-center w-full">
                 <input
                   id={`checkbox-${perm.id}`}
                   type="checkbox"

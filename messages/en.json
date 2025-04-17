@@ -14,11 +14,14 @@
 "no-notifications": "No new notifications",
 "view-all": "View all",
 "view-notification":"View Notification",
-"logs":"Logs"
+"logs":"Logs",
+"rents-managment":"Rents Management"
    
 
        },
     "full": {
+"rents-managment":"Rents Management",
+
       "add-user": "Add User",
       "export-csv": "Export CSV",
       "search-user":"Search User",

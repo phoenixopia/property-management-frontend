@@ -132,6 +132,35 @@ export async function search_properties(searchTerm: string) {
     end_date_max?: string;
     page?: string;
   }
+  export async function getUserProfileInfo() {
+      const cookieStore = await cookies();
+      const accessToken = cookieStore.get('_s_t')?.value;
+      if (!accessToken) {
+       
+        return null;
+      }
+    
+    try {
+      const response = await fetch(`${endPoint}/get_user_profile`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_token: accessToken
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch user profile');
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      throw error;
+    }
+  }
   
   export async function fetchRents(filters: RentFilters) {
     const cookieStore = await cookies();
@@ -160,6 +189,37 @@ export async function search_properties(searchTerm: string) {
         throw new Error('Failed to fetch rent. Please try again later.');
     }
   }
+
+
+  export async function fetchSpecificRents(filters: RentFilters) {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('_s_t')?.value;
+     const profileData = await getUserProfileInfo();
+        const user_id = profileData?.user_id;
+    try {
+      // Construct query parameters
+      const queryParams = new URLSearchParams();
+      
+      
+      if (filters.status) queryParams.append('search', filters.status);
+      if (filters.start_date_min) queryParams.append('start_date_min', filters.start_date_min);
+      if (filters.start_date_max) queryParams.append('start_date_max', filters.start_date_max);
+      if (filters.end_date_min) queryParams.append('end_date_min', filters.end_date_min);
+      if (filters.end_date_max) queryParams.append('end_date_max', filters.end_date_max);
+      if (filters.page) queryParams.append('page', filters.page);
+  
+      const response = await fetch(`${endPoint}/get_user_rents/${user_id}?ordering=-id&${queryParams.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      
+      return await handleApiResponse(response);
+    } catch (error) {
+        throw new Error('Failed to fetch rent. Please try again later.');
+    }
+  }
+  
   
   export async function deleteRent(id: number) {
     const cookieStore = await cookies();

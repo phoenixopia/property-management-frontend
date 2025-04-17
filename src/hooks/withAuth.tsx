@@ -14,7 +14,7 @@ export function withAuth(
 
     useEffect(() => {
       if (user === null) return; // Wait until user data is loaded
-
+      console.log(hasRole,'hasrol')
       const roleCheck =
         requiredRoles
           ? (Array.isArray(requiredRoles)
